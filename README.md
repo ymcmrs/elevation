@@ -1,2 +1,0 @@
-# srtm
-SRTM elevation
