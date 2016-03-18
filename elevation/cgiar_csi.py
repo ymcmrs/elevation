@@ -23,7 +23,7 @@ SRTM3_TILES_FOLDER = 'SRT-ZIP/SRTM_{version}/SRTM_Data_GeoTiff/'
 SRTM3_TILE_LOCAL_NAME = 'srtm_{ilon:02d}_{ilat:02d}.tif'
 SRTM3_TILE_REMOTE_NAME = 'srtm_{ilon:02d}_{ilat:02d}.zip'
 LOGGER = logging.getLogger('elevation')
-DEM_TRANSLATE_CMD = 'gdal_translate -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 '
+TRANSLATE_CMD = 'gdal_translate -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 '
 
 
 def srtm3_tile_ilonlat(lon, lat):
@@ -50,7 +50,7 @@ def srtm3_tile_remote_url(ilon, ilat, version='V41'):
 def srtm3_unpack_tile(zip_local_path, tile_local_path):
     with zipfile.ZipFile(zip_local_path) as zip, util.TemporaryDirectory() as temp:
         tile_temp_path = zip.extract(os.path.basename(tile_local_path), path=temp)
-        subprocess.check_call('cp ' + '%s %s' % (tile_temp_path, tile_local_path), shell=True)
+        subprocess.check_call(TRANSLATE_CMD + '%s %s' % (tile_temp_path, tile_local_path), shell=True)
     return tile_local_path
 
 
@@ -69,7 +69,7 @@ def srtm3_ensure_datasource(xmin, ymin, xmax, ymax, local_root=USER_CACHE_DIR, v
         for ilat in range(top_left[1], bottom_right[1] + 1):
             tile_local_path = srtm3_tile_local_path(ilon, ilat, local_root=local_root, version=version)
             subprocess.check_call('mkdir -p %s' % os.path.dirname(tile_local_path), shell=True)
-            if not util.is_valid_raster(tile_local_path):
+            if not os.path.exists(tile_local_path):
                 LOGGER.info('Fetching tile %s, %s.' % (ilon, ilat))
                 rebuild_datasource = True
                 srtm3_fetch_tile(ilon, ilat, tile_local_path, version=version)
@@ -86,5 +86,5 @@ def srtm3_clip(xmin, ymin, xmax, ymax, out_path, local_root=USER_CACHE_DIR, vers
         xmin, ymin, xmax, ymax, local_root=local_root, version=version
     )
     bbox_test = '%f %f %f %f' % (xmin, ymax, xmax, ymin)
-    clip_cmd = DEM_TRANSLATE_CMD + '-projwin %s %s %s' % (bbox_test, datasource_path, out_path)
+    clip_cmd = TRANSLATE_CMD + '-projwin %s %s %s' % (bbox_test, datasource_path, out_path)
     subprocess.check_call(clip_cmd, shell=True)

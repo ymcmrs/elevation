@@ -12,8 +12,6 @@ from future.moves.urllib import request
 import shutil
 import tempfile
 
-import rasterio
-
 
 @contextlib.contextmanager
 def urlretrieve_tempfile(url, filename=None):
@@ -27,15 +25,6 @@ def TemporaryDirectory(suffix='', prefix='tmp', dir=None):
     path = tempfile.mkdtemp(suffix, prefix, dir)
     yield path
     shutil.rmtree(path, ignore_errors=True)
-
-
-def is_valid_raster(datasource):
-    try:
-        with rasterio.open(datasource):
-            pass
-        return True
-    except:
-        return False
 
 
 def build_datasource(datasource_path, glob_pattern='srtm_*.tif'):

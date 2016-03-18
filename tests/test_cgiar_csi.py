@@ -65,7 +65,7 @@ def test_srtm3_unpack_tile(tmpdir):
     zip.write_binary(zip_bytes)
 
     cgiar_csi.srtm3_unpack_tile(str(zip), str(tif))
-    assert len(tif.read_binary()) == 1136
+    assert 1000 < len(tif.read_binary()) < 1200
 
 
 def notest_srtm3_fetch_tile():

@@ -25,13 +25,9 @@ setup(
     description="Global geographic elevation data (CGIAR-CSI SRTM3 V41) for Python.",
     long_description=read('README.rst'),
     packages=find_packages(),
-    setup_requires=[
-        'numpy'  # rasterio setup needs numpy
-    ],
     install_requires=[
         'future',
         'appdirs',
-        'rasterio',
     ],
     zip_safe=True,
     classifiers=[
