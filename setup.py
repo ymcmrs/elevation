@@ -36,7 +36,7 @@ setup(
     license='Apache License Version 2.0',
     url='https://github.com/bopen/elevation',
     download_url='https://github.com/bopen/elevation/archive/%s.tar.gz' % version,
-    description="Global geographic elevation data (CGIAR-CSI SRTM3 V41) for Python.",
+    description="Global geographic elevation data (CGIAR-CSI SRTM 90m v4.1).",
     long_description=read('README.rst'),
     packages=find_packages(),
     install_requires=[
@@ -56,6 +56,7 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
     ],
+    keywords='SRTM DEM DTM global digital elevation terrain model',
     entry_points={
         'console_scripts': ['eio=elevation.cli:eio'],
     },
