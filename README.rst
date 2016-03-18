@@ -59,5 +59,5 @@ Sponsors:
 License
 -------
 
-pytest-nodev is free and open source software
+elevation is free and open source software
 distributed under the terms of the `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
