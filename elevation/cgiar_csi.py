@@ -6,7 +6,6 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
-import itertools
 import math
 import os
 from future.moves.urllib import parse
@@ -27,8 +26,8 @@ SRTM3_TILE_REMOTE_NAME = 'srtm_{ilon:02d}_{ilat:02d}.zip'
 
 def srtm3_tile_ilonlat(lon, lat):
     assert -180. <= lon <= 180. and -90. <= lat <= 90.
-    ilon = (math.floor(lon) + 180) // 5 + 1
-    ilat = (64 - math.floor(lat)) // 5
+    ilon = int((math.floor(lon) + 180) // 5 + 1)
+    ilat = int((64 - math.floor(lat)) // 5)
     return ilon, ilat
 
 

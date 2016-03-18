@@ -28,7 +28,7 @@ setup(
     install_requires=[
         'future',
         'appdirs',
-        'requests',
+        'rasterio',
     ],
     zip_safe=True,
     classifiers=[
@@ -40,7 +40,6 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
     ],

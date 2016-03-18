@@ -1,0 +1,4 @@
+future==0.15.2
+appdirs==1.4.0
+rasterio==0.31.0
+numpy==1.10.2

@@ -31,9 +31,9 @@ def test_srtm3_tile_remote_url():
     assert cgiar_csi.srtm3_tile_remote_url(39, 4) == expected
 
 
-def test_srtm3_unpack_tile():
-    here = os.path.dirname(__file__)
-    cgiar_csi.srtm3_unpack_tile(os.path.join(here, 'srtm_39_04.zip'), os.path.join(here, 'srtm_39_04.tif'))
+# def test_srtm3_unpack_tile():
+#     here = os.path.dirname(__file__)
+#     cgiar_csi.srtm3_unpack_tile(os.path.join(here, 'srtm_39_04.zip'), os.path.join(here, 'srtm_39_04.tif'))
 
 
 def notest_srtm3_fetch_tile():

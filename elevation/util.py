@@ -19,6 +19,7 @@ def urlretrieve_tempfile(url, filename=None):
     yield filename, info
     os.unlink(filename)
 
+
 def is_valid_raster(datasource):
     try:
         with rasterio.open(datasource):
@@ -28,8 +29,6 @@ def is_valid_raster(datasource):
         return False
 
 
-
 def build_datasource(datasource_path, glob_pattern='srtm_*.tif'):
     datasource_folder = os.path.dirname(datasource_path)
     os.system('cd %s && gdalbuildvrt -overwrite %s %s' % (datasource_folder, os.path.basename(datasource_path), glob_pattern))
-
