@@ -1,5 +1,5 @@
 
-0.1.0 (unreleased)
+0.1.0 (2016-03-18)
 ------------------
 
 - Initial release release.
