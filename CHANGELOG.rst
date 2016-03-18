@@ -1,5 +1,5 @@
 
-0.3.0 (unreleased)
+0.2.2 (2016-03-19)
 ------------------
 
 - Nothing changed yet.
