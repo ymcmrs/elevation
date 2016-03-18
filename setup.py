@@ -43,4 +43,7 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
     ],
+    entry_points = {
+        'console_scripts': ['eio=elevation.cli:eio'],
+    },
 )
