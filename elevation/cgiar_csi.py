@@ -6,7 +6,6 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
-import logging
 import math
 import os
 from future.moves.urllib import parse
@@ -22,7 +21,6 @@ BASE_URL = 'http://srtm.csi.cgiar.org/'
 SRTM3_TILES_FOLDER = 'SRT-ZIP/SRTM_{version}/SRTM_Data_GeoTiff/'
 SRTM3_TILE_LOCAL_NAME = 'srtm_{ilon:02d}_{ilat:02d}.tif'
 SRTM3_TILE_REMOTE_NAME = 'srtm_{ilon:02d}_{ilat:02d}.zip'
-LOGGER = logging.getLogger('elevation')
 TRANSLATE_CMD = 'gdal_translate -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 '
 
 
@@ -70,7 +68,6 @@ def srtm3_ensure_datasource(xmin, ymin, xmax, ymax, local_root=USER_CACHE_DIR, v
             tile_local_path = srtm3_tile_local_path(ilon, ilat, local_root=local_root, version=version)
             subprocess.check_call('mkdir -p %s' % os.path.dirname(tile_local_path), shell=True)
             if not os.path.exists(tile_local_path):
-                LOGGER.info('Fetching tile %s, %s.' % (ilon, ilat))
                 rebuild_datasource = True
                 srtm3_fetch_tile(ilon, ilat, tile_local_path, version=version)
 

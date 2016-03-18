@@ -6,8 +6,6 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
-import logging
-
 import click
 
 from . import api
@@ -22,5 +20,4 @@ def eio():
 @click.argument('bbox', type=float, nargs=4)
 @click.option('-o', '--out_path', type=click.Path(), default='out.tif')
 def clip(**kwargs):
-    logging.basicConfig(level=logging.INFO)
     api.clip(**kwargs)
