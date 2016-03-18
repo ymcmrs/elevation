@@ -1,11 +1,5 @@
 
-0.2.0 (unreleased)
+0.2.0 (2016-03-18)
 ------------------
 
-- Nothing changed yet.
-
-
-0.1.0 (2016-03-18)
-------------------
-
-- Initial release release.
+- ``eio`` command line tool and ``eio clip`` command.
