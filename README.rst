@@ -20,7 +20,7 @@ For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.ti
 
     $ eio clip -o Rome-DEM.tif 12 41.5 13 42.5
 
-The bounding box must be given as ``lon_min lat_min lon_max lat_max``.
+The bounding box must be given as ``xmin ymin xmax ymax`` similarly to the ``rio`` command form ``rasterio``.
 
 The first time an area is accessed elevation downloads the data tiles from the CGIAR-CSI server and
 caches them as GeoTiff compressed formats,
