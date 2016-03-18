@@ -5,4 +5,4 @@
 
 import appdirs
 
-USER_CACHE_DIR = appdirs.user_cache_dir('SRTM', 'bopen')
+USER_CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')

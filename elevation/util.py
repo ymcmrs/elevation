@@ -9,6 +9,8 @@ from __future__ import absolute_import, unicode_literals
 import contextlib
 import os
 from future.moves.urllib import request
+import shutil
+import tempfile
 
 import rasterio
 
@@ -18,6 +20,13 @@ def urlretrieve_tempfile(url, filename=None):
     filename, info = request.urlretrieve(url, filename=filename)
     yield filename, info
     os.unlink(filename)
+
+
+@contextlib.contextmanager
+def TemporaryDirectory(suffix='', prefix='tmp', dir=None):
+    path = tempfile.mkdtemp(suffix, prefix, dir)
+    yield path
+    shutil.rmtree(path, ignore_errors=True)
 
 
 def is_valid_raster(datasource):

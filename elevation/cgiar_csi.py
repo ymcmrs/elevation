@@ -10,9 +10,7 @@ import logging
 import math
 import os
 from future.moves.urllib import parse
-import shutil
 import subprocess
-import tempfile
 import zipfile
 
 from . import USER_CACHE_DIR
@@ -50,10 +48,9 @@ def srtm3_tile_remote_url(ilon, ilat, version='V41'):
 
 
 def srtm3_unpack_tile(zip_local_path, tile_local_path):
-    with zipfile.ZipFile(zip_local_path) as zip, tempfile.NamedTemporaryFile() as tile:
-        zipped = zip.open(os.path.basename(tile_local_path))
-        shutil.copyfileobj(zipped, tile)
-        subprocess.check_call(DEM_TRANSLATE_CMD + '%s %s' % (tile.name, tile_local_path), shell=True)
+    with zipfile.ZipFile(zip_local_path) as zip, util.TemporaryDirectory() as temp:
+        tile_temp_path = zip.extract(os.path.basename(tile_local_path), path=temp)
+        subprocess.check_call('cp ' + '%s %s' % (tile_temp_path, tile_local_path), shell=True)
     return tile_local_path
 
 
