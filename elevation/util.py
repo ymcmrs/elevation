@@ -31,4 +31,5 @@ def is_valid_raster(datasource):
 
 def build_datasource(datasource_path, glob_pattern='srtm_*.tif'):
     datasource_folder = os.path.dirname(datasource_path)
-    os.system('cd %s && gdalbuildvrt -overwrite %s %s' % (datasource_folder, os.path.basename(datasource_path), glob_pattern))
+    build_cmd = 'gdalbuildvrt -overwrite %s %s' % (os.path.basename(datasource_path), glob_pattern)
+    os.system('cd %s && %s' % (datasource_folder, build_cmd))

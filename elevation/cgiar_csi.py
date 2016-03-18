@@ -79,6 +79,9 @@ def srtm3_ensure_datasource(xmin, ymin, xmax, ymax, local_root=elevation.USER_CA
 
 
 def srtm3_clip(xmin, ymin, xmax, ymax, clip_path, local_root=elevation.USER_CACHE_DIR, version='V41'):
-    datasource_path = srtm3_ensure_datasource(xmin, ymin, xmax, ymax, local_root=local_root, version=version)
+    datasource_path = srtm3_ensure_datasource(
+        xmin, ymin, xmax, ymax, local_root=local_root, version=version
+    )
     bbox_test = '%f %f %f %f' % (xmin, ymax, xmax, ymin)
-    subprocess.check_call('gdal_translate -projwin %s %s %s' % (bbox_test, datasource_path, clip_path), shell=True)
+    clip_cmd = 'gdal_translate -projwin %s %s %s' % (bbox_test, datasource_path, clip_path)
+    subprocess.check_call(clip_cmd, shell=True)

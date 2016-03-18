@@ -33,7 +33,9 @@ def test_srtm3_tile_remote_url():
 
 # def test_srtm3_unpack_tile():
 #     here = os.path.dirname(__file__)
-#     cgiar_csi.srtm3_unpack_tile(os.path.join(here, 'srtm_39_04.zip'), os.path.join(here, 'srtm_39_04.tif'))
+#     zip_path = os.path.join(here, 'srtm_39_04.zip')
+#     tif_path = os.path.join(here, 'srtm_39_04.tif')
+#     cgiar_csi.srtm3_unpack_tile(zip_path, tif_path)
 
 
 def notest_srtm3_fetch_tile():
