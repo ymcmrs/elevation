@@ -30,8 +30,7 @@ Project resources
 -----------------
 
 ============= ======================
-Documentation http://elevation.readthedocs.org
-Support       https://stackoverflow.com/search?q=elevation
+Support       https://stackoverflow.com/search?q=python+elevation
 Development   https://github.com/bopen/elevation
 Download      https://pypi.python.org/pypi/elevation
 ============= ======================
