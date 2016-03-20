@@ -26,7 +26,7 @@ def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     created_folders = []
     for path in [root] + [os.path.join(root, p) for p in folders]:
         if not os.path.exists(path):
-            os.makedirs(path, exist_ok=True)
+            os.makedirs(path)
             created_folders.append(path)
 
     created_files = collections.OrderedDict()
