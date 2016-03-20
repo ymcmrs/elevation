@@ -67,8 +67,8 @@ def srtm3_do_clip(path, out_path, bounds, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=[('out_path', out_path), ('projwin', projwin)], **kwargs)
 
 
-def srtm3_clip(left, bottom, right, top, out_path, dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
-    datasource_root = srtm3_ensure_setup(dataset=dataset, provider=provider, version=version)
+def srtm3_clip(left, bottom, right, top, out_path, cache_dir=USER_CACHE_DIR, dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+    datasource_root = srtm3_ensure_setup(cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
     ensure_tiles_names = srtm3_tiles_names(left, bottom, right, top)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     srtm3_do_clip(datasource_root, out_path, (left, bottom, right, top), **kwargs)

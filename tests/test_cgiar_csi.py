@@ -43,5 +43,10 @@ def test_srtm3_do_clip(mocker):
     check_call.assert_called_once_with(cmd, shell=True)
 
 
-def test_srtm3_clip():
-    cgiar_csi.srtm3_clip(13.1, 43.1, 14.9, 44.9, 'out.tif') == 0
+def test_srtm3_clip(mocker, tmpdir):
+    check_call = mocker.stub()
+    root = tmpdir.join('root')
+    cgiar_csi.srtm3_clip(13.1, 43.1, 14.9, 44.9, 'out.tif', cache_dir=str(root), check_call=check_call)
+    assert len(root.listdir()) == 1
+    datasource_root = root.listdir()[0]
+    check_call.assert_any_call('make -C %s  all ENSURE_TILES="srtm_39_04.tif"' % datasource_root, shell=True)
