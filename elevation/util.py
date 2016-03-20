@@ -22,16 +22,15 @@ import os
 import subprocess
 
 
-def ensure_setup(root, folders, file_templates, **kwargs):
+def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     created_folders = []
-    for relpath in folders:
-        path = os.path.join(root, relpath)
+    for path in [root] + [os.path.join(root, p) for p in folders]:
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
             created_folders.append(path)
 
     created_files = collections.OrderedDict()
-    for relpath, template in file_templates.items():
+    for relpath, template in collections.OrderedDict(file_templates).items():
         path = os.path.join(root, relpath)
         if not os.path.exists(path):
             body = template.format(**kwargs)
