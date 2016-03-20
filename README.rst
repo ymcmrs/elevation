@@ -6,21 +6,28 @@ elaborated by CGIAR-CSI.
 Installation and command line usage
 -----------------------------------
 
-You need to have the
-`GDAL/OGR library and command line tools <https://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries>`_
-installed.
+The following dependencies need to be installed:
+- `GNU make <https://www.gnu.org/software/make/>`_
+- `curl <https://curl.haxx.se/>`_
+- `GDAL command line tools <http://www.gdal.org/>`_
 
 Install the `latest version of elevation <https://pypi.python.org/pypi/elevation>`_
 from the Python Package Index::
 
     $ pip install elevation
 
-Identify the bounding box of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.tif`` file execute::
+Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
+For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.tif`` file::
 
-    $ eio clip -o Rome-DEM.tif 12 41.5 13 42.5
+    $ eio clip -o Rome-DEM.tif --bounds 12 41.5 13 42.5
+    curl -s -o spool/srtm_39_04.zip http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff/srtm_39_04.zip
+    unzip -q -d spool spool/srtm_39_04.zip srtm_39_04.tif
+    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 spool/srtm_39_04.tif cache/srtm_39_04.tif
+    gdalbuildvrt -q -overwrite SRTM3-CGIAR-CSI-V41.vrt cache/*.tif
+    rm spool/srtm_39_04.tif
+    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin 12.0 42.5 13.0 41.5 SRTM3-CGIAR-CSI-V41.vrt /Users/amici/devel/elevation/Rome-DEM.tif
 
-The bounding box must be given as ``xmin ymin xmax ymax`` similarly to the ``rio`` command form ``rasterio``.
+The ``--bounds`` option must be given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
 The first time an area is accessed elevation downloads the data tiles from the CGIAR-CSI server and
 caches them as GeoTiff compressed formats,

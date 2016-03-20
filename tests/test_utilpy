@@ -6,6 +6,8 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
+import os
+
 from elevation import cgiar_csi
 
 
@@ -19,8 +21,14 @@ def test_srtm3_v41_tile_indices():
     assert cgiar_csi.srtm3_tile_ilonlat(14.9, 40.1) == (39, 4)
 
 
-def test_srtm3_tiles_names():
-    assert next(cgiar_csi.srtm3_tiles_names(10.1, 44.9, 10.1, 44.9)).endswith('srtm_39_04.tif')
+def test_srtm3_tile_local_path():
+    assert cgiar_csi.srtm3_tile_local_path(39, 4).endswith('srtm_39_04.tif')
+
+
+def test_srtm3_tile_remote_url():
+    # values from http://srtm.csi.cgiar.org/SELECTION/inputCoord.asp
+    expected = 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff/srtm_39_04.zip'
+    assert cgiar_csi.srtm3_tile_remote_url(39, 4) == expected
 
 
 zip_bytes = (
@@ -48,6 +56,25 @@ zip_bytes = (
     b"\x04\x14\x00\x00\x00PK\x05\x06\x00\x00\x00\x00\x01\x00\x01\x00O\x00\x00\x00,\x02\x00"
     b"\x00\x00\x00"
 )
+
+
+def test_srtm3_unpack_tile(tmpdir):
+    zip = tmpdir.join('int16.zip')
+    tif = tmpdir.join('int16.tif')
+
+    zip.write_binary(zip_bytes)
+
+    cgiar_csi.srtm3_unpack_tile(str(zip), str(tif))
+    assert 1000 < len(tif.read_binary()) < 1200
+
+
+def notest_srtm3_fetch_tile():
+    here = os.path.dirname(__file__)
+    cgiar_csi.srtm3_fetch_tile(39, 4, os.path.join(here, 'srtm_39_04.tif'))
+
+
+def test_srtm3_ensure_datasource():
+    assert cgiar_csi.srtm3_ensure_datasource(9.1, 39.1, 14.9, 44.9)
 
 
 def test_srtm3_clip():

@@ -17,3 +17,4 @@
 import appdirs
 
 USER_CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
+DATASOURCE_TEMPLATE = '{dataset}-{provider}-{version}'

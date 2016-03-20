@@ -19,20 +19,15 @@ from __future__ import absolute_import, unicode_literals
 
 import math
 import os
-from future.moves.urllib import parse
-import subprocess
-import zipfile
+import pkgutil
 
 from . import USER_CACHE_DIR
+from . import DATASOURCE_TEMPLATE
 from . import util
 
 
-BASE_URL = 'http://srtm.csi.cgiar.org/'
-
-SRTM3_TILES_FOLDER = 'SRT-ZIP/SRTM_{version}/SRTM_Data_GeoTiff/'
-SRTM3_TILE_LOCAL_NAME = 'srtm_{ilon:02d}_{ilat:02d}.tif'
-SRTM3_TILE_REMOTE_NAME = 'srtm_{ilon:02d}_{ilat:02d}.zip'
-TRANSLATE_CMD = 'gdal_translate -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 '
+PROVIDER = 'CGIAR-CSI'
+SRTM3_TILE_NAME_TEMPLATE = 'srtm_{ilon:02d}_{ilat:02d}.tif'
 
 
 def srtm3_tile_ilonlat(lon, lat):
@@ -42,57 +37,39 @@ def srtm3_tile_ilonlat(lon, lat):
     return ilon, ilat
 
 
-def srtm3_tile_local_path(ilon, ilat, version='V41', local_root=USER_CACHE_DIR):
-    tile_local_name = SRTM3_TILE_LOCAL_NAME.format(**locals())
-    tiles_folder = SRTM3_TILES_FOLDER.format(**locals())
-    tile_local_path = os.path.join(local_root, tiles_folder, tile_local_name)
-    return tile_local_path
+def srtm3_tiles_names(left, bottom, right, top, tile_name_template=SRTM3_TILE_NAME_TEMPLATE):
+    ileft, itop = srtm3_tile_ilonlat(left, top)
+    iright, ibottom = srtm3_tile_ilonlat(right, bottom)
+    for ilon in range(ileft, iright + 1):
+        for ilat in range(itop, ibottom + 1):
+            yield tile_name_template.format(**locals())
 
 
-def srtm3_tile_remote_url(ilon, ilat, version='V41'):
-    tile_remote_name = SRTM3_TILE_REMOTE_NAME.format(**locals())
-    tiles_folder = SRTM3_TILES_FOLDER.format(**locals())
-    tile_remote_url = parse.urljoin(BASE_URL, tiles_folder + tile_remote_name)
-    return tile_remote_url
+def srtm3_ensure_setup(cache_dir, datasource_template, **kwargs):
+    folders = ['cache', 'spool']
+    file_templates = {
+        'Makefile': pkgutil.get_data('elevation', 'cgiar_csi_srtm3.mk').decode('utf-8'),
+    }
+    datasource = datasource_template.format(**kwargs)
+    datasource_root = os.path.join(cache_dir, datasource)
+    util.ensure_setup(datasource_root, folders, file_templates, datasource=datasource, **kwargs)
+    return datasource_root
 
 
-def srtm3_unpack_tile(zip_local_path, tile_local_path):
-    with zipfile.ZipFile(zip_local_path) as zip, util.TemporaryDirectory() as temp:
-        tile_temp_path = zip.extract(os.path.basename(tile_local_path), path=temp)
-        subprocess.check_call(TRANSLATE_CMD + '%s %s' % (tile_temp_path, tile_local_path), shell=True)
-    return tile_local_path
+def srtm3_ensure_tiles(path, ensure_tiles_names):
+    ensure_tiles = ' '.join(ensure_tiles_names)
+    util.call_make(path, targets=['all'], variables=locals(), make_flags='-j 4')
 
 
-def srtm3_fetch_tile(ilon, ilat, tile_local_path, version='V41'):
-    tile_remote_url = srtm3_tile_remote_url(ilon, ilat, version=version)
-    with util.urlretrieve_tempfile(tile_remote_url) as (zip_local_path, _):
-        return srtm3_unpack_tile(zip_local_path, tile_local_path)
+def srtm3_do_clip(path, out_path, bounds):
+    left, bottom, right, top = bounds
+    projwin = '%s %s %s %s' % (left, top, right, bottom)
+    util.call_make(path, targets=['clip'], variables=locals())
 
 
-def srtm3_ensure_datasource(xmin, ymin, xmax, ymax, local_root=USER_CACHE_DIR, version='V41'):
-    top_left = srtm3_tile_ilonlat(xmin, ymax)
-    bottom_right = srtm3_tile_ilonlat(xmax, ymin)
-
-    rebuild_datasource = False
-    for ilon in range(top_left[0], bottom_right[0] + 1):
-        for ilat in range(top_left[1], bottom_right[1] + 1):
-            tile_local_path = srtm3_tile_local_path(ilon, ilat, local_root=local_root, version=version)
-            subprocess.check_call('mkdir -p %s' % os.path.dirname(tile_local_path), shell=True)
-            if not os.path.exists(tile_local_path):
-                rebuild_datasource = True
-                srtm3_fetch_tile(ilon, ilat, tile_local_path, version=version)
-
-    datasource_path = os.path.join(os.path.dirname(tile_local_path), 'cgiar-csi-srtm3.vrt')
-    if rebuild_datasource:
-        util.build_datasource(datasource_path)
-
-    return datasource_path
-
-
-def srtm3_clip(xmin, ymin, xmax, ymax, out_path, local_root=USER_CACHE_DIR, version='V41'):
-    datasource_path = srtm3_ensure_datasource(
-        xmin, ymin, xmax, ymax, local_root=local_root, version=version
-    )
-    bbox_test = '%f %f %f %f' % (xmin, ymax, xmax, ymin)
-    clip_cmd = TRANSLATE_CMD + '-projwin %s %s %s' % (bbox_test, datasource_path, out_path)
-    subprocess.check_call(clip_cmd, shell=True)
+def srtm3_clip(left, bottom, right, top, out_path, dataset='SRTM3', provider=PROVIDER, version='V41'):
+    datasource_root = srtm3_ensure_setup(
+        USER_CACHE_DIR, DATASOURCE_TEMPLATE, dataset=dataset, provider=provider, version=version)
+    ensure_tiles_names = srtm3_tiles_names(left, bottom, right, top)
+    srtm3_ensure_tiles(datasource_root, ensure_tiles_names)
+    srtm3_do_clip(datasource_root, out_path, (left, bottom, right, top))

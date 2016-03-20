@@ -39,9 +39,11 @@ setup(
     description="Global geographic elevation data (CGIAR-CSI SRTM 90m v4.1).",
     long_description=read('README.rst'),
     packages=find_packages(),
+    include_package_data=True,
     install_requires=[
         'future',
         'appdirs',
+        'click',
     ],
     zip_safe=True,
     classifiers=[

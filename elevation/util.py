@@ -17,28 +17,33 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
-import contextlib
+import collections
 import os
-from future.moves.urllib import request
-import shutil
-import tempfile
+import subprocess
 
 
-@contextlib.contextmanager
-def urlretrieve_tempfile(url, filename=None):
-    filename, info = request.urlretrieve(url, filename=filename)
-    yield filename, info
-    os.unlink(filename)
+def ensure_setup(root, folders, file_templates, **kwargs):
+    created_folders = []
+    for relpath in folders:
+        path = os.path.join(root, relpath)
+        if not os.path.exists(path):
+            os.makedirs(path, exist_ok=True)
+            created_folders.append(path)
+
+    created_files = collections.OrderedDict()
+    for relpath, template in file_templates.items():
+        path = os.path.join(root, relpath)
+        if not os.path.exists(path):
+            body = template.format(**kwargs)
+            with open(path, 'w') as file:
+                file.write(body)
+            created_files[path] = body
+
+    return created_folders, created_files
 
 
-@contextlib.contextmanager
-def TemporaryDirectory(suffix='', prefix='tmp', dir=None):
-    path = tempfile.mkdtemp(suffix, prefix, dir)
-    yield path
-    shutil.rmtree(path, ignore_errors=True)
-
-
-def build_datasource(datasource_path, glob_pattern='srtm_*.tif'):
-    datasource_folder = os.path.dirname(datasource_path)
-    build_cmd = 'gdalbuildvrt -overwrite %s %s' % (os.path.basename(datasource_path), glob_pattern)
-    os.system('cd %s && %s' % (datasource_folder, build_cmd))
+def call_make(path, targets=(), variables=(), make_flags=''):
+    make_targets = ' '.join(targets)
+    make_variables = ' '.join('%s="%s"' % (k.upper(), v) for k, v in dict(variables).items())
+    cmd = 'make -C {path} {make_flags} {make_targets} {make_variables}'.format(**locals())
+    subprocess.check_call(cmd, shell=True)

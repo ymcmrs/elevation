@@ -27,8 +27,10 @@ def eio():
     pass
 
 
-@eio.command()
-@click.argument('bbox', type=float, nargs=4)
-@click.option('-o', '--out_path', type=click.Path(), default='out.tif')
+@eio.command(short_help='Clip a DEM to given bounds.')
+@click.option('-o', '--output', default='out.tif', type=click.Path(resolve_path=True),
+              help="Path to output file. Existing files will be overwritten.")
+@click.option('--bounds', nargs=4, type=float, default=None,
+              help='Output bounds: left bottom right top.')
 def clip(**kwargs):
     api.clip(**kwargs)
