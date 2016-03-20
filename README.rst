@@ -25,7 +25,7 @@ For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.ti
     gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 spool/srtm_39_04.tif cache/srtm_39_04.tif
     gdalbuildvrt -q -overwrite SRTM3-CGIAR-CSI-V41.vrt cache/*.tif
     rm spool/srtm_39_04.tif
-    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin 12.0 42.5 13.0 41.5 SRTM3-CGIAR-CSI-V41.vrt /Users/amici/devel/elevation/Rome-DEM.tif
+    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin 12.0 42.5 13.0 41.5 SRTM3-CGIAR-CSI-V41.vrt [...]/Rome-DEM.tif
 
 The ``--bounds`` option must be given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
