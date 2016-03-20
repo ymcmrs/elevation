@@ -7,8 +7,10 @@ Installation and command line usage
 -----------------------------------
 
 The following dependencies need to be installed:
+
 - `GNU make <https://www.gnu.org/software/make/>`_
 - `curl <https://curl.haxx.se/>`_
+- unzip
 - `GDAL command line tools <http://www.gdal.org/>`_
 
 Install the `latest version of elevation <https://pypi.python.org/pypi/elevation>`_
