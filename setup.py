@@ -57,6 +57,7 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: Apache Software License',
+        'Topic :: Scientific/Engineering :: GIS',
     ],
     keywords='SRTM DEM DTM global digital elevation terrain model',
     entry_points={
