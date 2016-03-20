@@ -37,3 +37,10 @@ def test_ensure_setup(tmpdir):
     assert len(created_files) == 0
     assert len(root.listdir()) == 3
     assert root.join('Makefile').read() == 'all: file.txt'
+
+
+def test_check_call_make(mocker):
+    check_call = mocker.stub()
+    cmd = util.check_call_make('/tmp', check_call=check_call)
+    assert cmd.strip() == 'make -C /tmp'
+    check_call.assert_called_once_with(cmd, shell=True)

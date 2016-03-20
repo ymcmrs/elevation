@@ -45,7 +45,7 @@ def srtm3_tiles_names(left, bottom, right, top, tile_name_template=SRTM3_TILE_NA
             yield tile_name_template.format(**locals())
 
 
-def srtm3_ensure_setup(cache_dir, datasource_template, **kwargs):
+def srtm3_ensure_setup(cache_dir=USER_CACHE_DIR, datasource_template=DATASOURCE_TEMPLATE, **kwargs):
     folders = ['cache', 'spool']
     file_templates = {
         'Makefile': pkgutil.get_data('elevation', 'cgiar_csi_srtm3.mk').decode('utf-8'),
@@ -56,20 +56,19 @@ def srtm3_ensure_setup(cache_dir, datasource_template, **kwargs):
     return datasource_root
 
 
-def srtm3_ensure_tiles(path, ensure_tiles_names):
+def srtm3_ensure_tiles(path, ensure_tiles_names, **kwargs):
     ensure_tiles = ' '.join(ensure_tiles_names)
-    util.call_make(path, targets=['all'], variables=locals())
+    return util.check_call_make(path, targets=['all'], variables=[('ensure_tiles', ensure_tiles)], **kwargs)
 
 
-def srtm3_do_clip(path, out_path, bounds):
+def srtm3_do_clip(path, out_path, bounds, **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
-    util.call_make(path, targets=['clip'], variables=locals())
+    return util.check_call_make(path, targets=['clip'], variables=[('out_path', out_path), ('projwin', projwin)], **kwargs)
 
 
-def srtm3_clip(left, bottom, right, top, out_path, dataset='SRTM3', provider=PROVIDER, version='V41'):
-    datasource_root = srtm3_ensure_setup(
-        USER_CACHE_DIR, DATASOURCE_TEMPLATE, dataset=dataset, provider=provider, version=version)
+def srtm3_clip(left, bottom, right, top, out_path, dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+    datasource_root = srtm3_ensure_setup(dataset=dataset, provider=provider, version=version)
     ensure_tiles_names = srtm3_tiles_names(left, bottom, right, top)
-    srtm3_ensure_tiles(datasource_root, ensure_tiles_names)
-    srtm3_do_clip(datasource_root, out_path, (left, bottom, right, top))
+    srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
+    srtm3_do_clip(datasource_root, out_path, (left, bottom, right, top), **kwargs)
