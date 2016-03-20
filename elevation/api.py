@@ -22,6 +22,6 @@ def clip(output='out.tif', bounds=None, dataset='SRTM3', provider='CGIAR-CSI', v
     assert left <= right and bottom <= top
     if dataset == 'SRTM3' and provider == cgiar_csi.PROVIDER and version in ['V41']:
         kwargs = {'dataset': dataset, 'provider': provider, 'version': version}
-        return cgiar_csi.srtm3_clip(left, bottom, right, top, output, **kwargs)
+        return cgiar_csi.srtm3_clip(bounds, output, **kwargs)
 
     raise ValueError("Unknown provider/dataset/version: %r/%r/%r" % (provider, dataset, version))

@@ -58,17 +58,21 @@ def srtm3_ensure_setup(cache_dir=USER_CACHE_DIR, datasource_template=DATASOURCE_
 
 def srtm3_ensure_tiles(path, ensure_tiles_names, **kwargs):
     ensure_tiles = ' '.join(ensure_tiles_names)
-    return util.check_call_make(path, targets=['all'], variables=[('ensure_tiles', ensure_tiles)], **kwargs)
+    variables_items = [('ensure_tiles', ensure_tiles)]
+    return util.check_call_make(path, targets=['all'], variables=variables_items, **kwargs)
 
 
 def srtm3_do_clip(path, out_path, bounds, **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
-    return util.check_call_make(path, targets=['clip'], variables=[('out_path', out_path), ('projwin', projwin)], **kwargs)
+    variables_items = [('out_path', out_path), ('projwin', projwin)]
+    return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
-def srtm3_clip(left, bottom, right, top, out_path, cache_dir=USER_CACHE_DIR, dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
-    datasource_root = srtm3_ensure_setup(cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
-    ensure_tiles_names = srtm3_tiles_names(left, bottom, right, top)
+def srtm3_clip(bounds, out_path, cache_dir=USER_CACHE_DIR,
+               dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+    datasource_root = srtm3_ensure_setup(
+        cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
+    ensure_tiles_names = srtm3_tiles_names(*bounds)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
-    srtm3_do_clip(datasource_root, out_path, (left, bottom, right, top), **kwargs)
+    srtm3_do_clip(datasource_root, out_path, bounds, **kwargs)

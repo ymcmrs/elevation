@@ -43,7 +43,8 @@ def ensure_setup(root, folders=(), file_templates=(), **kwargs):
 
 def check_call_make(path, targets=(), variables=(), make_flags='', check_call=subprocess.check_call):
     make_targets = ' '.join(targets)
-    make_variables = ' '.join('%s="%s"' % (k.upper(), v) for k, v in collections.OrderedDict(variables).items())
+    variables_items = collections.OrderedDict(variables).items()
+    make_variables = ' '.join('%s="%s"' % (k.upper(), v) for k, v in variables_items)
     cmd = 'make -C {path} {make_flags} {make_targets} {make_variables}'.format(**locals())
     check_call(cmd, shell=True)
     return cmd

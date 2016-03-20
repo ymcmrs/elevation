@@ -26,13 +26,15 @@ def test_ensure_setup(tmpdir):
     file_templates = [
         ('Makefile', 'all: {target}')
     ]
-    created_folders, created_files = util.ensure_setup(root_path, folders=folders, file_templates=file_templates, target='file.txt')
+    created_folders, created_files = util.ensure_setup(
+        root_path, folders=folders, file_templates=file_templates, target='file.txt')
     assert len(created_folders) == 0
     assert len(created_files) == 1
     assert len(root.listdir()) == 3
     assert root.join('Makefile').read() == 'all: file.txt'
 
-    created_folders, created_files = util.ensure_setup(root_path, folders=folders, file_templates=file_templates, target='wrong')
+    created_folders, created_files = util.ensure_setup(
+        root_path, folders=folders, file_templates=file_templates, target='wrong')
     assert len(created_folders) == 0
     assert len(created_files) == 0
     assert len(root.listdir()) == 3

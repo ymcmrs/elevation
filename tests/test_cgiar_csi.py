@@ -25,28 +25,31 @@ def test_srtm3_tiles_names():
 
 
 def test_srtm3_ensure_setup(tmpdir):
-    root = tmpdir.join('root')
-    cgiar_csi.srtm3_ensure_setup(str(root), dataset='SRTM3', provider=cgiar_csi.PROVIDER, version='V41')
+    root_path = str(tmpdir.join('root'))
+    cgiar_csi.srtm3_ensure_setup(root_path, dataset='SRTM3', provider=cgiar_csi.PROVIDER, version='V41')
 
 
 def test_srtm3_ensure_tiles(mocker):
     check_call = mocker.stub()
-    cmd = cgiar_csi.srtm3_ensure_tiles('/tmp', ['a', 'b'], make_flags='-s', check_call=check_call)
-    assert cmd == 'make -C /tmp -s all ENSURE_TILES="a b"'
+    cmd = cgiar_csi.srtm3_ensure_tiles('/', ['a', 'b'], make_flags='-s', check_call=check_call)
+    assert cmd == 'make -C / -s all ENSURE_TILES="a b"'
     check_call.assert_called_once_with(cmd, shell=True)
 
 
 def test_srtm3_do_clip(mocker):
     check_call = mocker.stub()
-    cmd = cgiar_csi.srtm3_do_clip('/tmp', '/tmp/out.tif', [1, 5, 2, 6], make_flags='-s', check_call=check_call)
-    assert cmd == 'make -C /tmp -s clip OUT_PATH="/tmp/out.tif" PROJWIN="1 6 2 5"'
+    bounds = (1, 5, 2, 6)
+    cmd = cgiar_csi.srtm3_do_clip('/', '/out.tif', bounds, make_flags='-s', check_call=check_call)
+    assert cmd == 'make -C / -s clip OUT_PATH="/out.tif" PROJWIN="1 6 2 5"'
     check_call.assert_called_once_with(cmd, shell=True)
 
 
 def test_srtm3_clip(mocker, tmpdir):
     check_call = mocker.stub()
     root = tmpdir.join('root')
-    cgiar_csi.srtm3_clip(13.1, 43.1, 14.9, 44.9, 'out.tif', cache_dir=str(root), check_call=check_call)
+    bounds = (13.1, 43.1, 14.9, 44.9)
+    cgiar_csi.srtm3_clip(bounds, 'out.tif', cache_dir=str(root), check_call=check_call)
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    check_call.assert_any_call('make -C %s  all ENSURE_TILES="srtm_39_04.tif"' % datasource_root, shell=True)
+    expected_cmd = 'make -C %s  all ENSURE_TILES="srtm_39_04.tif"' % datasource_root
+    check_call.assert_any_call(expected_cmd, shell=True)
