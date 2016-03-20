@@ -58,7 +58,7 @@ def srtm3_ensure_setup(cache_dir, datasource_template, **kwargs):
 
 def srtm3_ensure_tiles(path, ensure_tiles_names):
     ensure_tiles = ' '.join(ensure_tiles_names)
-    util.call_make(path, targets=['all'], variables=locals(), make_flags='-j 4')
+    util.call_make(path, targets=['all'], variables=locals())
 
 
 def srtm3_do_clip(path, out_path, bounds):
