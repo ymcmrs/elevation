@@ -22,18 +22,17 @@ Identify the geographic bounds of the area of interest and fetch the DEM with th
 For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.tif`` file::
 
     $ eio clip -o Rome-DEM.tif --bounds 12 41.5 13 42.5
-    curl -s -o spool/srtm_39_04.zip http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff/srtm_39_04.zip
-    unzip -q -d spool spool/srtm_39_04.zip srtm_39_04.tif
-    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 spool/srtm_39_04.tif cache/srtm_39_04.tif
-    gdalbuildvrt -q -overwrite SRTM3-CGIAR-CSI-V41.vrt cache/*.tif
-    rm spool/srtm_39_04.tif
-    gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin 12.0 42.5 13.0 41.5 SRTM3-CGIAR-CSI-V41.vrt [...]/Rome-DEM.tif
 
 The ``--bounds`` option must be given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
 The first time an area is accessed elevation downloads the data tiles from the CGIAR-CSI server and
 caches them as GeoTiff compressed formats,
 subsequent accesses to the same and nearby areas are much faster.
+
+It is possible to pre-populate the cache for an area, for example for Italy execute::
+
+    $ eio seed --bounds 6.6 36.6 18.6 47.1
+
 
 Project resources
 -----------------

@@ -32,6 +32,8 @@ def eio():
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
+@click.option('--make_flags', default='-s',
+              help='Options to be passed to make.')
 def clip(**kwargs):
     api.clip(**kwargs)
 
@@ -39,5 +41,7 @@ def clip(**kwargs):
 @eio.command(short_help='Seed a DEM to given bounds.')
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
+@click.option('--make_flags', default='-s',
+              help='Options to be passed to make.')
 def seed(**kwargs):
     api.seed(**kwargs)
