@@ -75,11 +75,11 @@ def srtm3_seed(bounds, cache_dir=USER_CACHE_DIR,
         cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
     ensure_tiles_names = srtm3_tiles_names(*bounds)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
+    return datasource_root
 
 
 def srtm3_clip(bounds, output, cache_dir=USER_CACHE_DIR,
                dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
-    datasource_root = srtm3_ensure_setup(
-        cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
-    srtm3_ensure_tiles(datasource_root, **kwargs)
+    datasource_root = srtm3_seed(
+        bounds, cache_dir=cache_dir, dataset=dataset, provider=provider, version=version, **kwargs)
     srtm3_do_clip(datasource_root, output, bounds, **kwargs)
