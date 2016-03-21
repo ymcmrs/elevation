@@ -31,7 +31,6 @@ distclean: clean
 	$(RM) cache/* $(DATASOURCE).vrt Makefile
 
 .DELETE_ON_ERROR:
-.PRECIOUS: spool/%.zip
 .PHONY: all clean distclean clip
 
 #
