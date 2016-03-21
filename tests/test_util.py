@@ -6,6 +6,8 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
+import subprocess
+
 from elevation import util
 
 
@@ -42,7 +44,7 @@ def test_ensure_setup(tmpdir):
 
 
 def test_check_call_make(mocker):
-    check_call = mocker.stub()
-    cmd = util.check_call_make('/tmp', check_call=check_call)
+    with mocker.patch('subprocess.check_call'):
+        cmd = util.check_call_make('/tmp')
     assert cmd.strip() == 'make -C /tmp'
-    check_call.assert_called_once_with(cmd, shell=True)
+    subprocess.check_call.assert_called_once_with(cmd, shell=True)

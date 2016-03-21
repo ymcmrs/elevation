@@ -19,6 +19,7 @@ from __future__ import absolute_import, unicode_literals
 
 import click
 
+from . import USER_CACHE_DIR
 from . import api
 
 
@@ -32,8 +33,11 @@ def eio():
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.option('--make_flags', default='-s',
+@click.option('--make_flags', default='-k -s',
               help='Options to be passed to make.')
+@click.option('--cache_dir', default=USER_CACHE_DIR,
+              type=click.Path(resolve_path=True, file_okay=False),
+              help='Root of the cache folder.')
 def clip(**kwargs):
     api.clip(**kwargs)
 
@@ -41,7 +45,10 @@ def clip(**kwargs):
 @eio.command(short_help='Seed a DEM to given bounds.')
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.option('--make_flags', default='-s',
+@click.option('--make_flags', default='-k -s',
               help='Options to be passed to make.')
+@click.option('--cache_dir', default=USER_CACHE_DIR,
+              type=click.Path(resolve_path=True, file_okay=False),
+              help='Root of the cache folder.')
 def seed(**kwargs):
     api.seed(**kwargs)

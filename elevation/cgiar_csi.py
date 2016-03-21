@@ -62,10 +62,10 @@ def srtm3_ensure_tiles(path, ensure_tiles_names=(), **kwargs):
     return util.check_call_make(path, targets=['all'], variables=variables_items, **kwargs)
 
 
-def srtm3_do_clip(path, out_path, bounds, **kwargs):
+def srtm3_do_clip(path, output, bounds, **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
-    variables_items = [('out_path', out_path), ('projwin', projwin)]
+    variables_items = [('output', output), ('projwin', projwin)]
     return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
@@ -77,9 +77,9 @@ def srtm3_seed(bounds, cache_dir=USER_CACHE_DIR,
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
 
 
-def srtm3_clip(bounds, out_path, cache_dir=USER_CACHE_DIR,
+def srtm3_clip(bounds, output, cache_dir=USER_CACHE_DIR,
                dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
     datasource_root = srtm3_ensure_setup(
         cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
     srtm3_ensure_tiles(datasource_root, **kwargs)
-    srtm3_do_clip(datasource_root, out_path, bounds, **kwargs)
+    srtm3_do_clip(datasource_root, output, bounds, **kwargs)

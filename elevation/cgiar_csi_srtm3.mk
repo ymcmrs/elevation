@@ -22,7 +22,7 @@ cache/%.tif: spool/%.tif
 	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 $< $@
 
 clip: $(DATASOURCE).vrt
-	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(DATASOURCE).vrt $(OUT_PATH)
+	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(DATASOURCE).vrt $(OUTPUT)
 
 clean:
 	$(RM) spool/*
