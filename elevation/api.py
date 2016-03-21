@@ -16,3 +16,5 @@
 
 from .cgiar_csi import srtm3_clip as clip
 from .cgiar_csi import srtm3_seed as seed
+
+__all__ = ['clip', 'seed']
