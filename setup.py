@@ -26,7 +26,7 @@ def read(fname):
     return codecs.open(file_path, encoding='utf-8').read()
 
 
-version = '0.5.0.dev0'
+version = '0.4.1'
 
 setup(
     name='elevation',

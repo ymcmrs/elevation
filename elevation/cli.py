@@ -23,6 +23,10 @@ from . import USER_CACHE_DIR
 from . import api
 
 
+# disable overzealous warning
+click.disable_unicode_literals_warning = True
+
+
 @click.group()
 def eio():
     pass
