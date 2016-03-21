@@ -40,4 +40,4 @@ def clip(**kwargs):
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
 def seed(**kwargs):
-    api.clip(output=None, **kwargs)
+    api.seed(**kwargs)

@@ -14,14 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from . import cgiar_csi
-
-
-def clip(output='out.tif', bounds=None, dataset='SRTM3', provider='CGIAR-CSI', version='V41'):
-    left, bottom, right, top = bounds
-    assert left <= right and bottom <= top
-    if dataset == 'SRTM3' and provider == cgiar_csi.PROVIDER and version in ['V41']:
-        kwargs = {'dataset': dataset, 'provider': provider, 'version': version}
-        return cgiar_csi.srtm3_clip(bounds, output, **kwargs)
-
-    raise ValueError("Unknown provider/dataset/version: %r/%r/%r" % (provider, dataset, version))
+from .cgiar_csi import srtm3_clip as clip
+from .cgiar_csi import srtm3_seed as seed
