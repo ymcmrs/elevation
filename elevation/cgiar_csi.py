@@ -75,4 +75,5 @@ def srtm3_clip(bounds, out_path, cache_dir=USER_CACHE_DIR,
         cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
     ensure_tiles_names = srtm3_tiles_names(*bounds)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
-    srtm3_do_clip(datasource_root, out_path, bounds, **kwargs)
+    if out_path:
+        srtm3_do_clip(datasource_root, out_path, bounds, **kwargs)

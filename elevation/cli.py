@@ -28,9 +28,16 @@ def eio():
 
 
 @eio.command(short_help='Clip a DEM to given bounds.')
-@click.option('-o', '--output', default='out.tif', type=click.Path(resolve_path=True),
+@click.option('-o', '--output', default='out.tif', type=click.Path(resolve_path=True, dir_okay=False),
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
 def clip(**kwargs):
     api.clip(**kwargs)
+
+
+@eio.command(short_help='Seed a DEM to given bounds.')
+@click.option('--bounds', nargs=4, type=float, default=None,
+              help='Output bounds: left bottom right top.')
+def seed(**kwargs):
+    api.clip(output=None, **kwargs)
