@@ -20,7 +20,7 @@ def test_eio_seed(mocker, tmpdir):
     with mocker.patch('subprocess.check_call'):
         result = runner.invoke(cli.seed, options.split())
     assert not result.exception
-    assert subprocess.check_call.call_count == 1
+    assert subprocess.check_call.call_count == 2
 
 
 def test_eio_clip(mocker, tmpdir):
@@ -30,7 +30,7 @@ def test_eio_clip(mocker, tmpdir):
     with mocker.patch('subprocess.check_call'):
         result = runner.invoke(cli.clip, options.split())
     assert not result.exception
-    assert subprocess.check_call.call_count == 2
+    assert subprocess.check_call.call_count == 3
 
 
 def test_eio(mocker, tmpdir):
@@ -40,4 +40,4 @@ def test_eio(mocker, tmpdir):
     with mocker.patch('subprocess.check_call'):
         result = runner.invoke(cli.eio, options.split())
     assert not result.exception
-    assert subprocess.check_call.call_count == 1
+    assert subprocess.check_call.call_count == 2

@@ -34,7 +34,7 @@ def test_srtm3_ensure_setup(tmpdir):
 def test_srtm3_ensure_tiles(mocker):
     with mocker.patch('subprocess.check_call'):
         cmd = cgiar_csi.srtm3_ensure_tiles('/', ['a', 'b'], make_flags='-s')
-    assert cmd == 'make -C / -s all ENSURE_TILES="a b"'
+    assert cmd == 'make -C / -s download ENSURE_TILES="a b"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 
@@ -53,7 +53,7 @@ def test_srtm3_seed(mocker, tmpdir):
         cgiar_csi.srtm3_seed(bounds, cache_dir=str(root))
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    expected_cmd = 'make -C %s  all ENSURE_TILES="srtm_39_04.tif"' % datasource_root
+    expected_cmd = 'make -C %s  download ENSURE_TILES="srtm_39_04.tif"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
 
