@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # python 2 support via python-future
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import click
 
