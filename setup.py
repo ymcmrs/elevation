@@ -43,6 +43,7 @@ setup(
     install_requires=[
         'future',
         'appdirs',
+        'fasteners',
         'click',
     ],
     zip_safe=True,

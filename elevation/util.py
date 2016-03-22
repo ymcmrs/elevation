@@ -18,10 +18,30 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import collections
+import functools
 import os
 import subprocess
 
+import fasteners
 
+
+LOCKFILE_NAME = '.folder_lock'
+
+
+def folder_lock(wrapped):
+
+    @functools.wraps(wrapped)
+    def wrapper(path, *args, **kwargs):
+        lockfile_name = os.path.join(path, LOCKFILE_NAME)
+        with fasteners.try_lock(fasteners.InterProcessLock(lockfile_name)) as locked:
+            if not locked:
+                raise RuntimeError("Failed to lock cache %r." % path)
+            return wrapped(path, *args, **kwargs)
+
+    return wrapper
+
+
+@folder_lock
 def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     created_folders = []
     for path in [root] + [os.path.join(root, p) for p in folders]:
@@ -41,6 +61,7 @@ def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     return created_folders, created_files
 
 
+@folder_lock
 def check_call_make(path, targets=(), variables=(), make_flags=''):
     make_targets = ' '.join(targets)
     variables_items = collections.OrderedDict(variables).items()

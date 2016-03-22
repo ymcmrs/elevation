@@ -33,16 +33,16 @@ def test_srtm3_ensure_setup(tmpdir):
 
 def test_srtm3_ensure_tiles(mocker):
     with mocker.patch('subprocess.check_call'):
-        cmd = cgiar_csi.srtm3_ensure_tiles('/', ['a', 'b'], make_flags='-s')
-    assert cmd == 'make -C / -s download ENSURE_TILES="a b"'
+        cmd = cgiar_csi.srtm3_ensure_tiles('/tmp', ['a', 'b'], make_flags='-s')
+    assert cmd == 'make -C /tmp -s download ENSURE_TILES="a b"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 
 def test_srtm3_do_clip(mocker):
     bounds = (1, 5, 2, 6)
     with mocker.patch('subprocess.check_call'):
-        cmd = cgiar_csi.srtm3_do_clip('/', '/out.tif', bounds, make_flags='-s')
-    assert cmd == 'make -C / -s clip OUTPUT="/out.tif" PROJWIN="1 6 2 5"'
+        cmd = cgiar_csi.srtm3_do_clip('/tmp', '/out.tif', bounds, make_flags='-s')
+    assert cmd == 'make -C /tmp -s clip OUTPUT="/out.tif" PROJWIN="1 6 2 5"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 

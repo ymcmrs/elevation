@@ -15,7 +15,7 @@ def test_ensure_setup(tmpdir):
     root = tmpdir.join('root')
     root_path = str(root)
     created_folders, _ = util.ensure_setup(root_path)
-    assert len(created_folders) == 1 and created_folders[0].endswith('root')
+    assert len(created_folders) == 0
     assert len(tmpdir.listdir()) == 1
 
     folders = ['etc', 'lib']
@@ -23,7 +23,7 @@ def test_ensure_setup(tmpdir):
     assert len(created_folders) == 2
     assert created_folders[0].endswith('etc')
     assert created_folders[1].endswith('lib')
-    assert len(root.listdir()) == 2
+    assert len(root.listdir()) == 3
 
     file_templates = [
         ('Makefile', 'all: {target}')
@@ -32,14 +32,14 @@ def test_ensure_setup(tmpdir):
         root_path, folders=folders, file_templates=file_templates, target='file.txt')
     assert len(created_folders) == 0
     assert len(created_files) == 1
-    assert len(root.listdir()) == 3
+    assert len(root.listdir()) == 4
     assert root.join('Makefile').read() == 'all: file.txt'
 
     created_folders, created_files = util.ensure_setup(
         root_path, folders=folders, file_templates=file_templates, target='wrong')
     assert len(created_folders) == 0
     assert len(created_files) == 0
-    assert len(root.listdir()) == 3
+    assert len(root.listdir()) == 4
     assert root.join('Makefile').read() == 'all: file.txt'
 
 
