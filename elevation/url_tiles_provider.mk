@@ -1,25 +1,27 @@
 
-BASE_URL := http://srtm.csi.cgiar.org
-VERSION := {version}
-FOLDER_PATH := SRT-ZIP/SRTM_$(VERSION)/SRTM_Data_GeoTiff
+DATASOURCE_URL := {datasource_url}
 DATASOURCE := {datasource}
+TILE_EXT := {tile_ext}
+ZIP_EXT := {zip_ext}
 
 ENSURE_TILE_PATHS := $(foreach n,$(ENSURE_TILES),cache/$n)
 
 
 all: $(DATASOURCE).vrt
 
-$(DATASOURCE).vrt: $(shell ls cache/*.tif 2>/dev/null) $(ENSURE_TILE_PATHS)
+$(DATASOURCE).vrt: $(shell ls cache/*.tif 2>/dev/null)
 	gdalbuildvrt -q -overwrite $@ cache/*.tif
 
-spool/%.zip:
-	curl -s -o $@ $(BASE_URL)/$(FOLDER_PATH)/$*.zip
+spool/%$(ZIP_EXT):
+	curl -s -f -o $@ $(DATASOURCE_URL)/$*$(ZIP_EXT)
 
-spool/%.tif: spool/%.zip
-	unzip -q -d spool $< $*.tif
+spool/%$(TILE_EXT): spool/%$(ZIP_EXT)
+	unzip -q -d spool $< $*$(TILE_EXT)
 
-cache/%.tif: spool/%.tif
+cache/%.tif: spool/%$(TILE_EXT)
 	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 $< $@
+
+download: $(ENSURE_TILE_PATHS)
 
 clip: $(DATASOURCE).vrt
 	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(DATASOURCE).vrt $(OUTPUT)
@@ -31,7 +33,7 @@ distclean: clean
 	$(RM) cache/* $(DATASOURCE).vrt Makefile
 
 .DELETE_ON_ERROR:
-.PHONY: all clean distclean clip
+.PHONY: all download clip clean distclean
 
 #
 # override most of make default behaviour

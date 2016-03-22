@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # python 2 support via python-future
-from __future__ import absolute_import, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import math
 import os
@@ -27,7 +27,6 @@ from . import util
 
 
 PROVIDER = 'CGIAR-CSI'
-SRTM3_URL_TEMPLATE = 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_{version}/SRTM_Data_GeoTiff'
 SRTM3_TILE_NAME_TEMPLATE = 'srtm_{ilon:02d}_{ilat:02d}.tif'
 
 
@@ -49,21 +48,18 @@ def srtm3_tiles_names(left, bottom, right, top, tile_name_template=SRTM3_TILE_NA
 def srtm3_ensure_setup(cache_dir=USER_CACHE_DIR, datasource_template=DATASOURCE_TEMPLATE, **kwargs):
     folders = ['cache', 'spool']
     file_templates = {
-        'Makefile': pkgutil.get_data('elevation', 'url_tiles_provider.mk').decode('utf-8'),
+        'Makefile': pkgutil.get_data('elevation', 'cgiar_csi_srtm3.mk').decode('utf-8'),
     }
-    kwargs['datasource_url'] = SRTM3_URL_TEMPLATE.format(**kwargs)
-    kwargs['datasource'] = datasource_template.format(**kwargs)
-    kwargs['zip_ext'] = '.zip'
-    kwargs['tile_ext'] = '.tif'
-    datasource_root = os.path.join(cache_dir, kwargs['datasource'])
-    util.ensure_setup(datasource_root, folders, file_templates, **kwargs)
+    datasource = datasource_template.format(**kwargs)
+    datasource_root = os.path.join(cache_dir, datasource)
+    util.ensure_setup(datasource_root, folders, file_templates, datasource=datasource, **kwargs)
     return datasource_root
 
 
 def srtm3_ensure_tiles(path, ensure_tiles_names=(), **kwargs):
     ensure_tiles = ' '.join(ensure_tiles_names)
     variables_items = [('ensure_tiles', ensure_tiles)]
-    return util.check_call_make(path, targets=['download'], variables=variables_items, **kwargs)
+    return util.check_call_make(path, targets=['all'], variables=variables_items, **kwargs)
 
 
 def srtm3_do_clip(path, output, bounds, **kwargs):
@@ -79,7 +75,6 @@ def srtm3_seed(bounds, cache_dir=USER_CACHE_DIR,
         cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
     ensure_tiles_names = srtm3_tiles_names(*bounds)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
-    util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
 
 
