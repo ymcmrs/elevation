@@ -34,7 +34,7 @@ def eio():
 
 @eio.command(short_help='Audits your installation for common issues.')
 def selfcheck():
-    elevation.selfcheck()
+    util.selfcheck(tools=elevation.TOOLS)
 
 
 product_options = util.composed(

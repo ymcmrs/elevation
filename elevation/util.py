@@ -28,6 +28,14 @@ import fasteners
 LOCKFILE_NAME = '.folder_lock'
 
 
+def selfcheck(tools):
+    for tool_name, check_cli in collections.OrderedDict(tools).items():
+        try:
+            subprocess.check_output(check_cli, shell=True)
+        except subprocess.CalledProcessError:
+            raise RuntimeError('%r not found in PATH.' % tool_name)
+
+
 def folder_lock(wrapped):
 
     @functools.wraps(wrapped)

@@ -26,7 +26,7 @@ def test_srtm3_tiles_names():
     assert len(list(datasource.srtm3_tiles_names(9.9, 39.1, 15.1, 45.1))) == 9
 
 
-def test_srtm3_ensure_tiles(mocker):
+def test_ensure_tiles(mocker):
     with mocker.patch('subprocess.check_call'):
         cmd = datasource.ensure_tiles('/tmp', ['a', 'b'], make_flags='-s')
     assert cmd == 'make -C /tmp -s download ENSURE_TILES="a b"'

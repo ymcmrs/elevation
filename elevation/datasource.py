@@ -29,7 +29,7 @@ from . import util
 # declare public all API functions and constants
 __all__ = [
     'seed', 'clip', 'clean',
-    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS',
+    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'TOOLS',
 ]
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
@@ -37,24 +37,13 @@ MAKE_FLAGS = '-s -k'
 DEFAULT_OUTPUT = 'out.tif'
 
 
-def srtm3_tile_ilonlat(lon, lat):
-    assert -180. <= lon <= 180. and -90. <= lat <= 90.
-    ilon = int((math.floor(lon) + 180) // 5 + 1)
-    ilat = int((64 - math.floor(lat)) // 5)
-    return ilon, ilat
-
-
 def srtmgl1_tile_ilonlat(lon, lat):
-    assert -180. <= lon <= 180. and -90. <= lat <= 90.
     return int(math.floor(lon)), int(math.floor(lat))
 
 
-def srtm3_tiles_names(left, bottom, right, top, tile_template='srtm_{ilon:02d}_{ilat:02d}.tif'):
-    ileft, itop = srtm3_tile_ilonlat(left, top)
-    iright, ibottom = srtm3_tile_ilonlat(right, bottom)
-    for ilon in range(ileft, iright + 1):
-        for ilat in range(itop, ibottom + 1):
-            yield tile_template.format(**locals())
+def srtm3_tile_ilonlat(lon, lat):
+    ilon, ilat = srtmgl1_tile_ilonlat(lon, lat)
+    return (ilon + 180) // 5 + 1, (64 - ilat) // 5
 
 
 def srtmgl1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slon}.tif'):
@@ -67,34 +56,48 @@ def srtmgl1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slo
             yield tile_name_template.format(**locals())
 
 
-URL_TILES_DATASOURCE = pkgutil.get_data('elevation', 'datasource.mk').decode('utf-8')
-URL_TILES_SPEC = dict(
-    folders=('spool', 'cache'),
-    file_templates={'Makefile': URL_TILES_DATASOURCE},
-)
+def srtm3_tiles_names(left, bottom, right, top, tile_template='srtm_{ilon:02d}_{ilat:02d}.tif'):
+    ileft, itop = srtm3_tile_ilonlat(left, top)
+    iright, ibottom = srtm3_tile_ilonlat(right, bottom)
+    for ilon in range(ileft, iright + 1):
+        for ilat in range(itop, ibottom + 1):
+            yield tile_template.format(**locals())
 
-SRTMGL1_SPEC = URL_TILES_SPEC.copy()
-SRTMGL1_SPEC.update(dict(
-    datasource_url='http://e4ftl01.cr.usgs.gov/SRTM/SRTMGL1.003/2000.02.11',
-    tile_ext='.hgt',
-    zip_ext='.SRTMGL1.hgt.zip',
-    tile_names=srtmgl1_tiles_names,
-))
 
-SRTM3_SPEC = URL_TILES_SPEC.copy()
-SRTM3_SPEC.update(dict(
-    datasource_url='http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff',
-    tile_ext='.tif',
-    zip_ext='.zip',
-    tile_names=srtm3_tiles_names,
-))
+DATASOURCE_MAKEFILE = pkgutil.get_data('elevation', 'datasource.mk').decode('utf-8')
+
+SRTMGL1_SPEC = {
+    'folders': ('spool', 'cache'),
+    'file_templates': {'Makefile': DATASOURCE_MAKEFILE},
+    'datasource_url': 'http://e4ftl01.cr.usgs.gov/SRTM/SRTMGL1.003/2000.02.11',
+    'tile_ext': '.hgt',
+    'zip_ext': '.SRTMGL1.hgt.zip',
+    'tile_names': srtmgl1_tiles_names,
+}
+
+SRTM3_SPEC = {
+    'folders': ('spool', 'cache'),
+    'file_templates': {'Makefile': DATASOURCE_MAKEFILE},
+    'datasource_url': 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff',
+    'tile_ext': '.tif',
+    'zip_ext': '.zip',
+    'tile_names': srtm3_tiles_names,
+}
 
 PRODUCTS_SPECS = collections.OrderedDict([
     ('SRTMGL1', SRTMGL1_SPEC),
     ('SRTM3', SRTM3_SPEC),
 ])
+
 PRODUCTS = list(PRODUCTS_SPECS)
 DEFAULT_PRODUCT = PRODUCTS[0]
+TOOLS = [
+    ('GNU Make', 'make --version'),
+    ('curl', 'curl --version'),
+    ('unzip', 'unzip -v'),
+    ('gdal_translate', 'gdal_translate --version'),
+    ('gdalbuildvrt', 'gdalbuildvrt --version'),
+]
 
 
 def ensure_tiles(path, ensure_tiles_names=(), **kwargs):
