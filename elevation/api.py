@@ -20,9 +20,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import appdirs
 
 from .datasource import clip, seed, PRODUCTS
+from .selfcheck import selfcheck
 
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 MAKE_FLAGS = '-s -k'
 
-__all__ = ['clip', 'seed', 'PRODUCTS', 'CACHE_DIR', 'MAKE_FLAGS']
+__all__ = ['selfcheck', 'clip', 'seed', 'PRODUCTS', 'CACHE_DIR', 'MAKE_FLAGS']

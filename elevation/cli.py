@@ -33,8 +33,8 @@ def eio():
 
 
 @eio.command(short_help='Audits your installation for common issues.')
-def doctor(**kwargs):
-    api.doctor(**kwargs)
+def selfcheck(**kwargs):
+    api.selfcheck(**kwargs)
 
 
 product_options = util.composed(
