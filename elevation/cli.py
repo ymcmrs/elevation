@@ -28,13 +28,12 @@ click.disable_unicode_literals_warning = True
 
 
 @click.group()
-def eio(**kwargs):
+def eio():
     pass
 
 
 @eio.command(short_help='Audits your installation for common issues.')
-@click.pass_context
-def doctor(ctx, **kwargs):
+def doctor(**kwargs):
     api.doctor(**kwargs)
 
 
@@ -53,8 +52,7 @@ product_options = util.composed(
 @product_options
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.pass_context
-def seed(ctx, **kwargs):
+def seed(**kwargs):
     api.seed(**kwargs)
 
 
@@ -64,13 +62,11 @@ def seed(ctx, **kwargs):
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.pass_context
-def clip(ctx, **kwargs):
+def clip(**kwargs):
     api.clip(**kwargs)
 
 
 @eio.command(short_help='Check the consistency of the DEM cache.')
 @product_options
-@click.pass_context
-def fsck(ctx, **kwargs):
+def fsck(**kwargs):
     api.fsck(**kwargs)
