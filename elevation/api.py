@@ -20,10 +20,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import appdirs
 
 from .datasource import srtm3_clip as clip
-from .datasource import srtm3_seed as seed
+from .datasource import seed
+from .datasource import PRODUCTS
 
 
-PRODUCTS = ['SRTMGL1', 'SRTM3']
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 MAKE_FLAGS = '-s -k'
 

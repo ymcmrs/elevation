@@ -17,16 +17,12 @@
 # python 2 support via python-future
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import collections
 import math
 import os.path
 import pkgutil
 
 from . import util
-
-
-PROVIDER = 'CGIAR-CSI'
-SRTM3_URL_TEMPLATE = 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff'
-SRTM3_TILE_NAME_TEMPLATE = 'srtm_{ilon:02d}_{ilat:02d}.tif'
 
 
 def srtm3_tile_ilonlat(lon, lat):
@@ -36,28 +32,59 @@ def srtm3_tile_ilonlat(lon, lat):
     return ilon, ilat
 
 
-def srtm3_tiles_names(left, bottom, right, top, tile_name_template=SRTM3_TILE_NAME_TEMPLATE):
+def srtmgl1_tile_ilonlat(lon, lat):
+    assert -180. <= lon <= 180. and -90. <= lat <= 90.
+    return int(math.floor(lon)), int(math.floor(lat))
+
+
+def srtm3_tiles_names(left, bottom, right, top, tile_template='srtm_{ilon:02d}_{ilat:02d}.tif'):
     ileft, itop = srtm3_tile_ilonlat(left, top)
     iright, ibottom = srtm3_tile_ilonlat(right, bottom)
     for ilon in range(ileft, iright + 1):
         for ilat in range(itop, ibottom + 1):
+            yield tile_template.format(**locals())
+
+
+def srtmgl1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slon}.tif'):
+    ileft, itop = srtmgl1_tile_ilonlat(left, top)
+    iright, ibottom = srtmgl1_tile_ilonlat(right, bottom)
+    for ilon in range(ileft, iright + 1):
+        slon = '%s%03d' % ('E' if ilon >= 0 else 'W', abs(ilon))
+        for ilat in range(ibottom, itop + 1):
+            slat = '%s%02d' % ('N' if ilat >= 0 else 'S', abs(ilat))
             yield tile_name_template.format(**locals())
 
 
-def srtm3_ensure_setup(cache_dir, **kwargs):
-    folders = ['cache', 'spool']
-    file_templates = {
-        'Makefile': pkgutil.get_data('elevation', 'url_tiles_datasource.mk').decode('utf-8'),
-    }
-    kwargs['datasource_url'] = SRTM3_URL_TEMPLATE.format(**kwargs)
-    kwargs['zip_ext'] = '.zip'
-    kwargs['tile_ext'] = '.tif'
-    datasource_root = os.path.join(cache_dir, kwargs['product'])
-    util.ensure_setup(datasource_root, folders, file_templates, **kwargs)
-    return datasource_root
+URL_TILES_DATASOURCE = pkgutil.get_data('elevation', 'url_tiles_datasource.mk').decode('utf-8')
+URL_TILES_SPEC = dict(
+    folders=('spool', 'cache'),
+    file_templates={'Makefile': URL_TILES_DATASOURCE},
+)
+
+SRTMGL1_SPEC = URL_TILES_SPEC.copy()
+SRTMGL1_SPEC.update(dict(
+    datasource_url='http://e4ftl01.cr.usgs.gov/SRTM/SRTMGL1.003/2000.02.11',
+    tile_ext='.hgt',
+    zip_ext='.SRTMGL1.hgt.zip',
+    tile_names=srtmgl1_tiles_names,
+))
+
+SRTM3_SPEC = URL_TILES_SPEC.copy()
+SRTM3_SPEC.update(dict(
+    datasource_url='http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff',
+    tile_ext='.tif',
+    zip_ext='.zip',
+    tile_names=srtm3_tiles_names,
+))
+
+PRODUCTS_SPECS = collections.OrderedDict([
+    ('SRTMGL1', SRTMGL1_SPEC),
+    ('SRTM3', SRTM3_SPEC),
+])
+PRODUCTS = list(PRODUCTS_SPECS)
 
 
-def srtm3_ensure_tiles(path, ensure_tiles_names=(), **kwargs):
+def ensure_tiles(path, ensure_tiles_names=(), **kwargs):
     ensure_tiles = ' '.join(ensure_tiles_names)
     variables_items = [('ensure_tiles', ensure_tiles)]
     return util.check_call_make(path, targets=['download'], variables=variables_items, **kwargs)
@@ -70,18 +97,18 @@ def srtm3_do_clip(path, output, bounds, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
-def srtm3_seed(bounds, cache_dir,
-               product='SRTM3', provider=PROVIDER, **kwargs):
-    datasource_root = srtm3_ensure_setup(
-        cache_dir=cache_dir, product=product, provider=provider)
-    ensure_tiles_names = srtm3_tiles_names(*bounds)
-    srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
+def seed(bounds, product, cache_dir, **kwargs):
+    datasource_root = os.path.join(cache_dir, product)
+    spec = PRODUCTS_SPECS[product]
+    util.ensure_setup(datasource_root, product=product, **spec)
+    ensure_tiles_names = spec['tile_names'](*bounds)
+    ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
 
 
 def srtm3_clip(bounds, output, cache_dir,
-               product='SRTM3', provider=PROVIDER, **kwargs):
-    datasource_root = srtm3_seed(
-        bounds, cache_dir=cache_dir, product=product, provider=provider, **kwargs)
+               product='SRTM3', **kwargs):
+    datasource_root = seed(
+        bounds, cache_dir=cache_dir, product=product, **kwargs)
     srtm3_do_clip(datasource_root, output, bounds, **kwargs)

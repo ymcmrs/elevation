@@ -26,14 +26,9 @@ def test_srtm3_tiles_names():
     assert len(list(datasource.srtm3_tiles_names(9.9, 39.1, 15.1, 45.1))) == 9
 
 
-def test_srtm3_ensure_setup(tmpdir):
-    root_path = str(tmpdir.join('root'))
-    datasource.srtm3_ensure_setup(root_path, product='SRTM3', provider=datasource.PROVIDER)
-
-
 def test_srtm3_ensure_tiles(mocker):
     with mocker.patch('subprocess.check_call'):
-        cmd = datasource.srtm3_ensure_tiles('/tmp', ['a', 'b'], make_flags='-s')
+        cmd = datasource.ensure_tiles('/tmp', ['a', 'b'], make_flags='-s')
     assert cmd == 'make -C /tmp -s download ENSURE_TILES="a b"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
@@ -48,12 +43,12 @@ def test_srtm3_do_clip(mocker):
 
 def test_srtm3_seed(mocker, tmpdir):
     root = tmpdir.join('root')
-    bounds = (13.1, 43.1, 14.9, 44.9)
+    bounds = (13.1, 43.1, 13.9, 43.9)
     with mocker.patch('subprocess.check_call'):
-        datasource.srtm3_seed(bounds, cache_dir=str(root))
+        datasource.seed(bounds, datasource.PRODUCTS[0], cache_dir=str(root))
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    expected_cmd = 'make -C %s  download ENSURE_TILES="srtm_39_04.tif"' % datasource_root
+    expected_cmd = 'make -C %s  download ENSURE_TILES="N43E013.tif"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
 
