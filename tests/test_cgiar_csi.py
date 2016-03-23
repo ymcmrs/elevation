@@ -28,7 +28,7 @@ def test_srtm3_tiles_names():
 
 def test_srtm3_ensure_setup(tmpdir):
     root_path = str(tmpdir.join('root'))
-    cgiar_csi.srtm3_ensure_setup(root_path, dataset='SRTM3', provider=cgiar_csi.PROVIDER, version='V41')
+    cgiar_csi.srtm3_ensure_setup(root_path, product='SRTM3', provider=cgiar_csi.PROVIDER, version='V41')
 
 
 def test_srtm3_ensure_tiles(mocker):

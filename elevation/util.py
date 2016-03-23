@@ -41,6 +41,14 @@ def folder_lock(wrapped):
     return wrapper
 
 
+def composed(*funcs):
+    def deco(f):
+        for func in reversed(funcs):
+            f = func(f)
+        return f
+    return deco
+
+
 @folder_lock
 def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     created_folders = []

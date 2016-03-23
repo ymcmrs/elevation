@@ -19,8 +19,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import click
 
-from . import USER_CACHE_DIR
 from . import api
+from . import util
 
 
 # disable overzealous warning
@@ -28,31 +28,49 @@ click.disable_unicode_literals_warning = True
 
 
 @click.group()
-def eio():
+def eio(**kwargs):
     pass
 
 
-@eio.command(short_help='Clip a DEM to given bounds.')
+@eio.command(short_help='Audits your installation for common issues.')
+@click.pass_context
+def doctor(ctx, **kwargs):
+    api.doctor(**kwargs)
+
+
+product_options = util.composed(
+    click.option('--product', default=api.PRODUCTS[0], type=click.Choice(api.PRODUCTS),
+                 help='DEM product choice (default: %r).' % api.PRODUCTS[0]),
+    click.option('--cache_dir', default=api.CACHE_DIR,
+                 type=click.Path(resolve_path=True, file_okay=False),
+                 help='Root of the DEM cache folder (default: %r).' % api.CACHE_DIR),
+    click.option('--make_flags', default='-k -s',
+                 help='Options to be passed to make (default: %r).' % api.MAKE_FLAGS),
+)
+
+
+@eio.command(short_help='Seed the DEM to given bounds.')
+@product_options
+@click.option('--bounds', nargs=4, type=float, default=None,
+              help='Output bounds: left bottom right top.')
+@click.pass_context
+def seed(ctx, **kwargs):
+    api.seed(**kwargs)
+
+
+@eio.command(short_help='Clip the DEM to given bounds.')
+@product_options
 @click.option('-o', '--output', default='out.tif', type=click.Path(resolve_path=True, dir_okay=False),
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.option('--make_flags', default='-k -s',
-              help='Options to be passed to make.')
-@click.option('--cache_dir', default=USER_CACHE_DIR,
-              type=click.Path(resolve_path=True, file_okay=False),
-              help='Root of the cache folder.')
-def clip(**kwargs):
+@click.pass_context
+def clip(ctx, **kwargs):
     api.clip(**kwargs)
 
 
-@eio.command(short_help='Seed a DEM to given bounds.')
-@click.option('--bounds', nargs=4, type=float, default=None,
-              help='Output bounds: left bottom right top.')
-@click.option('--make_flags', default='-k -s',
-              help='Options to be passed to make.')
-@click.option('--cache_dir', default=USER_CACHE_DIR,
-              type=click.Path(resolve_path=True, file_okay=False),
-              help='Root of the cache folder.')
-def seed(**kwargs):
-    api.seed(**kwargs)
+@eio.command(short_help='Check the consistency of the DEM cache.')
+@product_options
+@click.pass_context
+def fsck(ctx, **kwargs):
+    api.fsck(**kwargs)

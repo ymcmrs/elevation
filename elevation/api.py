@@ -17,7 +17,15 @@
 # python 2 support via python-future
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import appdirs
+
 from .cgiar_csi import srtm3_clip as clip
 from .cgiar_csi import srtm3_seed as seed
 
-__all__ = ['clip', 'seed']
+
+PRODUCTS = ['SRTMGL1', 'SRTM3']
+CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
+MAKE_FLAGS = '-s -k'
+
+
+__all__ = ['clip', 'seed', 'PRODUCTS', 'CACHE_DIR', 'MAKE_FLAGS']

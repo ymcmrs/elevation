@@ -21,7 +21,6 @@ import math
 import os.path
 import pkgutil
 
-from . import USER_CACHE_DIR
 from . import DATASOURCE_TEMPLATE
 from . import util
 
@@ -46,10 +45,10 @@ def srtm3_tiles_names(left, bottom, right, top, tile_name_template=SRTM3_TILE_NA
             yield tile_name_template.format(**locals())
 
 
-def srtm3_ensure_setup(cache_dir=USER_CACHE_DIR, datasource_template=DATASOURCE_TEMPLATE, **kwargs):
+def srtm3_ensure_setup(cache_dir, datasource_template=DATASOURCE_TEMPLATE, **kwargs):
     folders = ['cache', 'spool']
     file_templates = {
-        'Makefile': pkgutil.get_data('elevation', 'url_tiles_provider.mk').decode('utf-8'),
+        'Makefile': pkgutil.get_data('elevation', 'url_tiles_datasource.mk').decode('utf-8'),
     }
     kwargs['datasource_url'] = SRTM3_URL_TEMPLATE.format(**kwargs)
     kwargs['datasource'] = datasource_template.format(**kwargs)
@@ -73,18 +72,18 @@ def srtm3_do_clip(path, output, bounds, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
-def srtm3_seed(bounds, cache_dir=USER_CACHE_DIR,
-               dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+def srtm3_seed(bounds, cache_dir,
+               product='SRTM3', provider=PROVIDER, version='V41', **kwargs):
     datasource_root = srtm3_ensure_setup(
-        cache_dir=cache_dir, dataset=dataset, provider=provider, version=version)
+        cache_dir=cache_dir, product=product, provider=provider, version=version)
     ensure_tiles_names = srtm3_tiles_names(*bounds)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
 
 
-def srtm3_clip(bounds, output, cache_dir=USER_CACHE_DIR,
-               dataset='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+def srtm3_clip(bounds, output, cache_dir,
+               product='SRTM3', provider=PROVIDER, version='V41', **kwargs):
     datasource_root = srtm3_seed(
-        bounds, cache_dir=cache_dir, dataset=dataset, provider=provider, version=version, **kwargs)
+        bounds, cache_dir=cache_dir, product=product, provider=provider, version=version, **kwargs)
     srtm3_do_clip(datasource_root, output, bounds, **kwargs)
