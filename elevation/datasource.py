@@ -90,6 +90,13 @@ def ensure_tiles(path, ensure_tiles_names=(), **kwargs):
     return util.check_call_make(path, targets=['download'], variables=variables_items, **kwargs)
 
 
+def ensure_setup(cache_dir, product):
+    datasource_root = os.path.join(cache_dir, product)
+    spec = PRODUCTS_SPECS[product]
+    util.ensure_setup(datasource_root, product=product, **spec)
+    return datasource_root, spec
+
+
 def do_clip(path, bounds, output, **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
@@ -98,9 +105,7 @@ def do_clip(path, bounds, output, **kwargs):
 
 
 def seed(cache_dir, product, bounds, **kwargs):
-    datasource_root = os.path.join(cache_dir, product)
-    spec = PRODUCTS_SPECS[product]
-    util.ensure_setup(datasource_root, product=product, **spec)
+    datasource_root, spec = ensure_setup(cache_dir, product)
     ensure_tiles_names = spec['tile_names'](*bounds)
     ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     util.check_call_make(datasource_root, targets=['all'])
@@ -110,3 +115,8 @@ def seed(cache_dir, product, bounds, **kwargs):
 def clip(cache_dir, product, bounds, output, **kwargs):
     datasource_root = seed(cache_dir, product, bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
+
+
+def clean(cache_dir, product, **kwargs):
+    datasource_root, _ = ensure_setup(cache_dir, product)
+    util.check_call_make(datasource_root, targets=['clean'])

@@ -27,21 +27,21 @@ def selfcheck():
         raise RuntimeError('Fatal: GNU Make not found in PATH.')
 
     try:
-        assert b'curl' in subprocess.check_output('curl --version', shell=True)
+        subprocess.check_output('curl --version', shell=True)
     except:
         raise RuntimeError('Fatal: curl not found in PATH.')
 
     try:
-        assert b'UnZip' in subprocess.check_output('unzip -v', shell=True)
+        subprocess.check_output('unzip -v', shell=True)
     except:
         raise RuntimeError('Fatal: unzip not found in PATH.')
 
     try:
-        assert b'GDAL' in subprocess.check_output('gdal_translate --version', shell=True)
+        subprocess.check_output('gdal_translate --version', shell=True)
     except:
         raise RuntimeError('Fatal: gdal_translate not found in PATH.')
 
     try:
-        assert b'GDAL' in subprocess.check_output('gdalbuildvrt --version', shell=True)
+        subprocess.check_output('gdalbuildvrt --version', shell=True)
     except:
         raise RuntimeError('Fatal: gdalbuildvrt not found in PATH.')

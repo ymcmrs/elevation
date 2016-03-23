@@ -66,7 +66,7 @@ def clip(**kwargs):
     api.clip(**kwargs)
 
 
-@eio.command(short_help='Check the consistency of the DEM cache.')
+@eio.command(short_help='Clean up the cache from temporary files.')
 @product_options
-def fsck(**kwargs):
-    api.fsck(**kwargs)
+def clean(**kwargs):
+    api.clean(**kwargs)
