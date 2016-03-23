@@ -1,5 +1,8 @@
 Global geographic elevation data made easy.
-At the moment elevation provides easy download, cache and access of the global
+At the moment elevation provides easy download, cache and access of the global datasets
+`SRTMGL1 30m Global 1 arc second V003 <https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/srtmgl1_v003>`_
+elaborated by NASA and NGA
+and
 `SRTM 90m Digital Elevation Database v4.1 <http://www.cgiar-csi.org/data/srtm-90m-digital-elevation-database-v4-1>`_
 elaborated by CGIAR-CSI.
 

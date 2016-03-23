@@ -36,7 +36,7 @@ setup(
     license='Apache License Version 2.0',
     url='https://github.com/bopen/elevation',
     download_url='https://github.com/bopen/elevation/archive/%s.tar.gz' % version,
-    description="Global geographic elevation data (CGIAR-CSI SRTM 90m v4.1).",
+    description="Easy access to SRTM global terrain elevation models for 30m and 90m resolution.",
     long_description=read('README.rst'),
     packages=find_packages(),
     include_package_data=True,
