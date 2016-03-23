@@ -66,7 +66,7 @@ def test_clip(mocker, tmpdir):
 def test_clean(mocker, tmpdir):
     root = tmpdir.join('root')
     with mocker.patch('subprocess.check_call'):
-        datasource.clip(cache_dir=str(root), product='SRTMGL1')
+        datasource.clean(cache_dir=str(root), product='SRTMGL1')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    subprocess.check_call.assert_any_call('make -C %s  clean' % datasource_root, shell=True)
+    subprocess.check_call.assert_any_call('make -C %s  clean ' % datasource_root, shell=True)
