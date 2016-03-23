@@ -61,3 +61,12 @@ def test_clip(mocker, tmpdir):
     datasource_root = root.listdir()[0]
     expected_cmd = 'make -C %s  clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
+
+
+def test_clean(mocker, tmpdir):
+    root = tmpdir.join('root')
+    with mocker.patch('subprocess.check_call'):
+        datasource.clip(cache_dir=str(root), product='SRTMGL1')
+    assert len(root.listdir()) == 1
+    datasource_root = root.listdir()[0]
+    subprocess.check_call.assert_any_call('make -C %s  clean' % datasource_root, shell=True)
