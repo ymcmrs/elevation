@@ -19,7 +19,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import click
 
-from . import api
+import elevation
 from . import util
 
 
@@ -34,17 +34,17 @@ def eio():
 
 @eio.command(short_help='Audits your installation for common issues.')
 def selfcheck():
-    api.selfcheck()
+    elevation.selfcheck()
 
 
 product_options = util.composed(
-    click.option('--product', default=api.DEFAULT_PRODUCT, type=click.Choice(api.PRODUCTS),
-                 help='DEM product choice (default: %r).' % api.DEFAULT_PRODUCT),
-    click.option('--cache_dir', default=api.CACHE_DIR,
+    click.option('--product', default=elevation.DEFAULT_PRODUCT, type=click.Choice(elevation.PRODUCTS),
+                 help='DEM product choice (default: %r).' % elevation.DEFAULT_PRODUCT),
+    click.option('--cache_dir', default=elevation.CACHE_DIR,
                  type=click.Path(resolve_path=True, file_okay=False),
-                 help='Root of the DEM cache folder (default: %r).' % api.CACHE_DIR),
+                 help='Root of the DEM cache folder (default: %r).' % elevation.CACHE_DIR),
     click.option('--make_flags', default='-k -s',
-                 help='Options to be passed to make (default: %r).' % api.MAKE_FLAGS),
+                 help='Options to be passed to make (default: %r).' % elevation.MAKE_FLAGS),
 )
 
 
@@ -53,21 +53,21 @@ product_options = util.composed(
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
 def seed(**kwargs):
-    api.seed(**kwargs)
+    elevation.seed(**kwargs)
 
 
 @eio.command(short_help='Clip the DEM to given bounds.')
 @product_options
-@click.option('-o', '--output', default=api.DEFAULT_OUTPUT,
+@click.option('-o', '--output', default=elevation.DEFAULT_OUTPUT,
               type=click.Path(resolve_path=True, dir_okay=False),
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
 def clip(**kwargs):
-    api.clip(**kwargs)
+    elevation.clip(**kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
 @product_options
 def clean(**kwargs):
-    api.clean(**kwargs)
+    elevation.clean(**kwargs)

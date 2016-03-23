@@ -26,6 +26,12 @@ import appdirs
 
 from . import util
 
+# declare public all API functions and constants
+__all__ = [
+    'seed', 'clip', 'clean',
+    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS',
+]
+
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 MAKE_FLAGS = '-s -k'
 DEFAULT_OUTPUT = 'out.tif'
