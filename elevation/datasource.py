@@ -90,14 +90,14 @@ def ensure_tiles(path, ensure_tiles_names=(), **kwargs):
     return util.check_call_make(path, targets=['download'], variables=variables_items, **kwargs)
 
 
-def srtm3_do_clip(path, output, bounds, **kwargs):
+def do_clip(path, bounds, output, **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
     variables_items = [('output', output), ('projwin', projwin)]
     return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
-def seed(bounds, product, cache_dir, **kwargs):
+def seed(cache_dir, product, bounds, **kwargs):
     datasource_root = os.path.join(cache_dir, product)
     spec = PRODUCTS_SPECS[product]
     util.ensure_setup(datasource_root, product=product, **spec)
@@ -107,8 +107,6 @@ def seed(bounds, product, cache_dir, **kwargs):
     return datasource_root
 
 
-def srtm3_clip(bounds, output, cache_dir,
-               product='SRTM3', **kwargs):
-    datasource_root = seed(
-        bounds, cache_dir=cache_dir, product=product, **kwargs)
-    srtm3_do_clip(datasource_root, output, bounds, **kwargs)
+def clip(cache_dir, product, bounds, output, **kwargs):
+    datasource_root = seed(cache_dir, product, bounds, **kwargs)
+    do_clip(datasource_root, bounds, output, **kwargs)

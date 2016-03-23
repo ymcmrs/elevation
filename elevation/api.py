@@ -19,13 +19,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import appdirs
 
-from .datasource import srtm3_clip as clip
-from .datasource import seed
-from .datasource import PRODUCTS
+from .datasource import clip, seed, PRODUCTS
 
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 MAKE_FLAGS = '-s -k'
-
 
 __all__ = ['clip', 'seed', 'PRODUCTS', 'CACHE_DIR', 'MAKE_FLAGS']

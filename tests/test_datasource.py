@@ -33,30 +33,30 @@ def test_srtm3_ensure_tiles(mocker):
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 
-def test_srtm3_do_clip(mocker):
+def test_do_clip(mocker):
     bounds = (1, 5, 2, 6)
     with mocker.patch('subprocess.check_call'):
-        cmd = datasource.srtm3_do_clip('/tmp', '/out.tif', bounds, make_flags='-s')
+        cmd = datasource.do_clip(path='/tmp', bounds=bounds, output='/out.tif', make_flags='-s')
     assert cmd == 'make -C /tmp -s clip OUTPUT="/out.tif" PROJWIN="1 6 2 5"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 
-def test_srtm3_seed(mocker, tmpdir):
+def test_seed(mocker, tmpdir):
     root = tmpdir.join('root')
     bounds = (13.1, 43.1, 13.9, 43.9)
     with mocker.patch('subprocess.check_call'):
-        datasource.seed(bounds, datasource.PRODUCTS[0], cache_dir=str(root))
+        datasource.seed(cache_dir=str(root), product='SRTMGL1', bounds=bounds)
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
     expected_cmd = 'make -C %s  download ENSURE_TILES="N43E013.tif"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
 
-def test_srtm3_clip(mocker, tmpdir):
+def test_clip(mocker, tmpdir):
     root = tmpdir.join('root')
     bounds = (13.1, 43.1, 14.9, 44.9)
     with mocker.patch('subprocess.check_call'):
-        datasource.srtm3_clip(bounds, 'out.tif', cache_dir=str(root))
+        datasource.clip(cache_dir=str(root), product='SRTMGL1', bounds=bounds, output='out.tif')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
     expected_cmd = 'make -C %s  clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1"' % datasource_root
