@@ -1,13 +1,13 @@
 Global geographic elevation data made easy.
-At the moment elevation provides easy download, cache and access of the global datasets
+elevation provides easy download, cache and access of the global datasets
 `SRTMGL1 30m Global 1 arc second V003 <https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/srtmgl1_v003>`_
 elaborated by NASA and NGA
 and
 `SRTM 90m Digital Elevation Database v4.1 <http://www.cgiar-csi.org/data/srtm-90m-digital-elevation-database-v4-1>`_
 elaborated by CGIAR-CSI.
 
-Installation and command line usage
------------------------------------
+Installation
+------------
 
 The following dependencies need to be installed:
 
@@ -20,6 +20,9 @@ Install the `latest version of elevation <https://pypi.python.org/pypi/elevation
 from the Python Package Index::
 
     $ pip install elevation
+
+Command line usage
+------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
 For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.tif`` file::
@@ -35,6 +38,19 @@ subsequent accesses to the same and nearby areas are much faster.
 It is possible to pre-populate the cache for an area, for example for Italy execute::
 
     $ eio seed --bounds 6.6 36.6 18.6 47.1
+
+Python API
+----------
+
+Every command have a corresponding function in the `elevation.api` module::
+
+    from elevation import api
+
+    # clips the area around Rome and saves it to Rome-DEM.tif
+    api.clip(bounds=(12, 41.5, 13, 42.5), output='Rome-DEM.tif')
+
+    # pre-populate the cache for Italy
+    api.seed(bounds=(6.6 36.6 18.6 47.1))
 
 
 Project resources

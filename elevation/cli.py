@@ -33,13 +33,13 @@ def eio():
 
 
 @eio.command(short_help='Audits your installation for common issues.')
-def selfcheck(**kwargs):
-    api.selfcheck(**kwargs)
+def selfcheck():
+    api.selfcheck()
 
 
 product_options = util.composed(
-    click.option('--product', default=api.PRODUCTS[0], type=click.Choice(api.PRODUCTS),
-                 help='DEM product choice (default: %r).' % api.PRODUCTS[0]),
+    click.option('--product', default=api.DEFAULT_PRODUCT, type=click.Choice(api.PRODUCTS),
+                 help='DEM product choice (default: %r).' % api.DEFAULT_PRODUCT),
     click.option('--cache_dir', default=api.CACHE_DIR,
                  type=click.Path(resolve_path=True, file_okay=False),
                  help='Root of the DEM cache folder (default: %r).' % api.CACHE_DIR),
@@ -58,7 +58,8 @@ def seed(**kwargs):
 
 @eio.command(short_help='Clip the DEM to given bounds.')
 @product_options
-@click.option('-o', '--output', default='out.tif', type=click.Path(resolve_path=True, dir_okay=False),
+@click.option('-o', '--output', default=api.DEFAULT_OUTPUT,
+              type=click.Path(resolve_path=True, dir_okay=False),
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')

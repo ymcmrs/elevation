@@ -22,7 +22,13 @@ import math
 import os.path
 import pkgutil
 
+import appdirs
+
 from . import util
+
+CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
+MAKE_FLAGS = '-s -k'
+DEFAULT_OUTPUT = 'out.tif'
 
 
 def srtm3_tile_ilonlat(lon, lat):
@@ -55,7 +61,7 @@ def srtmgl1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slo
             yield tile_name_template.format(**locals())
 
 
-URL_TILES_DATASOURCE = pkgutil.get_data('elevation', 'url_tiles_datasource.mk').decode('utf-8')
+URL_TILES_DATASOURCE = pkgutil.get_data('elevation', 'datasource.mk').decode('utf-8')
 URL_TILES_SPEC = dict(
     folders=('spool', 'cache'),
     file_templates={'Makefile': URL_TILES_DATASOURCE},
@@ -82,6 +88,7 @@ PRODUCTS_SPECS = collections.OrderedDict([
     ('SRTM3', SRTM3_SPEC),
 ])
 PRODUCTS = list(PRODUCTS_SPECS)
+DEFAULT_PRODUCT = PRODUCTS[0]
 
 
 def ensure_tiles(path, ensure_tiles_names=(), **kwargs):
@@ -104,7 +111,7 @@ def do_clip(path, bounds, output, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
-def seed(cache_dir, product, bounds, **kwargs):
+def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, **kwargs):
     datasource_root, spec = ensure_setup(cache_dir, product)
     ensure_tiles_names = spec['tile_names'](*bounds)
     ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
@@ -112,11 +119,11 @@ def seed(cache_dir, product, bounds, **kwargs):
     return datasource_root
 
 
-def clip(cache_dir, product, bounds, output, **kwargs):
+def clip(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, output=DEFAULT_OUTPUT, **kwargs):
     datasource_root = seed(cache_dir, product, bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
 
 
-def clean(cache_dir, product, **kwargs):
+def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['clean'])
