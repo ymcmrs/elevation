@@ -1,15 +1,15 @@
 
 DATASOURCE_URL := {datasource_url}
-DATASOURCE := {datasource}
+PRODUCT := {product}
 TILE_EXT := {tile_ext}
 ZIP_EXT := {zip_ext}
 
 ENSURE_TILE_PATHS := $(foreach n,$(ENSURE_TILES),cache/$n)
 
 
-all: $(DATASOURCE).vrt
+all: $(PRODUCT).vrt
 
-$(DATASOURCE).vrt: $(shell ls cache/*.tif 2>/dev/null)
+$(PRODUCT).vrt: $(shell ls cache/*.tif 2>/dev/null)
 	gdalbuildvrt -q -overwrite $@ cache/*.tif
 
 spool/%$(ZIP_EXT):
@@ -23,14 +23,14 @@ cache/%.tif: spool/%$(TILE_EXT)
 
 download: $(ENSURE_TILE_PATHS)
 
-clip: $(DATASOURCE).vrt
-	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(DATASOURCE).vrt $(OUTPUT)
+clip: $(PRODUCT).vrt
+	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(PRODUCT).vrt $(OUTPUT)
 
 clean:
 	$(RM) spool/*
 
 distclean: clean
-	$(RM) cache/* $(DATASOURCE).vrt Makefile
+	$(RM) cache/* $(PRODUCT).vrt Makefile
 
 .DELETE_ON_ERROR:
 .PHONY: all download clip clean distclean

@@ -19,8 +19,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import appdirs
 
-from .cgiar_csi import srtm3_clip as clip
-from .cgiar_csi import srtm3_seed as seed
+from .datasource import srtm3_clip as clip
+from .datasource import srtm3_seed as seed
 
 
 PRODUCTS = ['SRTMGL1', 'SRTM3']

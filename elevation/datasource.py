@@ -21,12 +21,11 @@ import math
 import os.path
 import pkgutil
 
-from . import DATASOURCE_TEMPLATE
 from . import util
 
 
 PROVIDER = 'CGIAR-CSI'
-SRTM3_URL_TEMPLATE = 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_{version}/SRTM_Data_GeoTiff'
+SRTM3_URL_TEMPLATE = 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff'
 SRTM3_TILE_NAME_TEMPLATE = 'srtm_{ilon:02d}_{ilat:02d}.tif'
 
 
@@ -45,16 +44,15 @@ def srtm3_tiles_names(left, bottom, right, top, tile_name_template=SRTM3_TILE_NA
             yield tile_name_template.format(**locals())
 
 
-def srtm3_ensure_setup(cache_dir, datasource_template=DATASOURCE_TEMPLATE, **kwargs):
+def srtm3_ensure_setup(cache_dir, **kwargs):
     folders = ['cache', 'spool']
     file_templates = {
         'Makefile': pkgutil.get_data('elevation', 'url_tiles_datasource.mk').decode('utf-8'),
     }
     kwargs['datasource_url'] = SRTM3_URL_TEMPLATE.format(**kwargs)
-    kwargs['datasource'] = datasource_template.format(**kwargs)
     kwargs['zip_ext'] = '.zip'
     kwargs['tile_ext'] = '.tif'
-    datasource_root = os.path.join(cache_dir, kwargs['datasource'])
+    datasource_root = os.path.join(cache_dir, kwargs['product'])
     util.ensure_setup(datasource_root, folders, file_templates, **kwargs)
     return datasource_root
 
@@ -73,9 +71,9 @@ def srtm3_do_clip(path, output, bounds, **kwargs):
 
 
 def srtm3_seed(bounds, cache_dir,
-               product='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+               product='SRTM3', provider=PROVIDER, **kwargs):
     datasource_root = srtm3_ensure_setup(
-        cache_dir=cache_dir, product=product, provider=provider, version=version)
+        cache_dir=cache_dir, product=product, provider=provider)
     ensure_tiles_names = srtm3_tiles_names(*bounds)
     srtm3_ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     util.check_call_make(datasource_root, targets=['all'])
@@ -83,7 +81,7 @@ def srtm3_seed(bounds, cache_dir,
 
 
 def srtm3_clip(bounds, output, cache_dir,
-               product='SRTM3', provider=PROVIDER, version='V41', **kwargs):
+               product='SRTM3', provider=PROVIDER, **kwargs):
     datasource_root = srtm3_seed(
-        bounds, cache_dir=cache_dir, product=product, provider=provider, version=version, **kwargs)
+        bounds, cache_dir=cache_dir, product=product, provider=provider, **kwargs)
     srtm3_do_clip(datasource_root, output, bounds, **kwargs)
