@@ -20,7 +20,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import subprocess
 
 
-def selfcheck():
+def selfcheck():  # pragma: no mccabe
     try:
         assert b'GNU Make' in subprocess.check_output('make --version', shell=True)
     except:
