@@ -31,10 +31,8 @@ version = '0.9.3.dev0'
 setup(
     name='elevation',
     version=version,
-    author='B-Open Solutions srl',
+    author='B-Open Solutions srl, Alessandro Amici',
     author_email='info@bopen.eu',
-    maintainer='Alessandro Amici',
-    maintainer_email='a.amici@bopen.eu',
     license='Apache License Version 2.0',
     url='http://elevation.bopen.eu',
     download_url='https://github.com/bopen/elevation/archive/%s.tar.gz' % version,

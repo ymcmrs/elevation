@@ -88,9 +88,6 @@ If you encounter any problems, please file an issue along with a detailed descri
 Authors:
 
 - B-Open Solutions srl - `@bopen <https://github.com/bopen>`_ - http://bopen.eu
-
-Maintainer:
-
 - Alessandro Amici - `@alexamici <https://github.com/alexamici>`_
 
 
