@@ -66,8 +66,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'elevation'
-copyright = u'2016, Alessandro Amici'
-author = u'Alessandro Amici'
+copyright = u'2016, B-Open Solutions srl'
+author = u'B-Open Solutions srl'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -242,7 +242,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'elevation.tex', 'elevation Documentation',
-     'Alessandro Amici', 'manual'),
+     'B-Open Solutions srl', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

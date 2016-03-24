@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2016 Alessandro Amici
+# Copyright (c) 2016 B-Open Solutions srl - http://bopen.eu
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,10 +31,12 @@ version = '0.9.3.dev0'
 setup(
     name='elevation',
     version=version,
-    author='Alessandro Amici',
-    author_email='alexamici@gmail.com',
+    author='B-Open Solutions srl',
+    author_email='info@bopen.eu',
+    maintainer='Alessandro Amici',
+    maintainer_email='a.amici@bopen.eu',
     license='Apache License Version 2.0',
-    url='https://github.com/bopen/elevation',
+    url='http://elevation.bopen.eu',
     download_url='https://github.com/bopen/elevation/archive/%s.tar.gz' % version,
     description="Easy access to global terrain digital elevation models, SRTM 30m DEM and SRTM 90m DEM.",
     long_description=read('README.rst'),

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2016 Alessandro Amici
+# Copyright (c) 2016 B-Open Solutions srl - http://bopen.eu
 #
 
 # python 2 support via python-future

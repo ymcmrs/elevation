@@ -46,7 +46,7 @@ The ``seed`` sub-command::
     Options:
       --product [SRTMGL1|SRTM3]  DEM product choice (default: 'SRTMGL1').
       --cache_dir DIRECTORY      Root of the DEM cache folder (default:
-                                 '/Users/amici/Library/Caches/elevation').
+                                 '$HOME/Library/Caches/elevation').
       --make_flags TEXT          Options to be passed to make (default: '-s -k').
       --bounds FLOAT...          Output bounds: left bottom right top.
       --help                     Show this message and exit.
@@ -59,7 +59,7 @@ The ``clip`` sub-command::
     Options:
       --product [SRTMGL1|SRTM3]  DEM product choice (default: 'SRTMGL1').
       --cache_dir DIRECTORY      Root of the DEM cache folder (default:
-                                 '/Users/amici/Library/Caches/elevation').
+                                 '$HOME/Library/Caches/elevation').
       --make_flags TEXT          Options to be passed to make (default: '-s -k').
       -o, --output PATH          Path to output file. Existing files will be
                                  overwritten.
