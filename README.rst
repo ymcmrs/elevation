@@ -63,9 +63,16 @@ Project resources
 -----------------
 
 ============= ======================
+Documentation https://bopen-elevation.readthedocs.org
 Support       https://stackoverflow.com/search?q=python+elevation
 Development   https://github.com/bopen/elevation
 Download      https://pypi.python.org/pypi/elevation
+Code quality  .. image:: https://api.travis-ci.org/bopen/elevation.svg?branch=master
+                :target: https://travis-ci.org/bopen/elevation/branches
+                :alt: Build Status on Travis CI
+              .. image:: https://coveralls.io/repos/bopen/elevation/badge.svg?branch=master&service=github
+                :target: https://coveralls.io/github/bopen/elevation
+                :alt: Coverage Status on Coveralls
 ============= ======================
 
 

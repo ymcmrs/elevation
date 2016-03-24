@@ -1,22 +1,24 @@
-.. elevation documentation master file, created by
-   sphinx-quickstart on Fri Mar 18 22:04:47 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
-Welcome to elevation's documentation!
-=====================================
+=========
+elevation
+=========
 
-Contents:
+:Version: |release|
+:Date: |today|
+
+Easy access to global terrain digital elevation models, SRTM 30m DEM and SRTM 90m DEM.
+
+Jump to the :doc:`quickstart` for a 2 minutes hands-on overview.
+The :doc:`usersguide` documents elevation usage in details and
+covers a few more examples.
+
+If you have any feedback or you want to help out head over our main repository:
+https://github.com/bopen/elevation
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
+    :caption: Table of Contents
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+    quickstart
+    usersguide
+    design
