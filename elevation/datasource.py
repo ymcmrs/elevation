@@ -28,7 +28,7 @@ from . import util
 
 # declare public all API functions and constants
 __all__ = [
-    'seed', 'clip', 'clean',
+    'seed', 'clip', 'clean', 'distclean',
     'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'TOOLS',
 ]
 
