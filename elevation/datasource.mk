@@ -5,21 +5,21 @@ TILE_EXT := {tile_ext}
 ZIP_EXT := {zip_ext}
 
 ENSURE_TILE_PATHS := $(foreach n,$(ENSURE_TILES),cache/$n)
-
+STDERR_SWITCH := 2>/dev/null
 
 all: $(PRODUCT).vrt
 
-$(PRODUCT).vrt: $(shell ls cache/*.tif 2>/dev/null)
-	gdalbuildvrt -q -overwrite $@ cache/*.tif
+$(PRODUCT).vrt: $(shell find cache -size +0 -name "*.tif" 2>/dev/null)
+	gdalbuildvrt -q -overwrite $@ $^
 
 spool/%$(ZIP_EXT):
-	curl -s -f -o $@ $(DATASOURCE_URL)/$*$(ZIP_EXT)
+	curl -s -o $@.temp $(DATASOURCE_URL)/$*$(ZIP_EXT) && mv $@.temp $@
 
 spool/%$(TILE_EXT): spool/%$(ZIP_EXT)
-	unzip -q -d spool $< $*$(TILE_EXT)
+	unzip -qq -d spool $< $*$(TILE_EXT) $(STDERR_SWITCH) || touch $@
 
 cache/%.tif: spool/%$(TILE_EXT)
-	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 $< $@
+	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 $< $@ $(STDERR_SWITCH) || touch $@
 
 download: $(ENSURE_TILE_PATHS)
 
