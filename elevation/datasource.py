@@ -136,3 +136,8 @@ def clip(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, output=DEFAU
 def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['clean'])
+
+
+def distclean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+    datasource_root, _ = ensure_setup(cache_dir, product)
+    util.check_call_make(datasource_root, targets=['distclean'])

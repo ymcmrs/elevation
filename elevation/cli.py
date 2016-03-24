@@ -71,3 +71,9 @@ def clip(**kwargs):
 @product_options
 def clean(**kwargs):
     elevation.clean(**kwargs)
+
+
+@eio.command(short_help='Clean up the cache from temporary files.')
+@product_options
+def distclean(**kwargs):
+    elevation.distclean(**kwargs)
