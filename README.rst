@@ -62,7 +62,7 @@ Every command have a corresponding API function in the ``elevation`` module::
 Project resources
 -----------------
 
-============= ======================
+============= =========================================================
 Documentation https://bopen-elevation.readthedocs.org
 Support       https://stackoverflow.com/search?q=python+elevation
 Development   https://github.com/bopen/elevation
@@ -73,7 +73,7 @@ Code quality  .. image:: https://api.travis-ci.org/bopen/elevation.svg?branch=ma
               .. image:: https://coveralls.io/repos/bopen/elevation/badge.svg?branch=master&service=github
                 :target: https://coveralls.io/github/bopen/elevation
                 :alt: Coverage Status on Coveralls
-============= ======================
+============= =========================================================
 
 
 Contributing
