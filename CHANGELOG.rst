@@ -1,5 +1,5 @@
 
-0.5.0 (unreleased)
+0.9.0 (2016-03-24)
 ------------------
 
 - First Beta release.
