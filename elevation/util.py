@@ -36,7 +36,15 @@ def selfcheck(tools):
             raise RuntimeError('%r not found in PATH.' % tool_name)
 
 
-def folder_lock(wrapped):
+def composed(*funcs):
+    def deco(f):
+        for func in reversed(funcs):
+            f = func(f)
+        return f
+    return deco
+
+
+def folder_try_lock(wrapped):
 
     @functools.wraps(wrapped)
     def wrapper(path, *args, **kwargs):
@@ -49,15 +57,7 @@ def folder_lock(wrapped):
     return wrapper
 
 
-def composed(*funcs):
-    def deco(f):
-        for func in reversed(funcs):
-            f = func(f)
-        return f
-    return deco
-
-
-@folder_lock
+@folder_try_lock
 def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     created_folders = []
     for path in [root] + [os.path.join(root, p) for p in folders]:
@@ -77,7 +77,7 @@ def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     return created_folders, created_files
 
 
-@folder_lock
+@folder_try_lock
 def check_call_make(path, targets=(), variables=(), make_flags=''):
     make_targets = ' '.join(targets)
     variables_items = collections.OrderedDict(variables).items()
