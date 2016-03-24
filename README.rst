@@ -87,13 +87,11 @@ If you encounter any problems, please file an issue along with a detailed descri
 
 Authors:
 
+- B-Open Solutions srl - `@bopen <https://github.com/bopen>`_ - http://bopen.eu
+
+Maintainer:
+
 - Alessandro Amici - `@alexamici <https://github.com/alexamici>`_
-
-Sponsors:
-
-- .. image:: http://services.bopen.eu/bopen-logo.png
-      :target: http://bopen.eu/
-      :alt: B-Open Solutions srl
 
 
 License
