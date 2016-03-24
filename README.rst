@@ -9,48 +9,54 @@ elaborated by CGIAR-CSI.
 Installation
 ------------
 
-The following dependencies need to be installed:
+Install the `latest version of elevation <https://pypi.python.org/pypi/elevation>`_
+from the Python Package Index::
+
+    $ pip install elevation
+
+The following dependencies need to be installed and working:
 
 - `GNU make <https://www.gnu.org/software/make/>`_
 - `curl <https://curl.haxx.se/>`_
 - unzip
 - `GDAL command line tools <http://www.gdal.org/>`_
 
-Install the `latest version of elevation <https://pypi.python.org/pypi/elevation>`_
-from the Python Package Index::
+The following command runs some basic checks and reports common issues::
 
-    $ pip install elevation
+    $ eio selfcheck
+
 
 Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the DEM of the area of Rome, 42N 12.5W, to the ``Rome-DEM.tif`` file::
+For example to clip the SRTMGL1 30m DEM of the area of Rome, around 42N 12.5W, to the ``Rome-DEM.tif`` file::
 
     $ eio clip -o Rome-DEM.tif --bounds 12 41.5 13 42.5
 
 The ``--bounds`` option must be given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
-The first time an area is accessed elevation downloads the data tiles from the CGIAR-CSI server and
-caches them as GeoTiff compressed formats,
+The first time an area is accessed elevation downloads the data tiles from the USGS or CGIAR-CSI servers and
+caches them in GeoTiff compressed formats,
 subsequent accesses to the same and nearby areas are much faster.
 
-It is possible to pre-populate the cache for an area, for example for Italy execute::
+It is possible to pre-populate the cache for an area, for example to seed the SRTM3 90m DEM of Italy execute::
 
-    $ eio seed --bounds 6.6 36.6 18.6 47.1
+    $ eio seed --product SRTM3 --bounds 6.6 36.6 18.6 47.1
+
 
 Python API
 ----------
 
-Every command have a corresponding function in the `elevation.api` module::
+Every command have a corresponding API function in the ``elevation`` module::
 
-    from elevation import api
+    import elevation
 
-    # clips the area around Rome and saves it to Rome-DEM.tif
-    api.clip(bounds=(12, 41.5, 13, 42.5), output='Rome-DEM.tif')
+    # clip the SRTMGL1 30m DEM of the area around Rome and save it to Rome-DEM.tif
+    elevation.clip(bounds=(12, 41.5, 13, 42.5), output='Rome-DEM.tif')
 
-    # pre-populate the cache for Italy
-    api.seed(bounds=(6.6 36.6 18.6 47.1))
+    # seed the SRTM3 90m DEM of Italy
+    elevation.seed(product='SRTM3', bounds=(6.6 36.6 18.6 47.1))
 
 
 Project resources
