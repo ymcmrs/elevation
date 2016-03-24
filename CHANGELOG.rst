@@ -1,8 +1,8 @@
 
-0.9.1 (unreleased)
+0.9.1 (2016-03-24)
 ------------------
 
-- Nothing changed yet.
+- Update the usage documentation in the README.
 
 
 0.9.0 (2016-03-24)
