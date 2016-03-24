@@ -1,8 +1,8 @@
 
-0.9.3 (unreleased)
+0.9.3 (2016-03-24)
 ------------------
 
-- Nothing changed yet.
+- Add distclean sub-command.
 
 
 0.9.2 (2016-03-24)
