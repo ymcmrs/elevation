@@ -49,6 +49,11 @@ def srtm3_tile_ilonlat(lon, lat):
 def srtmgl1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slon}.tif'):
     ileft, itop = srtmgl1_tile_ilonlat(left, top)
     iright, ibottom = srtmgl1_tile_ilonlat(right, bottom)
+    # special case often used *integer* top and right to avoid downloading unneeded tiles
+    if top.is_integer():
+        itop -= 1
+    if right.is_integer():
+        iright -= 1
     for ilon in range(ileft, iright + 1):
         slon = '%s%03d' % ('E' if ilon >= 0 else 'W', abs(ilon))
         for ilat in range(ibottom, itop + 1):
