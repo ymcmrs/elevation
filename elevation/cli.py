@@ -35,6 +35,7 @@ def eio():
 @eio.command(short_help='Audits your installation for common issues.')
 def selfcheck():
     util.selfcheck(tools=elevation.TOOLS)
+    print('Your system is ready.')
 
 
 product_options = util.composed(
@@ -43,7 +44,7 @@ product_options = util.composed(
     click.option('--cache_dir', default=elevation.CACHE_DIR,
                  type=click.Path(resolve_path=True, file_okay=False),
                  help='Root of the DEM cache folder (default: %r).' % elevation.CACHE_DIR),
-    click.option('--make_flags', default='-k -s',
+    click.option('--make_flags', default='-k',
                  help='Options to be passed to make (default: %r).' % elevation.MAKE_FLAGS),
 )
 
