@@ -1,5 +1,5 @@
 Global geographic elevation data made easy.
-elevation provides easy download, cache and access of the global datasets
+Elevation provides easy download, cache and access of the global datasets
 `SRTMGL1 30m Global 1 arc second V003 <https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/srtmgl1_v003>`_
 elaborated by NASA and NGA
 and
@@ -9,7 +9,7 @@ elaborated by CGIAR-CSI.
 Installation
 ------------
 
-Install the `latest version of elevation <https://pypi.python.org/pypi/elevation>`_
+Install the `latest version of Elevation <https://pypi.python.org/pypi/elevation>`_
 from the Python Package Index::
 
     $ pip install elevation
@@ -38,7 +38,7 @@ The ``--bounds`` option accepts latitude and longitude coordinates
 (more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
 given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
-The first time an area is accessed elevation downloads the data tiles from the USGS or CGIAR-CSI servers and
+The first time an area is accessed Elevation downloads the data tiles from the USGS or CGIAR-CSI servers and
 caches them in GeoTiff compressed formats,
 subsequent accesses to the same and nearby areas are much faster.
 
@@ -98,5 +98,5 @@ Authors:
 License
 -------
 
-elevation is free and open source software
+Elevation is free and open source software
 distributed under the terms of the `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
