@@ -34,7 +34,9 @@ For example to clip the SRTMGL1 30m DEM of the area of Rome, around 42N 12.5W, t
 
     $ eio clip -o Rome-DEM.tif --bounds 12 41.5 13 42.5
 
-The ``--bounds`` option must be given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
+The ``--bounds`` option accepts latitude and longitude coordinates
+(more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
+given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
 The first time an area is accessed elevation downloads the data tiles from the USGS or CGIAR-CSI servers and
 caches them in GeoTiff compressed formats,
@@ -48,7 +50,7 @@ It is possible to pre-populate the cache for an area, for example to seed the SR
 Python API
 ----------
 
-Every command have a corresponding API function in the ``elevation`` module::
+Every command has a corresponding API function in the ``elevation`` module::
 
     import elevation
 
@@ -57,6 +59,8 @@ Every command have a corresponding API function in the ``elevation`` module::
 
     # seed the SRTM3 90m DEM of Italy
     elevation.seed(product='SRTM3', bounds=(6.6 36.6 18.6 47.1))
+
+See the `User's guide <http://elevation.bopen.eu/en/stable/usersguide.html>`_ for the complete list of functionalities.
 
 
 Project resources
