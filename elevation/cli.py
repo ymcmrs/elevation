@@ -28,7 +28,14 @@ click.disable_unicode_literals_warning = True
 
 
 @click.group()
-def eio():
+@click.option('--product', default=elevation.DEFAULT_PRODUCT, type=click.Choice(elevation.PRODUCTS),
+              help='DEM product choice (default: %r).' % elevation.DEFAULT_PRODUCT)
+@click.option('--cache_dir', default=elevation.CACHE_DIR,
+              type=click.Path(resolve_path=True, file_okay=False),
+              help='Root of the DEM cache folder (default: %r).' % elevation.CACHE_DIR)
+@click.option('--make_flags', default='-k',
+              help='Options to be passed to make (default: %r).' % elevation.MAKE_FLAGS)
+def eio(**kwargs):
     pass
 
 
@@ -37,43 +44,48 @@ def selfcheck():
     print(util.selfcheck(tools=elevation.TOOLS))
 
 
-product_options = util.composed(
-    click.option('--product', default=elevation.DEFAULT_PRODUCT, type=click.Choice(elevation.PRODUCTS),
-                 help='DEM product choice (default: %r).' % elevation.DEFAULT_PRODUCT),
-    click.option('--cache_dir', default=elevation.CACHE_DIR,
-                 type=click.Path(resolve_path=True, file_okay=False),
-                 help='Root of the DEM cache folder (default: %r).' % elevation.CACHE_DIR),
-    click.option('--make_flags', default='-k',
-                 help='Options to be passed to make (default: %r).' % elevation.MAKE_FLAGS),
-)
+@eio.command(short_help='')
+@click.pass_context
+def info(ctx, **kwargs):
+    if ctx.parent and ctx.parent.params:
+        kwargs.update(ctx.parent.params)
+    elevation.info(**kwargs)
 
 
 @eio.command(short_help='Seed the DEM to given bounds.')
-@product_options
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-def seed(**kwargs):
+@click.pass_context
+def seed(ctx, **kwargs):
+    if ctx.parent and ctx.parent.params:
+        kwargs.update(ctx.parent.params)
     elevation.seed(**kwargs)
 
 
 @eio.command(short_help='Clip the DEM to given bounds.')
-@product_options
 @click.option('-o', '--output', default=elevation.DEFAULT_OUTPUT,
               type=click.Path(resolve_path=True, dir_okay=False),
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-def clip(**kwargs):
+@click.pass_context
+def clip(ctx, **kwargs):
+    if ctx.parent and ctx.parent.params:
+        kwargs.update(ctx.parent.params)
     elevation.clip(**kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
-@product_options
-def clean(**kwargs):
+@click.pass_context
+def clean(ctx, **kwargs):
+    if ctx.parent and ctx.parent.params:
+        kwargs.update(ctx.parent.params)
     elevation.clean(**kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
-@product_options
-def distclean(**kwargs):
+@click.pass_context
+def distclean(ctx, **kwargs):
+    if ctx.parent and ctx.parent.params:
+        kwargs.update(ctx.parent.params)
     elevation.distclean(**kwargs)

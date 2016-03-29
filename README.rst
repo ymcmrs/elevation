@@ -45,7 +45,7 @@ subsequent accesses to the same and nearby areas are much faster.
 
 It is possible to pre-populate the cache for an area, for example to seed the SRTM3 90m DEM of Italy execute::
 
-    $ eio seed --product SRTM3 --bounds 6.6 36.6 18.6 47.1
+    $ eio --product SRTM3 seed --bounds 6.6 36.6 18.6 47.1
 
 
 Python API

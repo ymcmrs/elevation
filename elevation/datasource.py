@@ -28,7 +28,7 @@ from . import util
 
 # declare public all API functions and constants
 __all__ = [
-    'seed', 'clip', 'clean', 'distclean',
+    'info', 'seed', 'clip', 'clean', 'distclean',
     'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'TOOLS',
 ]
 
@@ -136,6 +136,11 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, **kwargs):
 def clip(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, output=DEFAULT_OUTPUT, **kwargs):
     datasource_root = seed(cache_dir, product, bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
+
+
+def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+    datasource_root, _ = ensure_setup(cache_dir, product)
+    util.check_call_make(datasource_root, targets=['info'])
 
 
 def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
