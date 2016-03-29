@@ -45,7 +45,7 @@ def test_seed(mocker, tmpdir):
     root = tmpdir.join('root')
     bounds = (13.1, 43.1, 13.9, 43.9)
     with mocker.patch('subprocess.check_call'):
-        datasource.seed(cache_dir=str(root), product='SRTMGL1', bounds=bounds)
+        datasource.seed(cache_dir=str(root), product='SRTM1', bounds=bounds)
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
     expected_cmd = 'make -C %s  download ENSURE_TILES="N43E013.tif"' % datasource_root
@@ -56,7 +56,7 @@ def test_clip(mocker, tmpdir):
     root = tmpdir.join('root')
     bounds = (13.1, 43.1, 14.9, 44.9)
     with mocker.patch('subprocess.check_call'):
-        datasource.clip(cache_dir=str(root), product='SRTMGL1', bounds=bounds, output='out.tif')
+        datasource.clip(cache_dir=str(root), product='SRTM1', bounds=bounds, output='out.tif')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
     expected_cmd = 'make -C %s  clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1"' % datasource_root
@@ -66,7 +66,7 @@ def test_clip(mocker, tmpdir):
 def test_clean(mocker, tmpdir):
     root = tmpdir.join('root')
     with mocker.patch('subprocess.check_call'):
-        datasource.clean(cache_dir=str(root), product='SRTMGL1')
+        datasource.clean(cache_dir=str(root), product='SRTM1')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
     subprocess.check_call.assert_any_call('make -C %s  clean ' % datasource_root, shell=True)

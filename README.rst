@@ -1,6 +1,6 @@
 Global geographic elevation data made easy.
 Elevation provides easy download, cache and access of the global datasets
-`SRTMGL1 30m Global 1 arc second V003 <https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/srtmgl1_v003>`_
+`SRTM 30m Global 1 arc second V003 <https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/SRTM1_v003>`_
 elaborated by NASA and NGA
 and
 `SRTM 90m Digital Elevation Database v4.1 <http://www.cgiar-csi.org/data/srtm-90m-digital-elevation-database-v4-1>`_
@@ -30,9 +30,9 @@ Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the SRTMGL1 30m DEM of the area of Rome, around 42N 12.5W, to the ``Rome-DEM.tif`` file::
+For example to clip the SRTM1 30m DEM of the area of Rome, around 42N 12.5W, to the ``Rome-DEM.tif`` file::
 
-    $ eio clip -o Rome-DEM.tif --bounds 12 41.5 13 42.5
+    $ eio clip -o Rome-DEM.tif --bounds 12.35 41.8 12.65 42
 
 The ``--bounds`` option accepts latitude and longitude coordinates
 (more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
@@ -54,7 +54,7 @@ Every command has a corresponding API function in the ``elevation`` module::
 
     import elevation
 
-    # clip the SRTMGL1 30m DEM of the area around Rome and save it to Rome-DEM.tif
+    # clip the SRTM1 30m DEM of the area around Rome and save it to Rome-DEM.tif
     elevation.clip(bounds=(12, 41.5, 13, 42.5), output='Rome-DEM.tif')
 
     # seed the SRTM3 90m DEM of Italy

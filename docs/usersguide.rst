@@ -44,7 +44,7 @@ The ``seed`` sub-command::
     Usage: eio seed [OPTIONS]
 
     Options:
-      --product [SRTMGL1|SRTM3]  DEM product choice (default: 'SRTMGL1').
+      --product [SRTM1|SRTM3]    DEM product choice (default: 'SRTM1').
       --cache_dir DIRECTORY      Root of the DEM cache folder (default:
                                  '$HOME/Library/Caches/elevation').
       --make_flags TEXT          Options to be passed to make (default: '-s -k').
@@ -57,7 +57,7 @@ The ``clip`` sub-command::
     Usage: eio clip [OPTIONS]
 
     Options:
-      --product [SRTMGL1|SRTM3]  DEM product choice (default: 'SRTMGL1').
+      --product [SRTM1|SRTM3]  DEM product choice (default: 'SRTM1').
       --cache_dir DIRECTORY      Root of the DEM cache folder (default:
                                  '$HOME/Library/Caches/elevation').
       --make_flags TEXT          Options to be passed to make (default: '-s -k').

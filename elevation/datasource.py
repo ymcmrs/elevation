@@ -37,18 +37,18 @@ MAKE_FLAGS = '-s -k'
 DEFAULT_OUTPUT = 'out.tif'
 
 
-def srtmgl1_tile_ilonlat(lon, lat):
+def srtm1_tile_ilonlat(lon, lat):
     return int(math.floor(lon)), int(math.floor(lat))
 
 
 def srtm3_tile_ilonlat(lon, lat):
-    ilon, ilat = srtmgl1_tile_ilonlat(lon, lat)
+    ilon, ilat = srtm1_tile_ilonlat(lon, lat)
     return (ilon + 180) // 5 + 1, (64 - ilat) // 5
 
 
-def srtmgl1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slon}.tif'):
-    ileft, itop = srtmgl1_tile_ilonlat(left, top)
-    iright, ibottom = srtmgl1_tile_ilonlat(right, bottom)
+def srtm1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slon}.tif'):
+    ileft, itop = srtm1_tile_ilonlat(left, top)
+    iright, ibottom = srtm1_tile_ilonlat(right, bottom)
     # special case often used *integer* top and right to avoid downloading unneeded tiles
     if top.is_integer():
         itop -= 1
@@ -71,13 +71,13 @@ def srtm3_tiles_names(left, bottom, right, top, tile_template='srtm_{ilon:02d}_{
 
 DATASOURCE_MAKEFILE = pkgutil.get_data('elevation', 'datasource.mk').decode('utf-8')
 
-SRTMGL1_SPEC = {
+SRTM1_SPEC = {
     'folders': ('spool', 'cache'),
     'file_templates': {'Makefile': DATASOURCE_MAKEFILE},
     'datasource_url': 'http://e4ftl01.cr.usgs.gov/SRTM/SRTMGL1.003/2000.02.11',
     'tile_ext': '.hgt',
     'zip_ext': '.SRTMGL1.hgt.zip',
-    'tile_names': srtmgl1_tiles_names,
+    'tile_names': srtm1_tiles_names,
 }
 
 SRTM3_SPEC = {
@@ -90,7 +90,7 @@ SRTM3_SPEC = {
 }
 
 PRODUCTS_SPECS = collections.OrderedDict([
-    ('SRTMGL1', SRTMGL1_SPEC),
+    ('SRTM1', SRTM1_SPEC),
     ('SRTM3', SRTM3_SPEC),
 ])
 
