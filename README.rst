@@ -24,6 +24,7 @@ The following dependencies need to be installed and working:
 The following command runs some basic checks and reports common issues::
 
     $ eio selfcheck
+    Your system is ready.
 
 
 Command line usage

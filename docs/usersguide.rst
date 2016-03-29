@@ -4,21 +4,38 @@ User's guide
 
 .. warning:: This section is work in progress and there will be areas that are lacking.
 
+
 Installation
 ------------
 
-Install the `latest version of elevation <https://pypi.python.org/pypi/elevation>`_
+Install the `latest version of Elevation <https://pypi.python.org/pypi/elevation>`_
 from the Python Package Index::
 
     $ pip install elevation
 
+The following dependencies need to be installed and working:
 
-Basic usage
------------
+- `GNU make <https://www.gnu.org/software/make/>`_
+- `curl <https://curl.haxx.se/>`_
+- unzip
+- `GDAL command line tools <http://www.gdal.org/>`_
+
+The following command runs some basic checks and reports common issues::
+
+    $ eio selfcheck
+    Your system is ready.
+
+GNU make, curl and unzip come pre-installed with most operating systems.
+The best way to install GDAL command line tools varies across operating systems
+and distributions, please refer to the `GDAL inastall documentation`_.
 
 
-Advanced usage
---------------
+Command line usage
+------------------
+
+
+Python API
+----------
 
 
 Command line reference
