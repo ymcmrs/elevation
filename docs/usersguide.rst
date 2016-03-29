@@ -27,7 +27,7 @@ The following command runs some basic checks and reports common issues::
 
 GNU make, curl and unzip come pre-installed with most operating systems.
 The best way to install GDAL command line tools varies across operating systems
-and distributions, please refer to the `GDAL inastall documentation`_.
+and distributions, please refer to the `GDAL install documentation`_.
 
 
 Command line usage
