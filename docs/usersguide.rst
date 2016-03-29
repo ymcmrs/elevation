@@ -49,9 +49,8 @@ The ``eio`` command as the following sub-commands and options::
 
     Options:
       --product [SRTM1|SRTM3]  DEM product choice (default: 'SRTM1').
-      --cache_dir DIRECTORY    Root of the DEM cache folder (default:
-                               '/Users/amici/Library/Caches/elevation').
-      --make_flags TEXT        Options to be passed to make (default: '-s -k').
+      --cache_dir DIRECTORY    Root of the DEM cache folder (default: [...]).
+      --make_flags TEXT        Options to be passed to make (default: '-k').
       --help                   Show this message and exit.
 
     Commands:
