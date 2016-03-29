@@ -33,7 +33,7 @@ __all__ = [
 ]
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
-MAKE_FLAGS = '-s -k'
+MAKE_FLAGS = '-k'
 DEFAULT_OUTPUT = 'out.tif'
 
 

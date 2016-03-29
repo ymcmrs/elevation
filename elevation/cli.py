@@ -33,7 +33,7 @@ click.disable_unicode_literals_warning = True
 @click.option('--cache_dir', default=elevation.CACHE_DIR,
               type=click.Path(resolve_path=True, file_okay=False),
               help='Root of the DEM cache folder (default: %r).' % elevation.CACHE_DIR)
-@click.option('--make_flags', default='-k',
+@click.option('--make_flags', default=elevation.MAKE_FLAGS,
               help='Options to be passed to make (default: %r).' % elevation.MAKE_FLAGS)
 def eio(**kwargs):
     pass
