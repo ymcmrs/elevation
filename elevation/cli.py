@@ -34,8 +34,7 @@ def eio():
 
 @eio.command(short_help='Audits your installation for common issues.')
 def selfcheck():
-    util.selfcheck(tools=elevation.TOOLS)
-    print('Your system is ready.')
+    print(util.selfcheck(tools=elevation.TOOLS))
 
 
 product_options = util.composed(

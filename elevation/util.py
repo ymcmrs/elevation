@@ -29,11 +29,13 @@ LOCKFILE_NAME = '.folder_lock'
 
 
 def selfcheck(tools):
+    msg = []
     for tool_name, check_cli in collections.OrderedDict(tools).items():
         try:
-            subprocess.check_output(check_cli, shell=True)
+            subprocess.check_output(check_cli, shell=True, stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError:
-            raise RuntimeError('%r not found in PATH.' % tool_name)
+            msg.append('%r not found or not usable.' % tool_name)
+    return '\n'.join(msg) if msg else 'Your system is ready.'
 
 
 def composed(*funcs):
