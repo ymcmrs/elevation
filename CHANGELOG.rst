@@ -1,6 +1,6 @@
 
-0.9.4 (unreleased)
+1.0.0 (unreleased)
 ------------------
 
-- Beta release.
+- Initial full release.
 

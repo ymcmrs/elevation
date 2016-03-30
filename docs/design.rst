@@ -48,10 +48,8 @@ No completeness and no performance guarantees.
 
 - Cache management:
 
-  - Auto setup
+  - new SRTM1 and old SRTM3 global high resolution digital elevation model
 
-- Documentation:
+  - GNU Makefile for cache management (parallelism and dependecy tracking)
 
-  - Enough to inspire and raise interest in new users.
-
-  - Enough to use it effectively and safely.
+  - GDAL VirtualRaster as main entry point
