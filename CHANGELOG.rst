@@ -1,8 +1,8 @@
 
-0.9.7 (unreleased)
+0.9.7 (2016-03-30)
 ------------------
 
-- Nothing changed yet.
+- Fixed user visible documentation.
 
 
 0.9.6 (2016-03-30)
