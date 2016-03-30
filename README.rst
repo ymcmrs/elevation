@@ -104,8 +104,6 @@ Every command has a corresponding API function in the ``elevation`` module::
     # seed the SRTM3 90m DEM of Italy
     elevation.seed(product='SRTM3', bounds=(6.6 36.6 18.6 47.1))
 
-See the `User's guide <http://elevation.bopen.eu/en/stable/usersguide.html>`_ for the complete list of functionalities.
-
 
 Project resources
 -----------------
