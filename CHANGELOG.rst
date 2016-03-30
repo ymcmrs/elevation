@@ -1,6 +1,5 @@
 
-1.0.0 (unreleased)
+0.9.4 (2016-03-30)
 ------------------
 
-- Initial full release.
-
+- Initial public beta release.
