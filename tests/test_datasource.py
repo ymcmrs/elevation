@@ -21,6 +21,12 @@ def test_srtm3_tile_ilonlat():
     assert datasource.srtm3_tile_ilonlat(14.9, 40.1) == (39, 4)
 
 
+def test_srtm1_tiles_names():
+    assert list(datasource.srtm1_tiles_names(10.1, 44.9, 10.1, 44.9)) == ['N44E010.tif']
+    # NOTE this also tests int (not float) input
+    assert list(datasource.srtm1_tiles_names(10, 44, 11, 45)) == ['N44E010.tif']
+
+
 def test_srtm3_tiles_names():
     assert next(datasource.srtm3_tiles_names(10.1, 44.9, 10.1, 44.9)).endswith('srtm_39_04.tif')
     assert len(list(datasource.srtm3_tiles_names(9.9, 39.1, 15.1, 45.1))) == 9

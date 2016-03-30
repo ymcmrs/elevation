@@ -21,6 +21,16 @@ def test_eio_selfcheck(mocker):
     assert subprocess.check_output.call_count == 5
 
 
+def test_eio_info(mocker, tmpdir):
+    root = tmpdir.join('root')
+    runner = click.testing.CliRunner()
+    options = '--cache_dir %s info' % str(root)
+    with mocker.patch('subprocess.check_call'):
+        result = runner.invoke(cli.eio, options.split())
+    assert not result.exception
+    assert subprocess.check_call.call_count == 1
+
+
 def test_eio_seed(mocker, tmpdir):
     root = tmpdir.join('root')
     runner = click.testing.CliRunner()
@@ -45,6 +55,16 @@ def test_eio_clean(mocker, tmpdir):
     root = tmpdir.join('root')
     runner = click.testing.CliRunner()
     options = '--cache_dir %s clean' % str(root)
+    with mocker.patch('subprocess.check_call'):
+        result = runner.invoke(cli.eio, options.split())
+    assert not result.exception
+    assert subprocess.check_call.call_count == 1
+
+
+def test_eio_distclean(mocker, tmpdir):
+    root = tmpdir.join('root')
+    runner = click.testing.CliRunner()
+    options = '--cache_dir %s distclean' % str(root)
     with mocker.patch('subprocess.check_call'):
         result = runner.invoke(cli.eio, options.split())
     assert not result.exception

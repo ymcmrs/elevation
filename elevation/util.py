@@ -38,14 +38,6 @@ def selfcheck(tools):
     return '\n'.join(msg) if msg else 'Your system is ready.'
 
 
-def composed(*funcs):
-    def deco(f):
-        for func in reversed(funcs):
-            f = func(f)
-        return f
-    return deco
-
-
 def folder_try_lock(wrapped):
 
     @functools.wraps(wrapped)

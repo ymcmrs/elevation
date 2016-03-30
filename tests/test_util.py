@@ -11,6 +11,11 @@ import subprocess
 from elevation import util
 
 
+def test_selfcheck():
+    assert 'NAME' not in util.selfcheck([('NAME', 'true')])
+    assert 'NAME' in util.selfcheck([('NAME', 'false')])
+
+
 def test_ensure_setup(tmpdir):
     root = tmpdir.join('root')
     root_path = str(root)
