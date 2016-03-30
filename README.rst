@@ -26,6 +26,11 @@ The following command runs some basic checks and reports common issues::
     $ eio selfcheck
     Your system is ready.
 
+GNU make, curl and unzip come pre-installed with most operating systems.
+The best way to install GDAL command line tools varies across operating systems
+and distributions, please refer to the
+`GDAL install documentation <https://trac.osgeo.org/gdal/wiki/DownloadingGdalBinaries>`_.
+
 
 Command line usage
 ------------------
@@ -46,6 +51,44 @@ subsequent accesses to the same and nearby areas are much faster.
 It is possible to pre-populate the cache for an area, for example to seed the SRTM3 90m DEM of Italy execute::
 
     $ eio --product SRTM3 seed --bounds 6.6 36.6 18.6 47.1
+
+The ``eio`` command as the following sub-commands and options::
+
+    $ eio --help
+    Usage: eio [OPTIONS] COMMAND [ARGS]...
+
+    Options:
+      --product [SRTM1|SRTM3]  DEM product choice (default: 'SRTM1').
+      --cache_dir DIRECTORY    Root of the DEM cache folder (default: [...]).
+      --make_flags TEXT        Options to be passed to make (default: '-k').
+      --help                   Show this message and exit.
+
+    Commands:
+      clean      Clean up the cache from temporary files.
+      clip       Clip the DEM to given bounds.
+      distclean  Clean up the cache from temporary files.
+      info
+      seed       Seed the DEM to given bounds.
+      selfcheck  Audits your installation for common issues.
+
+The ``seed`` sub-command::
+
+    $ eio seed --help
+    Usage: eio seed [OPTIONS]
+
+    Options:
+      --bounds FLOAT...  Output bounds: left bottom right top.
+      --help             Show this message and exit.
+
+The ``clip`` sub-command::
+
+    $ eio clip --help
+    Usage: eio clip [OPTIONS]
+
+    Options:
+      -o, --output PATH  Path to output file. Existing files will be overwritten.
+      --bounds FLOAT...  Output bounds: left bottom right top.
+      --help             Show this message and exit.
 
 
 Python API
