@@ -126,9 +126,13 @@ def do_clip(path, bounds, output, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
 
 
-def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, **kwargs):
+def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload_tiles=9, **kwargs):
     datasource_root, spec = ensure_setup(cache_dir, product)
-    ensure_tiles_names = spec['tile_names'](*bounds)
+    ensure_tiles_names = list(spec['tile_names'](*bounds))
+    # FIXME: emergency hack to enforce the no-bulk-download policy
+    if len(ensure_tiles_names) > max_donwload_tiles:
+        raise RuntimeError("Too many tiles: %d. Please consult the providers' websites "
+                           "for bulk download." % len(ensure_tiles_names))
     ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
