@@ -1,8 +1,8 @@
 
-0.9.9 (unreleased)
+0.9.9 (2016-04-01)
 ------------------
 
-- Nothing changed yet.
+- Enforce the no-bulk-download policy.
 
 
 0.9.8 (2016-03-31)
