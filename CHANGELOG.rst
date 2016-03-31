@@ -1,8 +1,8 @@
 
-0.9.8 (unreleased)
+0.9.8 (2016-03-31)
 ------------------
 
-- Nothing changed yet.
+- Make ``clean`` remove empty tiles as they may be due to temporary server failures.
 
 
 0.9.7 (2016-03-30)
