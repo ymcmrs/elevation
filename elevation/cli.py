@@ -28,6 +28,7 @@ click.disable_unicode_literals_warning = True
 
 
 @click.group()
+@click.version_option()
 @click.option('--product', default=elevation.DEFAULT_PRODUCT, type=click.Choice(elevation.PRODUCTS),
               help='DEM product choice (default: %r).' % elevation.DEFAULT_PRODUCT)
 @click.option('--cache_dir', default=elevation.CACHE_DIR,
