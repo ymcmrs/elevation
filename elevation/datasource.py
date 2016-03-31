@@ -132,7 +132,7 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     # FIXME: emergency hack to enforce the no-bulk-download policy
     if len(ensure_tiles_names) > max_donwload_tiles:
         raise RuntimeError("Too many tiles: %d. Please consult the providers' websites "
-                           "for bulk download." % len(ensure_tiles_names))
+                           "for how to bulk download tiles." % len(ensure_tiles_names))
     ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
     util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
