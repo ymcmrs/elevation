@@ -6,6 +6,9 @@ and
 `SRTM 90m Digital Elevation Database v4.1 <http://www.cgiar-csi.org/data/srtm-90m-digital-elevation-database-v4-1>`_
 elaborated by CGIAR-CSI.
 
+Note that any download policies of the respective providers apply.
+
+
 Installation
 ------------
 
