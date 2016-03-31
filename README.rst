@@ -39,7 +39,7 @@ Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the SRTM1 30m DEM of the area of Rome, around 42N 12.5W, to the ``Rome-DEM.tif`` file::
+For example to clip the SRTM1 30m DEM of Rome, around 41.9N 12.5W, to the ``Rome-DEM.tif`` file::
 
     $ eio clip -o Rome-DEM.tif --bounds 12.35 41.8 12.65 42
 
@@ -51,9 +51,13 @@ The first time an area is accessed Elevation downloads the data tiles from the U
 caches them in GeoTiff compressed formats,
 subsequent accesses to the same and nearby areas are much faster.
 
-It is possible to pre-populate the cache for an area, for example to seed the SRTM3 90m DEM of Italy execute::
+It is possible to pre-populate the cache for an area, for example to seed the SRTM3 90m DEM of
+a wider area around Rome execute::
 
-    $ eio --product SRTM3 seed --bounds 6.6 36.6 18.6 47.1
+    $ eio --product SRTM3 seed --bounds 10.5 40 14.5 44
+
+The ``seed`` sub-command doesn't allow automatic download of a large amount of DEM tiles,
+please refer to the upstream providers' websites to learn the preferred procedures for bulk download.
 
 To clean up stale temporary files and to try fixing the cache in the event of a server error use::
 
@@ -105,11 +109,11 @@ Every command has a corresponding API function in the ``elevation`` module::
 
     import elevation
 
-    # clip the SRTM1 30m DEM of the area around Rome and save it to Rome-DEM.tif
-    elevation.clip(bounds=(12, 41.5, 13, 42.5), output='Rome-DEM.tif')
+    # clip the SRTM1 30m DEM of Rome and save it to Rome-DEM.tif
+    elevation.clip(bounds=(12.35, 41.8, 12.65, 42), output='Rome-DEM.tif')
 
-    # seed the SRTM3 90m DEM of Italy
-    elevation.seed(product='SRTM3', bounds=(6.6 36.6 18.6 47.1))
+    # seed the SRTM3 90m DEM of a wider area around Rome
+    elevation.seed(product='SRTM3', bounds=(10.5, 40, 14.5, 44))
 
 
 Project resources
