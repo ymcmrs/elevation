@@ -32,6 +32,7 @@ info:
 	@echo 'Cache size: $(shell du -sh .)'
 
 clean:
+	find cache -size 0 -name "*.tif" -delete
 	$(RM) spool/*
 
 distclean: clean

@@ -111,10 +111,11 @@ def ensure_tiles(path, ensure_tiles_names=(), **kwargs):
     return util.check_call_make(path, targets=['download'], variables=variables_items, **kwargs)
 
 
-def ensure_setup(cache_dir, product):
+# FIXME: force=True is an emergency hack to ensure that the file always contains the intended body
+def ensure_setup(cache_dir, product, force=True):
     datasource_root = os.path.join(cache_dir, product)
     spec = PRODUCTS_SPECS[product]
-    util.ensure_setup(datasource_root, product=product, **spec)
+    util.ensure_setup(datasource_root, product=product, force=force, **spec)
     return datasource_root, spec
 
 

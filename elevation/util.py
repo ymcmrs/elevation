@@ -52,7 +52,7 @@ def folder_try_lock(wrapped):
 
 
 @folder_try_lock
-def ensure_setup(root, folders=(), file_templates=(), **kwargs):
+def ensure_setup(root, folders=(), file_templates=(), force=False, **kwargs):
     created_folders = []
     for path in [root] + [os.path.join(root, p) for p in folders]:
         if not os.path.exists(path):
@@ -62,7 +62,7 @@ def ensure_setup(root, folders=(), file_templates=(), **kwargs):
     created_files = collections.OrderedDict()
     for relpath, template in collections.OrderedDict(file_templates).items():
         path = os.path.join(root, relpath)
-        if not os.path.exists(path):
+        if force or not os.path.exists(path):
             body = template.format(**kwargs)
             with open(path, 'w') as file:
                 file.write(body)
