@@ -52,7 +52,7 @@ It is possible to pre-populate the cache for an area, for example to seed the SR
 
     $ eio --product SRTM3 seed --bounds 6.6 36.6 18.6 47.1
 
-To clean up temporary download files especially on server errors use::
+To clean up stale temporary files and to try fixing the cache in the event of a server error use::
 
     $ eio --product SRTM3 clean
 
