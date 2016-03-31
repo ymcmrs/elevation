@@ -36,7 +36,8 @@ setup(
     license='Apache License Version 2.0',
     url='http://elevation.bopen.eu',
     download_url='https://github.com/bopen/elevation/archive/%s.tar.gz' % version,
-    description="Easy access to global terrain digital elevation models, SRTM 30m DEM and SRTM 90m DEM.",
+    description="Python script to download global terrain digital elevation models, "
+                "SRTM 30m DEM and SRTM 90m DEM.",
     long_description=read('README.rst'),
     packages=find_packages(),
     include_package_data=True,
@@ -62,7 +63,7 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Topic :: Scientific/Engineering :: GIS',
     ],
-    keywords='SRTM DEM DTM global digital elevation terrain model',
+    keywords='script download SRTM DEM DTM global digital elevation terrain model',
     entry_points={
         'console_scripts': ['eio=elevation.cli:eio'],
     },
