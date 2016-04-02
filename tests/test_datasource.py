@@ -58,6 +58,14 @@ def test_seed(mocker, tmpdir):
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
 
+def test_build_bounds():
+    raw_bounds = (13.1, 43.1, 13.9, 43.9)
+    assert datasource.build_bounds(raw_bounds, margin='0') == raw_bounds
+
+    assert datasource.build_bounds(raw_bounds, margin='0.08') == (13.02, 43.02, 13.98, 43.98)
+    assert datasource.build_bounds(raw_bounds, margin='10%') == (13.02, 43.02, 13.98, 43.98)
+
+
 def test_clip(mocker, tmpdir):
     root = tmpdir.join('root')
     bounds = (13.1, 43.1, 14.9, 44.9)

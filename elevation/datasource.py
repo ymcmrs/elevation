@@ -140,14 +140,19 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     return datasource_root
 
 
-def make_bounds(reference, margin=MARGIN):
+def get_bounds(reference):
     # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
     try:
         with rasterio.open(reference) as datasource:
-            left, bottom, right, top = datasource.bounds
+            pass
     except:
         with fiona.open(reference) as datasource:
-            left, bottom, right, top = datasource.bounds
+            pass
+    return datasource.bounds
+
+
+def build_bounds(bounds, margin=MARGIN):
+    left, bottom, right, top = bounds
     if margin.endswith('%'):
         margin_percent = float(margin[:-1])
         margin_lon = (right - left) * margin_percent / 100
@@ -162,7 +167,8 @@ def ensure_bounds(bounds, reference=None, **kwargs):
         if not reference:
             raise ValueError("bounds are not defined.")
         else:
-            bounds = make_bounds(reference, **kwargs)
+            raw_bounds = get_bounds(reference)
+            bounds = build_bounds(raw_bounds, **kwargs)
     return bounds
 
 
