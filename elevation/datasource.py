@@ -23,8 +23,6 @@ import os.path
 import pkgutil
 
 import appdirs
-import rasterio
-import fiona
 
 from . import util
 
@@ -36,7 +34,7 @@ __all__ = [
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 DEFAULT_OUTPUT = 'out.tif'
-MARGIN = '10%'
+MARGIN = '0'
 
 
 def srtm1_tile_ilonlat(lon, lat):
@@ -140,17 +138,6 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     return datasource_root
 
 
-def get_bounds(reference):
-    # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
-    try:
-        with rasterio.open(reference) as datasource:
-            pass
-    except:
-        with fiona.open(reference) as datasource:
-            pass
-    return datasource.bounds
-
-
 def build_bounds(bounds, margin=MARGIN):
     left, bottom, right, top = bounds
     if margin.endswith('%'):
@@ -162,18 +149,8 @@ def build_bounds(bounds, margin=MARGIN):
     return (left - margin_lon, bottom - margin_lat, right + margin_lon, top + margin_lat)
 
 
-def ensure_bounds(bounds, reference=None, **kwargs):
-    if not bounds:
-        if not reference:
-            raise ValueError("bounds are not defined.")
-        else:
-            raw_bounds = get_bounds(reference)
-            bounds = build_bounds(raw_bounds, **kwargs)
-    return bounds
-
-
-def clip(output=DEFAULT_OUTPUT, bounds=None, reference=None, margin=MARGIN, **kwargs):
-    bounds = ensure_bounds(bounds, reference=reference, margin=margin)
+def clip(bounds, output=DEFAULT_OUTPUT, margin=MARGIN, **kwargs):
+    bounds = build_bounds(bounds, margin=margin)
     datasource_root = seed(bounds=bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
 

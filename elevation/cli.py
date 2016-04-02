@@ -20,6 +20,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import functools
 
 import click
+import rasterio
+import fiona
+
 
 import elevation
 from . import util
@@ -69,6 +72,26 @@ def seed(**kwargs):
     elevation.seed(**kwargs)
 
 
+def parse_bounds(reference):
+    # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
+    try:
+        with rasterio.open(reference) as datasource:
+            pass
+    except:
+        with fiona.open(reference) as datasource:
+            pass
+    return datasource.bounds
+
+
+def ensure_bounds(bounds, reference=None):
+    if not bounds:
+        if not reference:
+            raise ValueError("bounds are not defined.")
+        else:
+            bounds = parse_bounds(reference)
+    return bounds
+
+
 @eio.command(short_help='Clip the DEM to given bounds.')
 @click.option('-o', '--output', default=elevation.DEFAULT_OUTPUT,
               type=click.Path(resolve_path=True, dir_okay=False),
@@ -81,8 +104,9 @@ def seed(**kwargs):
 @click.option('-r', '--reference',
               help="Use the extent of a reference GDAL/OGR data source as output bounds.")
 @pass_click_context
-def clip(**kwargs):
-    elevation.clip(**kwargs)
+def clip(bounds, reference, **kwargs):
+    bounds = ensure_bounds(bounds, reference)
+    elevation.clip(bounds, **kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
