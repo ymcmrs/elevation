@@ -31,13 +31,13 @@ from . import util
 # declare public all API functions and constants
 __all__ = [
     'info', 'seed', 'clip', 'clean', 'distclean',
-    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'DEFAULT_MARGIN', 'TOOLS',
+    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'MARGIN', 'TOOLS',
 ]
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 MAKE_FLAGS = '-k'
 DEFAULT_OUTPUT = 'out.tif'
-DEFAULT_MARGIN = '10%'
+MARGIN = '10%'
 
 
 def srtm1_tile_ilonlat(lon, lat):
@@ -141,7 +141,7 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     return datasource_root
 
 
-def make_bounds(reference, margin=DEFAULT_MARGIN):
+def make_bounds(reference, margin=MARGIN):
     # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
     try:
         with rasterio.open(reference) as datasource:
@@ -167,7 +167,7 @@ def ensure_bounds(bounds, reference=None, **kwargs):
     return bounds
 
 
-def clip(output=DEFAULT_OUTPUT, bounds=None, reference=None, margin=DEFAULT_MARGIN, **kwargs):
+def clip(output=DEFAULT_OUTPUT, bounds=None, reference=None, margin=MARGIN, **kwargs):
     bounds = ensure_bounds(bounds, reference=reference, margin=margin)
     datasource_root = seed(bounds=bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
