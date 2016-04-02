@@ -48,7 +48,7 @@ def selfcheck():
     print(util.selfcheck(tools=elevation.TOOLS))
 
 
-def pass_click_context(wrapped):
+def click_merge_parent_params(wrapped):
     @click.pass_context
     @functools.wraps(wrapped)
     def wrapper(ctx, **kwargs):
@@ -59,7 +59,7 @@ def pass_click_context(wrapped):
 
 
 @eio.command(short_help='')
-@pass_click_context
+@click_merge_parent_params
 def info(**kwargs):
     elevation.info(**kwargs)
 
@@ -67,7 +67,7 @@ def info(**kwargs):
 @eio.command(short_help='Seed the DEM to given bounds.')
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@pass_click_context
+@click_merge_parent_params
 def seed(**kwargs):
     elevation.seed(**kwargs)
 
@@ -83,13 +83,16 @@ def parse_bounds(reference):
     return datasource.bounds
 
 
-def ensure_bounds(bounds, reference=None):
-    if not bounds:
-        if not reference:
-            raise ValueError("bounds are not defined.")
-        else:
-            bounds = parse_bounds(reference)
-    return bounds
+def ensure_bounds(wrapped):
+    @functools.wraps(wrapped)
+    def wrapper(bounds, reference, **kwargs):
+        if not bounds:
+            if not reference:
+                raise ValueError("bounds are not defined.")
+            else:
+                bounds = parse_bounds(reference)
+        return wrapped(bounds=bounds, **kwargs)
+    return wrapper
 
 
 @eio.command(short_help='Clip the DEM to given bounds.')
@@ -103,19 +106,19 @@ def ensure_bounds(bounds, reference=None):
               "Defaults to %r" % elevation.MARGIN)
 @click.option('-r', '--reference',
               help="Use the extent of a reference GDAL/OGR data source as output bounds.")
-@pass_click_context
-def clip(bounds, reference, **kwargs):
-    bounds = ensure_bounds(bounds, reference)
+@ensure_bounds
+@click_merge_parent_params
+def clip(bounds, **kwargs):
     elevation.clip(bounds, **kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
-@pass_click_context
+@click_merge_parent_params
 def clean(**kwargs):
     elevation.clean(**kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
-@pass_click_context
+@click_merge_parent_params
 def distclean(**kwargs):
     elevation.distclean(**kwargs)
