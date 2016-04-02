@@ -1,6 +1,13 @@
 # Config file for automatic testing at travis-ci.org
 
 sudo: false
+
+addons:
+  apt:
+    packages:
+    - gdal-bin
+    - libgdal-dev
+
 language: python
 python: 3.5
 env:
