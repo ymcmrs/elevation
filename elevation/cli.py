@@ -17,6 +17,8 @@
 # python 2 support via python-future
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import functools
+
 import click
 
 import elevation
@@ -43,21 +45,27 @@ def selfcheck():
     print(util.selfcheck(tools=elevation.TOOLS))
 
 
+def pass_click_context(wrapped):
+    @click.pass_context
+    @functools.wraps(wrapped)
+    def wrapper(ctx, **kwargs):
+        if ctx.parent and ctx.parent.params:
+            kwargs.update(ctx.parent.params)
+        return wrapped(**kwargs)
+    return wrapper
+
+
 @eio.command(short_help='')
-@click.pass_context
-def info(ctx, **kwargs):
-    if ctx.parent and ctx.parent.params:
-        kwargs.update(ctx.parent.params)
+@pass_click_context
+def info(**kwargs):
     elevation.info(**kwargs)
 
 
 @eio.command(short_help='Seed the DEM to given bounds.')
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.pass_context
-def seed(ctx, **kwargs):
-    if ctx.parent and ctx.parent.params:
-        kwargs.update(ctx.parent.params)
+@pass_click_context
+def seed(**kwargs):
     elevation.seed(**kwargs)
 
 
@@ -72,24 +80,18 @@ def seed(ctx, **kwargs):
               "Defaults to %r" % elevation.MARGIN)
 @click.option('-r', '--reference',
               help="Use the extent of a reference GDAL/OGR data source as output bounds.")
-@click.pass_context
-def clip(ctx, **kwargs):
-    if ctx.parent and ctx.parent.params:
-        kwargs.update(ctx.parent.params)
+@pass_click_context
+def clip(**kwargs):
     elevation.clip(**kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
-@click.pass_context
-def clean(ctx, **kwargs):
-    if ctx.parent and ctx.parent.params:
-        kwargs.update(ctx.parent.params)
+@pass_click_context
+def clean(**kwargs):
     elevation.clean(**kwargs)
 
 
 @eio.command(short_help='Clean up the cache from temporary files.')
-@click.pass_context
-def distclean(ctx, **kwargs):
-    if ctx.parent and ctx.parent.params:
-        kwargs.update(ctx.parent.params)
+@pass_click_context
+def distclean(**kwargs):
     elevation.distclean(**kwargs)
