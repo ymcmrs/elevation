@@ -14,7 +14,6 @@ env:
 install:
   - pip install tox
   - pip install coveralls
-  - pip install numpy==1.11.0
 script: tox -e $TOX_ENV
 after_success:
   - if [[ $TOX_ENV == "quality-check" ]]; then
