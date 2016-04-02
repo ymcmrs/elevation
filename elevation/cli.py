@@ -69,7 +69,8 @@ def seed(ctx, **kwargs):
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
-@click.option('--same-as', help="Use the extent of a GDAL/OGR supported data source as output bounds.")
+@click.option('-r', '--reference',
+              help="Use the extent of a reference GDAL/OGR data source as output bounds.")
 @click.pass_context
 def clip(ctx, **kwargs):
     if ctx.parent and ctx.parent.params:

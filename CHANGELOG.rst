@@ -2,7 +2,8 @@
 0.9.10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Added -r/--reference option to get bounds from a GDAL/OGR data source.
+  Issue `#14 <https://github.com/bopen/elevation/issues/14>`_.
 
 
 0.9.9 (2016-04-01)

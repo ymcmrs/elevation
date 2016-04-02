@@ -140,23 +140,23 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     return datasource_root
 
 
-def ensure_bounds(bounds, datasourcename=None):
+def ensure_bounds(bounds, reference=None):
     if not bounds:
-        if not datasourcename:
+        if not reference:
             raise ValueError("bounds are not defined.")
         else:
             # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
             try:
-                with rasterio.open(datasourcename) as datasource:
+                with rasterio.open(reference) as datasource:
                     bounds = datasource.bounds
             except:
-                with fiona.open(datasourcename) as datasource:
+                with fiona.open(reference) as datasource:
                     bounds = datasource.bounds
     return bounds
 
 
-def clip(output=DEFAULT_OUTPUT, bounds=None, same_as=None, **kwargs):
-    bounds = ensure_bounds(bounds, datasourcename=same_as)
+def clip(output=DEFAULT_OUTPUT, bounds=None, reference=None, **kwargs):
+    bounds = ensure_bounds(bounds, reference=reference)
     datasource_root = seed(bounds=bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
 
