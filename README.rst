@@ -39,29 +39,40 @@ Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the SRTM1 30m DEM of Rome, around 41.9N 12.5W, to the ``Rome-DEM.tif`` file::
+For example to clip the SRTM 30m DEM of Rome, around 41.9N 12.5W, to the ``Rome-DEM.tif`` file::
 
-    $ eio clip -o Rome-DEM.tif --bounds 12.35 41.8 12.65 42
+    $ eio clip -o Rome-30m-DEM.tif --bounds 12.35 41.8 12.65 42
+
+For the SRTM 90m DEM use::
+
+    $ eio --product SRTM3 clip -o Rome-90m-DEM.tif --bounds 12.35 41.8 12.65 42
 
 The ``--bounds`` option accepts latitude and longitude coordinates
 (more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
 given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
+You can clip a DEM on the same extent of any other geospatial data source supported by GDAL and OGR,
+for example if you have a georeference image ``MyImage.tif`` you can clip the corresponding DEM with::
+
+    $ eio clip -o MyImage-DEM.tif --reference MyImage.tif
+
+The ``--reference`` option can take also verctor data as input::
+
+    $ eio clip -o MyShapefile-DEM.tif --reference MyShapefile.shp
+
 The first time an area is accessed Elevation downloads the data tiles from the USGS or CGIAR-CSI servers and
 caches them in GeoTiff compressed formats,
 subsequent accesses to the same and nearby areas are much faster.
 
-It is possible to pre-populate the cache for an area, for example to seed the SRTM3 90m DEM of
-a wider area around Rome execute::
-
-    $ eio --product SRTM3 seed --bounds 10.5 40 14.5 44
-
-The ``seed`` sub-command doesn't allow automatic download of a large amount of DEM tiles,
+The ``clip`` sub-command doesn't allow automatic download of a large amount of DEM tiles,
 please refer to the upstream providers' websites to learn the preferred procedures for bulk download.
 
-To clean up stale temporary files and to try fixing the cache in the event of a server error use::
+To clean up stale temporary files and fix the cache in the event of a server error use::
 
-    $ eio --product SRTM3 clean
+    $ eio clean
+
+Command line reference
+----------------------
 
 The ``eio`` command as the following sub-commands and options::
 
@@ -82,24 +93,18 @@ The ``eio`` command as the following sub-commands and options::
       seed       Seed the DEM to given bounds.
       selfcheck  Audits your installation for common issues.
 
-The ``seed`` sub-command::
-
-    $ eio seed --help
-    Usage: eio seed [OPTIONS]
-
-    Options:
-      --bounds FLOAT...  Output bounds: left bottom right top.
-      --help             Show this message and exit.
-
 The ``clip`` sub-command::
 
     $ eio clip --help
     Usage: eio clip [OPTIONS]
 
     Options:
-      -o, --output PATH  Path to output file. Existing files will be overwritten.
-      --bounds FLOAT...  Output bounds: left bottom right top.
-      --help             Show this message and exit.
+      -o, --output PATH     Path to output file. Existing files will be
+                            overwritten.
+      --bounds FLOAT...     Output bounds: left bottom right top.
+      -r, --reference TEXT  Use the extent of a reference GDAL/OGR data source as
+                            output bounds.
+      --help                Show this message and exit.
 
 
 Python API
@@ -112,8 +117,8 @@ Every command has a corresponding API function in the ``elevation`` module::
     # clip the SRTM1 30m DEM of Rome and save it to Rome-DEM.tif
     elevation.clip(bounds=(12.35, 41.8, 12.65, 42), output='Rome-DEM.tif')
 
-    # seed the SRTM3 90m DEM of a wider area around Rome
-    elevation.seed(product='SRTM3', bounds=(10.5, 40, 14.5, 44))
+    # clean up stale temporary files and fix the cache in the event of a server error
+    elevation.clean()
 
 
 Project resources
@@ -153,3 +158,4 @@ License
 
 Elevation is free and open source software
 distributed under the terms of the `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
+
