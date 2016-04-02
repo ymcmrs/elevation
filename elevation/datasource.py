@@ -23,6 +23,8 @@ import os.path
 import pkgutil
 
 import appdirs
+import rasterio
+import fiona
 
 from . import util
 
@@ -119,11 +121,11 @@ def ensure_setup(cache_dir, product, force=True):
     return datasource_root, spec
 
 
-def do_clip(path, bounds, output, **kwargs):
+def do_clip(path, bounds, output, make_flags='', **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
     variables_items = [('output', output), ('projwin', projwin)]
-    return util.check_call_make(path, targets=['clip'], variables=variables_items, **kwargs)
+    return util.check_call_make(path, targets=['clip'], variables=variables_items, make_flags=make_flags)
 
 
 def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload_tiles=9, **kwargs):
@@ -138,8 +140,24 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     return datasource_root
 
 
-def clip(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, output=DEFAULT_OUTPUT, **kwargs):
-    datasource_root = seed(cache_dir, product, bounds, **kwargs)
+def ensure_bounds(bounds, datasourcename=None):
+    if not bounds:
+        if not datasourcename:
+            raise ValueError("bounds are not defined.")
+        else:
+            # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
+            try:
+                with rasterio.open(datasourcename) as datasource:
+                    bounds = datasource.bounds
+            except:
+                with fiona.open(datasourcename) as datasource:
+                    bounds = datasource.bounds
+    return bounds
+
+
+def clip(output=DEFAULT_OUTPUT, bounds=None, same_as=None, **kwargs):
+    bounds = ensure_bounds(bounds, datasourcename=same_as)
+    datasource_root = seed(bounds=bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
 
 

@@ -1,2 +1,4 @@
 future==0.15.2
 appdirs==1.4.0
+rasterio==0.33.0
+Fiona==1.6.3.post1
