@@ -31,12 +31,13 @@ from . import util
 # declare public all API functions and constants
 __all__ = [
     'info', 'seed', 'clip', 'clean', 'distclean',
-    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'TOOLS',
+    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'DEFAULT_MARGIN', 'TOOLS',
 ]
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
 MAKE_FLAGS = '-k'
 DEFAULT_OUTPUT = 'out.tif'
+DEFAULT_MARGIN = '10%'
 
 
 def srtm1_tile_ilonlat(lon, lat):
@@ -140,23 +141,34 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload
     return datasource_root
 
 
-def ensure_bounds(bounds, reference=None):
+def make_bounds(reference, margin=DEFAULT_MARGIN):
+    # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
+    try:
+        with rasterio.open(reference) as datasource:
+            left, bottom, right, top = datasource.bounds
+    except:
+        with fiona.open(reference) as datasource:
+            left, bottom, right, top = datasource.bounds
+    if margin.endswith('%'):
+        margin_percent = float(margin[:-1])
+        margin_lon = (right - left) * margin_percent / 100
+        margin_lat = (top - bottom) * margin_percent / 100
+    else:
+        margin_lon = margin_lat = float(margin)
+    return (left - margin_lon, bottom - margin_lat, right + margin_lon, top + margin_lat)
+
+
+def ensure_bounds(bounds, reference=None, **kwargs):
     if not bounds:
         if not reference:
             raise ValueError("bounds are not defined.")
         else:
-            # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
-            try:
-                with rasterio.open(reference) as datasource:
-                    bounds = datasource.bounds
-            except:
-                with fiona.open(reference) as datasource:
-                    bounds = datasource.bounds
+            bounds = make_bounds(reference, **kwargs)
     return bounds
 
 
-def clip(output=DEFAULT_OUTPUT, bounds=None, reference=None, **kwargs):
-    bounds = ensure_bounds(bounds, reference=reference)
+def clip(output=DEFAULT_OUTPUT, bounds=None, reference=None, margin=DEFAULT_MARGIN, **kwargs):
+    bounds = ensure_bounds(bounds, reference=reference, margin=margin)
     datasource_root = seed(bounds=bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
 

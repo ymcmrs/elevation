@@ -69,6 +69,9 @@ def seed(ctx, **kwargs):
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', nargs=4, type=float, default=None,
               help='Output bounds: left bottom right top.')
+@click.option('-m', '--margin', default=elevation.DEFAULT_MARGIN,
+              help="Decimal degree margin added to the bounds. Use '%%' for percent margin. "
+              "Defaults to %r" % elevation.DEFAULT_MARGIN)
 @click.option('-r', '--reference',
               help="Use the extent of a reference GDAL/OGR data source as output bounds.")
 @click.pass_context

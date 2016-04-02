@@ -2,7 +2,7 @@
 0.9.10 (unreleased)
 -------------------
 
-- Added -r/--reference option to get bounds from a GDAL/OGR data source.
+- Added ``-r/--reference`` and ``-m/--margin`` options to define the bounds from a GDAL/OGR data source.
   Issue `#14 <https://github.com/bopen/elevation/issues/14>`_.
 
 
