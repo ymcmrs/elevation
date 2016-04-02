@@ -102,6 +102,8 @@ The ``clip`` sub-command::
       -o, --output PATH     Path to output file. Existing files will be
                             overwritten.
       --bounds FLOAT...     Output bounds: left bottom right top.
+      -m, --margin TEXT     Decimal degree margin added to the bounds. Use '%' for
+                            percent margin. Defaults to '10%'
       -r, --reference TEXT  Use the extent of a reference GDAL/OGR data source as
                             output bounds.
       --help                Show this message and exit.
