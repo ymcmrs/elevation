@@ -72,10 +72,10 @@ def ensure_setup(root, folders=(), file_templates=(), force=False, **kwargs):
 
 
 @folder_try_lock
-def check_call_make(path, targets=(), variables=(), make_flags=''):
+def check_call_make(path, targets=(), variables=()):
     make_targets = ' '.join(targets)
     variables_items = collections.OrderedDict(variables).items()
     make_variables = ' '.join('%s="%s"' % (k.upper(), v) for k, v in variables_items)
-    cmd = 'make -C {path} {make_flags} {make_targets} {make_variables}'.format(**locals())
+    cmd = 'make -C {path} {make_targets} {make_variables}'.format(**locals())
     subprocess.check_call(cmd, shell=True)
     return cmd

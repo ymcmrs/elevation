@@ -34,16 +34,16 @@ def test_srtm3_tiles_names():
 
 def test_ensure_tiles(mocker):
     with mocker.patch('subprocess.check_call'):
-        cmd = datasource.ensure_tiles('/tmp', ['a', 'b'], make_flags='-s')
-    assert cmd == 'make -C /tmp -s download ENSURE_TILES="a b"'
+        cmd = datasource.ensure_tiles('/tmp', ['a', 'b'])
+    assert cmd == 'make -C /tmp download ENSURE_TILES="a b"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 
 def test_do_clip(mocker):
     bounds = (1, 5, 2, 6)
     with mocker.patch('subprocess.check_call'):
-        cmd = datasource.do_clip(path='/tmp', bounds=bounds, output='/out.tif', make_flags='-s')
-    assert cmd == 'make -C /tmp -s clip OUTPUT="/out.tif" PROJWIN="1 6 2 5"'
+        cmd = datasource.do_clip(path='/tmp', bounds=bounds, output='/out.tif')
+    assert cmd == 'make -C /tmp clip OUTPUT="/out.tif" PROJWIN="1 6 2 5"'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
 
 
@@ -54,7 +54,7 @@ def test_seed(mocker, tmpdir):
         datasource.seed(cache_dir=str(root), product='SRTM1', bounds=bounds)
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    expected_cmd = 'make -C %s  download ENSURE_TILES="N43E013.tif"' % datasource_root
+    expected_cmd = 'make -C %s download ENSURE_TILES="N43E013.tif"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
 
@@ -65,7 +65,7 @@ def test_clip(mocker, tmpdir):
         datasource.clip(cache_dir=str(root), product='SRTM1', bounds=bounds, output='out.tif')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    expected_cmd = 'make -C %s  clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1"' % datasource_root
+    expected_cmd = 'make -C %s clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
 
@@ -75,4 +75,4 @@ def test_clean(mocker, tmpdir):
         datasource.clean(cache_dir=str(root), product='SRTM1')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    subprocess.check_call.assert_any_call('make -C %s  clean ' % datasource_root, shell=True)
+    subprocess.check_call.assert_any_call('make -C %s clean ' % datasource_root, shell=True)

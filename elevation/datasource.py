@@ -31,11 +31,10 @@ from . import util
 # declare public all API functions and constants
 __all__ = [
     'info', 'seed', 'clip', 'clean', 'distclean',
-    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MAKE_FLAGS', 'MARGIN', 'TOOLS',
+    'CACHE_DIR', 'DEFAULT_PRODUCT', 'PRODUCTS', 'DEFAULT_OUTPUT', 'MARGIN', 'TOOLS',
 ]
 
 CACHE_DIR = appdirs.user_cache_dir('elevation', 'bopen')
-MAKE_FLAGS = '-k'
 DEFAULT_OUTPUT = 'out.tif'
 MARGIN = '10%'
 
@@ -122,11 +121,11 @@ def ensure_setup(cache_dir, product, force=True):
     return datasource_root, spec
 
 
-def do_clip(path, bounds, output, make_flags='', **kwargs):
+def do_clip(path, bounds, output, **kwargs):
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
     variables_items = [('output', output), ('projwin', projwin)]
-    return util.check_call_make(path, targets=['clip'], variables=variables_items, make_flags=make_flags)
+    return util.check_call_make(path, targets=['clip'], variables=variables_items)
 
 
 def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload_tiles=9, **kwargs):
