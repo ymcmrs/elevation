@@ -51,14 +51,15 @@ The ``--bounds`` option accepts latitude and longitude coordinates
 (more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
 given as ``left bottom right top`` similarly to the ``rio`` command form ``rasterio``.
 
-You can clip a DEM on the same extent of any other geospatial data source supported by GDAL and OGR,
+If you have installed the packages ``rasterio`` and ``fiona``
+you can clip a DEM on the same extent of any other geospatial data source supported by GDAL and OGR,
 for example if you have a georeference image ``MyImage.tif`` you can clip the corresponding DEM with::
 
-    $ eio clip -o MyImage-DEM.tif --reference MyImage.tif
+    $ eio clip -o MyImage-DEM.tif --reference MyImage.tif  # enable with: $ pip install rasterio
 
 The ``--reference`` option can take also verctor data as input::
 
-    $ eio clip -o MyShapefile-DEM.tif --reference MyShapefile.shp
+    $ eio clip -o MyShapefile-DEM.tif --reference MyShapefile.shp  # enable with: $ pip install fiona
 
 The first time an area is accessed Elevation downloads the data tiles from the USGS or CGIAR-CSI servers and
 caches them in GeoTiff compressed formats,
