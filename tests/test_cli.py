@@ -15,7 +15,7 @@ from elevation import cli
 
 def test_eio_selfcheck(mocker):
     runner = click.testing.CliRunner()
-    mocker.patch('subprocess.check_output'):
+    mocker.patch('subprocess.check_output')
     result = runner.invoke(cli.selfcheck)
     assert not result.exception
     assert subprocess.check_output.call_count == 5
