@@ -32,11 +32,12 @@ click.disable_unicode_literals_warning = True
 
 @click.group()
 @click.version_option()
-@click.option('--product', default=elevation.DEFAULT_PRODUCT, type=click.Choice(elevation.PRODUCTS),
-              help='DEM product choice (default: %r).' % elevation.DEFAULT_PRODUCT)
-@click.option('--cache_dir', default=elevation.CACHE_DIR,
-              type=click.Path(resolve_path=True, file_okay=False),
-              help='Root of the DEM cache folder (default: %r).' % elevation.CACHE_DIR)
+@click.option('--product', type=click.Choice(elevation.PRODUCTS),
+              default=elevation.DEFAULT_PRODUCT, show_default=True,
+              help="DEM product choice.")
+@click.option('--cache_dir', type=click.Path(resolve_path=True, file_okay=False),
+              default=elevation.CACHE_DIR, show_default=True,
+              help='Root of the DEM cache folder')
 def eio(**kwargs):
     pass
 
@@ -63,7 +64,7 @@ def info(**kwargs):
 
 
 @eio.command(short_help='Seed the DEM to given bounds.')
-@click.option('--bounds', nargs=4, type=float, default=None,
+@click.option('--bounds', nargs=4, type=float,
               help='Output bounds: left bottom right top.')
 @click_merge_parent_params
 def seed(**kwargs):
@@ -71,14 +72,13 @@ def seed(**kwargs):
 
 
 @eio.command(short_help='Clip the DEM to given bounds.')
-@click.option('-o', '--output', default=elevation.DEFAULT_OUTPUT,
-              type=click.Path(resolve_path=True, dir_okay=False),
+@click.option('-o', '--output', type=click.Path(resolve_path=True, dir_okay=False),
+              default=elevation.DEFAULT_OUTPUT, show_default=True,
               help="Path to output file. Existing files will be overwritten.")
-@click.option('--bounds', nargs=4, type=float,
+@click.option('--bounds', type=float, nargs=4,
               help='Output bounds: left bottom right top.')
-@click.option('-m', '--margin', default=elevation.MARGIN,
-              help="Decimal degree margin added to the bounds. Use '%%' for percent margin. "
-              "Defaults to %r" % elevation.MARGIN)
+@click.option('-m', '--margin', default=elevation.MARGIN, show_default=True,
+              help="Decimal degree margin added to the bounds. Use '%%' for percent margin.")
 @click.option('-r', '--reference',
               help="Use the extent of a reference GDAL/OGR data source as output bounds.")
 @click_merge_parent_params
