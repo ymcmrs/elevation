@@ -3,6 +3,7 @@
 -------------------
 
 - Added ``-r/--reference`` and ``-m/--margin`` options to define the bounds from a GDAL/OGR data source.
+  Install the ``rasterio`` and ``fiona`` packages with ``pip`` to enable it.
   Issue `#14 <https://github.com/bopen/elevation/issues/14>`_.
 
 

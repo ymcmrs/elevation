@@ -81,18 +81,19 @@ The ``eio`` command as the following sub-commands and options::
     Usage: eio [OPTIONS] COMMAND [ARGS]...
 
     Options:
-      --product [SRTM1|SRTM3]  DEM product choice (default: 'SRTM1').
-      --cache_dir DIRECTORY    Root of the DEM cache folder (default: [...]).
-      --make_flags TEXT        Options to be passed to make (default: '-k').
+      --version                Show the version and exit.
+      --product [SRTM1|SRTM3]  DEM product choice.  [default: SRTM1]
+      --cache_dir DIRECTORY    Root of the DEM cache folder.  [default:
+                               /Users/amici/Library/Caches/elevation]
       --help                   Show this message and exit.
 
     Commands:
       clean      Clean up the cache from temporary files.
       clip       Clip the DEM to given bounds.
       distclean  Clean up the cache from temporary files.
-      info
+      info       Show info about the product cache.
       seed       Seed the DEM to given bounds.
-      selfcheck  Audits your installation for common issues.
+      selfcheck  Audit your installation for common issues.
 
 The ``clip`` sub-command::
 
@@ -101,10 +102,10 @@ The ``clip`` sub-command::
 
     Options:
       -o, --output PATH     Path to output file. Existing files will be
-                            overwritten.
+                            overwritten.  [default: out.tif]
       --bounds FLOAT...     Output bounds: left bottom right top.
       -m, --margin TEXT     Decimal degree margin added to the bounds. Use '%' for
-                            percent margin. Defaults to '10%'
+                            percent margin.  [default: 0]
       -r, --reference TEXT  Use the extent of a reference GDAL/OGR data source as
                             output bounds.
       --help                Show this message and exit.
