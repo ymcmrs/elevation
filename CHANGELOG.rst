@@ -6,7 +6,7 @@
   Install the ``rasterio`` and ``fiona`` packages with ``pip`` to enable it.
   Issue `#14 <https://github.com/bopen/elevation/issues/14>`_.
 - Enable reading defaults from environment variables prefixed with ``EIO``,
-  e.g. ``EIO_PRODUCT_PRODCUT=SRTM3`` and ``EIO_CLIP_MARGIN=10%``.
+  e.g. ``EIO_PRODUCT=SRTM3`` and ``EIO_CLIP_MARGIN=10%``.
 
 
 0.9.9 (2016-04-01)

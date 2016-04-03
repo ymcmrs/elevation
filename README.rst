@@ -111,7 +111,7 @@ The ``clip`` sub-command::
       --help                Show this message and exit.
 
 Defaults can be defined by setting environment variables prefixed with ``EIO``,
-e.g. ``EIO_PRODUCT_PRODCUT=SRTM3`` and ``EIO_CLIP_MARGIN=10%``.
+e.g. ``EIO_PRODUCT=SRTM3`` and ``EIO_CLIP_MARGIN=10%``.
 
 
 Python API
