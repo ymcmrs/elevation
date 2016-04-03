@@ -20,9 +20,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import functools
 
 import click
-import rasterio
-import fiona
-
 
 import elevation
 from . import util
@@ -72,15 +69,23 @@ def seed(**kwargs):
     elevation.seed(**kwargs)
 
 
-def parse_bounds(reference):
-    # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
-    try:
-        with rasterio.open(reference) as datasource:
-            pass
-    except:
-        with fiona.open(reference) as datasource:
-            pass
-    return datasource.bounds
+try:
+    # NOTE: GDAL/OGR bindings are not supported on Pypy
+    import rasterio
+    import fiona
+
+    def import_bounds(reference):
+        # ASSUMPTION: rasterio and fiona bounds are given in geodetic WGS84 crs
+        try:
+            with rasterio.open(reference) as datasource:
+                bounds = datasource.bounds
+        except:
+            with fiona.open(reference) as datasource:
+                bounds = datasource.bounds
+        return bounds
+except ImportError:
+    def import_bounds(reference):
+        raise click.BadOptionUsage("-r/--reference disabled, to enable it install rasterio and fiona.")
 
 
 def ensure_bounds(wrapped):
@@ -90,7 +95,7 @@ def ensure_bounds(wrapped):
             if not reference:
                 raise ValueError("bounds are not defined.")
             else:
-                bounds = parse_bounds(reference)
+                bounds = import_bounds(reference)
         return wrapped(bounds=bounds, **kwargs)
     return wrapper
 

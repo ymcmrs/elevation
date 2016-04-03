@@ -46,9 +46,10 @@ setup(
         'appdirs',
         'fasteners',
         'click',
-        'rasterio',
-        'fiona',
     ],
+    extras_require={
+        'reference': ['rasterio', 'fiona'],
+    },
     zip_safe=True,
     classifiers=[
         'Development Status :: 4 - Beta',
