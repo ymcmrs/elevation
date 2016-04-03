@@ -65,7 +65,7 @@ def test_ensure_setup(tmpdir):
 
 
 def test_check_call_make(mocker):
-    with mocker.patch('subprocess.check_call'):
-        cmd = util.check_call_make('/tmp')
+    mocker.patch('subprocess.check_call')
+    cmd = util.check_call_make('/tmp')
     assert cmd.strip() == 'make -C /tmp'
     subprocess.check_call.assert_called_once_with(cmd, shell=True)
