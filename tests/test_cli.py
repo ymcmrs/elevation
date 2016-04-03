@@ -6,9 +6,9 @@
 # python 2 support via python-future
 from __future__ import absolute_import, unicode_literals
 
-import click.testing
-
 import subprocess
+
+import click.testing
 
 from elevation import cli
 
@@ -19,6 +19,23 @@ def test_eio_selfcheck(mocker):
     result = runner.invoke(cli.selfcheck)
     assert not result.exception
     assert subprocess.check_output.call_count == 5
+
+
+def test_click_merge_parent_params():
+    runner = click.testing.CliRunner()
+
+    @cli.eio.command()
+    @cli.click_merge_parent_params
+    def return_kwargs(**kwargs):
+        print(kwargs)
+
+    result = runner.invoke(cli.eio, 'return_kwargs'.split())
+    assert not result.exception
+    assert 'product' in result.output and 'cache_dir' in result.output
+
+    result = runner.invoke(return_kwargs)
+    assert not result.exception
+    assert result.output == '{}\n'
 
 
 def test_eio_info(mocker, tmpdir):
@@ -49,6 +66,16 @@ def test_eio_clip(mocker, tmpdir):
     result = runner.invoke(cli.eio, options.split())
     assert not result.exception
     assert subprocess.check_call.call_count == 3
+
+    mocker.patch('subprocess.check_call')
+    result = runner.invoke(cli.eio, ['clip'])
+    assert result.exception
+    assert subprocess.check_call.call_count == 0
+
+    mocker.patch('subprocess.check_call')
+    result = runner.invoke(cli.eio, 'clip --reference .'.split())
+    assert result.exception
+    assert subprocess.check_call.call_count == 0
 
 
 def test_eio_clean(mocker, tmpdir):
