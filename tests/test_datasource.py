@@ -8,6 +8,8 @@ from __future__ import absolute_import, unicode_literals
 
 import subprocess
 
+import pytest
+
 from elevation import datasource
 
 
@@ -56,6 +58,9 @@ def test_seed(mocker, tmpdir):
     datasource_root = root.listdir()[0]
     expected_cmd = 'make -C %s download ENSURE_TILES="N43E013.tif"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
+
+    with pytest.raises(RuntimeError):
+        datasource.seed(cache_dir=str(root), product='SRTM1', bounds=(-180, -90, 180, 90))
 
 
 def test_build_bounds():
