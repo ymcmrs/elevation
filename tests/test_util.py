@@ -8,12 +8,28 @@ from __future__ import absolute_import, unicode_literals
 
 import subprocess
 
+import pytest
+
 from elevation import util
 
 
 def test_selfcheck():
     assert 'NAME' not in util.selfcheck([('NAME', 'true')])
     assert 'NAME' in util.selfcheck([('NAME', 'false')])
+
+
+def test_folder_try_lock(tmpdir, mocker):
+    root = tmpdir.join('root')
+
+    @util.folder_try_lock
+    def operation(path):
+        return True
+
+    assert operation(str(root))
+
+    mocker.patch('fasteners.InterProcessLock.acquire', return_value=False)
+    with pytest.raises(RuntimeError):
+        operation(str(root))
 
 
 def test_ensure_setup(tmpdir):
