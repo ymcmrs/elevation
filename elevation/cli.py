@@ -75,32 +75,23 @@ def seed(**kwargs):
     elevation.seed(**kwargs)
 
 
-def ensure_bounds(wrapped):
-    @functools.wraps(wrapped)
-    def wrapper(bounds, reference, **kwargs):
-        if not bounds:
-            if not reference:
-                raise click.BadOptionUsage("One of --bounds or --reference must be supplied.")
-            else:
-                bounds = import_bounds(reference)
-        return wrapped(bounds=bounds, **kwargs)
-    return wrapper
-
-
 @eio.command(short_help='Clip the DEM to given bounds.')
 @click.option('-o', '--output', default=elevation.DEFAULT_OUTPUT,
               type=click.Path(resolve_path=True, dir_okay=False),
               help="Path to output file. Existing files will be overwritten.")
-@click.option('--bounds', nargs=4, type=float, default=None,
+@click.option('--bounds', nargs=4, type=float,
               help='Output bounds: left bottom right top.')
 @click.option('-m', '--margin', default=elevation.MARGIN,
               help="Decimal degree margin added to the bounds. Use '%%' for percent margin. "
               "Defaults to %r" % elevation.MARGIN)
 @click.option('-r', '--reference',
               help="Use the extent of a reference GDAL/OGR data source as output bounds.")
-@ensure_bounds
 @click_merge_parent_params
-def clip(bounds, **kwargs):
+def clip(bounds, reference, **kwargs):
+    if not bounds and not reference:
+        raise click.BadOptionUsage("One of --bounds or --reference must be supplied.")
+    if not bounds:
+        bounds = import_bounds(reference)
     elevation.clip(bounds, **kwargs)
 
 
