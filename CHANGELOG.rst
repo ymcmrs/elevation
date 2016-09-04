@@ -1,5 +1,5 @@
 
-0.9.10 (unreleased)
+0.9.10 (2016-09-04)
 -------------------
 
 - Change default product to ``SRTM3`` as direct access to ``SRTM1`` has been apparently discontinued.
