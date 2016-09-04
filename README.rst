@@ -39,13 +39,13 @@ Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the SRTM 30m DEM of Rome, around 41.9N 12.5W, to the ``Rome-DEM.tif`` file::
+For example to clip the SRTM 90m DEM of Rome, around 41.9N 12.5W, to the ``Rome-90m-DEM.tif`` file::
 
-    $ eio clip -o Rome-30m-DEM.tif --bounds 12.35 41.8 12.65 42
+    $ eio clip -o Rome-90m-DEM.tif --bounds 12.35 41.8 12.65 42
 
-For the SRTM 90m DEM use::
+For the SRTM 30m DEM try to use::
 
-    $ eio --product SRTM3 clip -o Rome-90m-DEM.tif --bounds 12.35 41.8 12.65 42
+    $ eio --product SRTM1 clip -o Rome-30m-DEM.tif --bounds 12.35 41.8 12.65 42
 
 The ``--bounds`` option accepts latitude and longitude coordinates
 (more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
@@ -82,7 +82,7 @@ The ``eio`` command as the following sub-commands and options::
 
     Options:
       --version                Show the version and exit.
-      --product [SRTM1|SRTM3]  DEM product choice.  [default: SRTM1]
+      --product [SRTM1|SRTM3]  DEM product choice.  [default: SRTM3]
       --cache_dir DIRECTORY    Root of the DEM cache folder.  [default:
                                /Users/amici/Library/Caches/elevation]
       --help                   Show this message and exit.

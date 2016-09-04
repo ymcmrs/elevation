@@ -95,7 +95,7 @@ PRODUCTS_SPECS = collections.OrderedDict([
 ])
 
 PRODUCTS = list(PRODUCTS_SPECS)
-DEFAULT_PRODUCT = PRODUCTS[0]
+DEFAULT_PRODUCT = PRODUCTS[1]
 TOOLS = [
     ('GNU Make', 'make --version'),
     ('curl', 'curl --version'),
