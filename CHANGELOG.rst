@@ -1,5 +1,5 @@
 
-0.9.11 (unreleased)
+0.9.11 (2016-09-23)
 -------------------
 
 - Revert the default product back to ``SRTM1`` by downloading from the
