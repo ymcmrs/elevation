@@ -1,7 +1,7 @@
 Global geographic elevation data made easy.
 Elevation provides easy download, cache and access of the global datasets
 `SRTM 30m Global 1 arc second V003 <https://lpdaac.usgs.gov/dataset_discovery/measures/measures_products_table/SRTMGL1_v003>`_
-elaborated by NASA and NGA
+elaborated by NASA and NGA hosted on `Amazon S3 <https://aws.amazon.com/public-data-sets/terrain>`_
 and
 `SRTM 90m Digital Elevation Database v4.1 <http://www.cgiar-csi.org/data/srtm-90m-digital-elevation-database-v4-1>`_
 elaborated by CGIAR-CSI.
@@ -22,6 +22,7 @@ The following dependencies need to be installed and working:
 - `GNU make <https://www.gnu.org/software/make/>`_
 - `curl <https://curl.haxx.se/>`_
 - unzip
+- `gunzip <http://www.gzip.org/>`_
 - `GDAL command line tools <http://www.gdal.org/>`_
 
 The following command runs some basic checks and reports common issues::
@@ -39,13 +40,13 @@ Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the SRTM 90m DEM of Rome, around 41.9N 12.5W, to the ``Rome-90m-DEM.tif`` file::
+For example to clip the SRTM 30m DEM of Rome, around 41.9N 12.5W, to the ``Rome-30m-DEM.tif`` file::
 
-    $ eio clip -o Rome-90m-DEM.tif --bounds 12.35 41.8 12.65 42
+    $ eio clip -o Rome-30m-DEM.tif --bounds 12.35 41.8 12.65 42
 
-For the SRTM 30m DEM try to use::
+For the SRTM 90m DEM use::
 
-    $ eio --product SRTM1 clip -o Rome-30m-DEM.tif --bounds 12.35 41.8 12.65 42
+    $ eio --product SRTM3 clip -o Rome-90m-DEM.tif --bounds 12.35 41.8 12.65 42
 
 The ``--bounds`` option accepts latitude and longitude coordinates
 (more precisely in geodetic coordinates in the WGS84 refernce system EPSG:4326 for those who care)
@@ -82,7 +83,7 @@ The ``eio`` command as the following sub-commands and options::
 
     Options:
       --version                Show the version and exit.
-      --product [SRTM1|SRTM3]  DEM product choice.  [default: SRTM3]
+      --product [SRTM1|SRTM3]  DEM product choice.  [default: SRTM1]
       --cache_dir DIRECTORY    Root of the DEM cache folder.  [default:
                                /Users/amici/Library/Caches/elevation]
       --help                   Show this message and exit.

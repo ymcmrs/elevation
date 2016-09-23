@@ -18,7 +18,7 @@ def test_eio_selfcheck(mocker):
     mocker.patch('subprocess.check_output')
     result = runner.invoke(cli.selfcheck)
     assert not result.exception
-    assert subprocess.check_output.call_count == 5
+    assert subprocess.check_output.call_count == len(cli.elevation.TOOLS)
 
 
 def test_click_merge_parent_params():

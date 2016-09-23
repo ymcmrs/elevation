@@ -2,7 +2,8 @@
 DATASOURCE_URL := {datasource_url}
 PRODUCT := {product}
 TILE_EXT := {tile_ext}
-ZIP_EXT := {zip_ext}
+COMPRESSED_PRE_EXT = {compressed_pre_ext}
+COMPRESSED_EXT := {compressed_ext}
 
 ENSURE_TILE_PATHS := $(foreach n,$(ENSURE_TILES),cache/$n)
 STDERR_SWITCH := 2>/dev/null
@@ -12,13 +13,18 @@ all: $(PRODUCT).vrt
 $(PRODUCT).vrt: $(shell find cache -size +0 -name "*.tif" 2>/dev/null)
 	gdalbuildvrt -q -overwrite $@ $^
 
-spool/%$(ZIP_EXT):
-	curl -s -o $@.temp $(DATASOURCE_URL)/$*$(ZIP_EXT) && mv $@.temp $@
+spool/%$(COMPRESSED_EXT):
+	@mkdir -p $(dir $@)
+	curl -s -o $@.temp $(DATASOURCE_URL)/$*$(COMPRESSED_EXT) && mv $@.temp $@
 
-spool/%$(TILE_EXT): spool/%$(ZIP_EXT)
+spool/%$(TILE_EXT): spool/%$(COMPRESSED_PRE_EXT).zip
 	unzip -qq -d spool $< $*$(TILE_EXT) $(STDERR_SWITCH) || touch $@
 
+spool/%$(TILE_EXT): spool/%$(COMPRESSED_PRE_EXT).gz
+	gunzip $< $(STDERR_SWITCH) || touch $@
+
 cache/%.tif: spool/%$(TILE_EXT)
+	@mkdir -p $(dir $@)
 	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 $< $@ $(STDERR_SWITCH) || touch $@
 
 download: $(ENSURE_TILE_PATHS)

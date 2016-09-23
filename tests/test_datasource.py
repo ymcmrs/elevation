@@ -24,9 +24,9 @@ def test_srtm3_tile_ilonlat():
 
 
 def test_srtm1_tiles_names():
-    assert list(datasource.srtm1_tiles_names(10.1, 44.9, 10.1, 44.9)) == ['N44E010.tif']
+    assert list(datasource.srtm1_tiles_names(10.1, 44.9, 10.1, 44.9)) == ['N44/N44E010.tif']
     # NOTE this also tests int (not float) input
-    assert list(datasource.srtm1_tiles_names(10, 44, 11, 45)) == ['N44E010.tif']
+    assert list(datasource.srtm1_tiles_names(10, 44, 11, 45)) == ['N44/N44E010.tif']
 
 
 def test_srtm3_tiles_names():
@@ -56,7 +56,7 @@ def test_seed(mocker, tmpdir):
     datasource.seed(cache_dir=str(root), product='SRTM1', bounds=bounds)
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    expected_cmd = 'make -C %s download ENSURE_TILES="N43E013.tif"' % datasource_root
+    expected_cmd = 'make -C %s download ENSURE_TILES="N43/N43E013.tif"' % datasource_root
     subprocess.check_call.assert_any_call(expected_cmd, shell=True)
 
     with pytest.raises(RuntimeError):

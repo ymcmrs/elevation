@@ -46,7 +46,7 @@ def srtm3_tile_ilonlat(lon, lat):
     return (ilon + 180) // 5 + 1, (64 - ilat) // 5
 
 
-def srtm1_tiles_names(left, bottom, right, top, tile_name_template='{slat}{slon}.tif'):
+def srtm1_tiles_names(left, bottom, right, top, tile_name_template='{slat}/{slat}{slon}.tif'):
     ileft, itop = srtm1_tile_ilonlat(left, top)
     iright, ibottom = srtm1_tile_ilonlat(right, bottom)
     # special case often used *integer* top and right to avoid downloading unneeded tiles
@@ -74,9 +74,10 @@ DATASOURCE_MAKEFILE = pkgutil.get_data('elevation', 'datasource.mk').decode('utf
 SRTM1_SPEC = {
     'folders': ('spool', 'cache'),
     'file_templates': {'Makefile': DATASOURCE_MAKEFILE},
-    'datasource_url': 'http://e4ftl01.cr.usgs.gov/SRTM/SRTMGL1.003/2000.02.11',
+    'datasource_url': 'https://s3.amazonaws.com/elevation-tiles-prod/skadi',
     'tile_ext': '.hgt',
-    'zip_ext': '.SRTMGL1.hgt.zip',
+    'compressed_pre_ext': '.hgt',
+    'compressed_ext': '.hgt.gz',
     'tile_names': srtm1_tiles_names,
 }
 
@@ -85,7 +86,8 @@ SRTM3_SPEC = {
     'file_templates': {'Makefile': DATASOURCE_MAKEFILE},
     'datasource_url': 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff',
     'tile_ext': '.tif',
-    'zip_ext': '.zip',
+    'compressed_pre_ext': '',
+    'compressed_ext': '.zip',
     'tile_names': srtm3_tiles_names,
 }
 
@@ -95,11 +97,12 @@ PRODUCTS_SPECS = collections.OrderedDict([
 ])
 
 PRODUCTS = list(PRODUCTS_SPECS)
-DEFAULT_PRODUCT = PRODUCTS[1]
+DEFAULT_PRODUCT = PRODUCTS[0]
 TOOLS = [
     ('GNU Make', 'make --version'),
     ('curl', 'curl --version'),
     ('unzip', 'unzip -v'),
+    ('gunzip', 'gunzip --version'),
     ('gdal_translate', 'gdal_translate --version'),
     ('gdalbuildvrt', 'gdalbuildvrt --version'),
 ]

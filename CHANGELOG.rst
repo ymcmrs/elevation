@@ -2,7 +2,9 @@
 0.9.11 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Revert the default product back to ``SRTM1`` by downloading from the
+ `Amazon Terrain Tiles on AWS servcie <https://aws.amazon.com/public-data-sets/terrain>`_.
+  Closes issue `#18 <https://github.com/bopen/elevation/issues/18>`_.
 
 
 0.9.10 (2016-09-04)
