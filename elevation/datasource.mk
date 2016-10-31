@@ -39,7 +39,7 @@ info:
 
 clean:
 	find cache -size 0 -name "*.tif" -delete
-	$(RM) spool/*
+	$(RM) -r spool/*
 
 distclean: clean
 	$(RM) cache/* $(PRODUCT).vrt Makefile
