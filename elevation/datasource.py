@@ -129,11 +129,19 @@ def do_clip(path, bounds, output, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items)
 
 
-def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload_tiles=9, **kwargs):
+def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download_tiles=9, **kwargs):
+    """Seed the DEM to given bounds.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    :param bounds: Output bounds in 'left bottom right top' order.
+    :param max_download_tiles: Maximum number of tiles to process.
+    :param kwargs: Pass additional kwargs to ensure_tiles.
+    """
     datasource_root, spec = ensure_setup(cache_dir, product)
     ensure_tiles_names = list(spec['tile_names'](*bounds))
     # FIXME: emergency hack to enforce the no-bulk-download policy
-    if len(ensure_tiles_names) > max_donwload_tiles:
+    if len(ensure_tiles_names) > max_download_tiles:
         raise RuntimeError("Too many tiles: %d. Please consult the providers' websites "
                            "for how to bulk download tiles." % len(ensure_tiles_names))
     ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
@@ -153,21 +161,44 @@ def build_bounds(bounds, margin=MARGIN):
 
 
 def clip(bounds, output=DEFAULT_OUTPUT, margin=MARGIN, **kwargs):
+    """Clip the DEM to given bounds.
+
+    :param bounds: Output bounds in 'left bottom right top' order.
+    :param output: Path to output file. Existing files will be overwritten.
+    :param margin: Decimal degree margin added to the bounds. Use '%' for percent margin.
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     bounds = build_bounds(bounds, margin=margin)
     datasource_root = seed(bounds=bounds, **kwargs)
     do_clip(datasource_root, bounds, output, **kwargs)
 
 
-def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
+    """Show info about the product cache.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['info'])
 
 
-def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
+    """Clean up the product cache from temporary files.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['clean'])
 
 
-def distclean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+def distclean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
+    """Remove the product cache entirely.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['distclean'])
