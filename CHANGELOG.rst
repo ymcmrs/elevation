@@ -1,8 +1,11 @@
 
-0.9.12 (unreleased)
--------------------
+1.0.0 (2016-11-03)
+------------------
 
-- Nothing changed yet.
+- Fix clean command.
+  Closes issue `#21 <https://github.com/bopen/elevation/issues/21>`_.
+- Add docstrings for all Pyhton API functions.
+  Closes issue `#15 <https://github.com/bopen/elevation/issues/15>`_.
 
 
 0.9.11 (2016-09-23)
