@@ -166,13 +166,18 @@ def clip(bounds, output=DEFAULT_OUTPUT, margin=MARGIN, **kwargs):
     do_clip(datasource_root, bounds, output, **kwargs)
 
 
-def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
+    """Show info about the product cache.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['info'])
 
 
 def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
-    """Clean up the cache from temporary files.
+    """Clean up the product cache from temporary files.
 
     :param cache_dir: Root of the DEM cache folder.
     :param product: DEM product choice.
@@ -182,7 +187,7 @@ def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
 
 
 def distclean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
-    """Remove the tile cache entirely.
+    """Remove the product cache entirely.
 
     :param cache_dir: Root of the DEM cache folder.
     :param product: DEM product choice.

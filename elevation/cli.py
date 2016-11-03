@@ -93,13 +93,13 @@ def clip(bounds, reference, **kwargs):
     elevation.clip(bounds, **kwargs)
 
 
-@eio.command(short_help="Clean up the cache from temporary files.")
+@eio.command(short_help="Clean up the product cache from temporary files.")
 @click_merge_parent_params
 def clean(**kwargs):
     elevation.clean(**kwargs)
 
 
-@eio.command(short_help="Remove the tile cache entirely.")
+@eio.command(short_help="Remove the product cache entirely.")
 @click_merge_parent_params
 def distclean(**kwargs):
     elevation.distclean(**kwargs)
