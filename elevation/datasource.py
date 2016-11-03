@@ -129,11 +129,19 @@ def do_clip(path, bounds, output, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items)
 
 
-def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_donwload_tiles=9, **kwargs):
+def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download_tiles=9, **kwargs):
+    """Seed the DEM to given bounds.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    :param bounds: Output bounds in 'left bottom right top' order.
+    :param max_download_tiles: Maximum number of tiles to process.
+    :param kwargs: Pass additional kwargs to ensure_tiles.
+    """
     datasource_root, spec = ensure_setup(cache_dir, product)
     ensure_tiles_names = list(spec['tile_names'](*bounds))
     # FIXME: emergency hack to enforce the no-bulk-download policy
-    if len(ensure_tiles_names) > max_donwload_tiles:
+    if len(ensure_tiles_names) > max_download_tiles:
         raise RuntimeError("Too many tiles: %d. Please consult the providers' websites "
                            "for how to bulk download tiles." % len(ensure_tiles_names))
     ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
