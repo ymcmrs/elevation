@@ -45,7 +45,7 @@ def eio(**kwargs):
     pass
 
 
-@eio.command(short_help="Audit your installation for common issues.")
+@eio.command(short_help="Audit the system for common issues.")
 def selfcheck():
     print(util.selfcheck(tools=elevation.TOOLS))
 
@@ -79,7 +79,7 @@ def seed(**kwargs):
               default=elevation.DEFAULT_OUTPUT, show_default=True,
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', type=float, nargs=4,
-              help="Output bounds: left bottom right top.")
+              help="Output bounds in 'left bottom right top' order.")
 @click.option('-m', '--margin', default=elevation.MARGIN, show_default=True,
               help="Decimal degree margin added to the bounds. Use '%' for percent margin.")
 @click.option('-r', '--reference',
@@ -93,13 +93,13 @@ def clip(bounds, reference, **kwargs):
     elevation.clip(bounds, **kwargs)
 
 
-@eio.command(short_help="Clean up the cache from temporary files.")
+@eio.command(short_help="Clean up the product cache from temporary files.")
 @click_merge_parent_params
 def clean(**kwargs):
     elevation.clean(**kwargs)
 
 
-@eio.command(short_help="Clean up the cache from temporary files.")
+@eio.command(short_help="Remove the product cache entirely.")
 @click_merge_parent_params
 def distclean(**kwargs):
     elevation.distclean(**kwargs)

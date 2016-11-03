@@ -29,6 +29,10 @@ LOCKFILE_NAME = '.folder_lock'
 
 
 def selfcheck(tools):
+    """Audit the system for issues.
+
+    :param tools: Tools description. Use elevation.TOOLS to test elevation.
+    """
     msg = []
     for tool_name, check_cli in collections.OrderedDict(tools).items():
         try:
