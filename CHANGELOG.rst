@@ -1,6 +1,6 @@
 
-0.9.12 (unreleased)
--------------------
+1.0.0 (2016-11-03)
+------------------
 
 - Fix clean command.
   Closes issue `#21 <https://github.com/bopen/elevation/issues/21>`_.
