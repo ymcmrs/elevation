@@ -78,8 +78,7 @@ Command line reference
 
 The ``eio`` command as the following sub-commands and options::
 
-    $ eio --help
-    Usage: eio [OPTIONS] COMMAND [ARGS]...
+    $ Usage: eio [OPTIONS] COMMAND [ARGS]...
 
     Options:
       --version                Show the version and exit.
@@ -89,12 +88,12 @@ The ``eio`` command as the following sub-commands and options::
       --help                   Show this message and exit.
 
     Commands:
-      clean      Clean up the cache from temporary files.
+      clean      Clean up the product cache from temporary files.
       clip       Clip the DEM to given bounds.
-      distclean  Clean up the cache from temporary files.
+      distclean  Remove the product cache entirely.
       info       Show info about the product cache.
       seed       Seed the DEM to given bounds.
-      selfcheck  Audit your installation for common issues.
+      selfcheck  Audit the system for common issues.
 
 The ``clip`` sub-command::
 
@@ -104,7 +103,7 @@ The ``clip`` sub-command::
     Options:
       -o, --output PATH     Path to output file. Existing files will be
                             overwritten.  [default: out.tif]
-      --bounds FLOAT...     Output bounds: left bottom right top.
+      --bounds FLOAT...     Output bounds in 'left bottom right top' order.
       -m, --margin TEXT     Decimal degree margin added to the bounds. Use '%' for
                             percent margin.  [default: 0]
       -r, --reference TEXT  Use the extent of a reference GDAL/OGR data source as
