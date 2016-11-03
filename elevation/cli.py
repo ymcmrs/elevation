@@ -79,7 +79,7 @@ def seed(**kwargs):
               default=elevation.DEFAULT_OUTPUT, show_default=True,
               help="Path to output file. Existing files will be overwritten.")
 @click.option('--bounds', type=float, nargs=4,
-              help="Output bounds: left bottom right top.")
+              help="Output bounds in 'left bottom right top' order.")
 @click.option('-m', '--margin', default=elevation.MARGIN, show_default=True,
               help="Decimal degree margin added to the bounds. Use '%' for percent margin.")
 @click.option('-r', '--reference',
