@@ -170,7 +170,12 @@ def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
     util.check_call_make(datasource_root, targets=['info'])
 
 
-def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
+    """Clean up the cache from temporary files.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['clean'])
 
