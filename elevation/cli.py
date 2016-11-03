@@ -45,7 +45,7 @@ def eio(**kwargs):
     pass
 
 
-@eio.command(short_help="Audit your installation for common issues.")
+@eio.command(short_help="Audit the system for common issues.")
 def selfcheck():
     print(util.selfcheck(tools=elevation.TOOLS))
 
