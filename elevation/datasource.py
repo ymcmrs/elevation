@@ -158,7 +158,8 @@ def clip(bounds, output=DEFAULT_OUTPUT, margin=MARGIN, **kwargs):
     :param bounds: Output bounds in 'left bottom right top' order.
     :param output: Path to output file. Existing files will be overwritten.
     :param margin: Decimal degree margin added to the bounds. Use '%' for percent margin.
-    :param kwargs: Additional keyword arguments passed to ensure_tiles.
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
     """
     bounds = build_bounds(bounds, margin=margin)
     datasource_root = seed(bounds=bounds, **kwargs)
@@ -180,6 +181,11 @@ def clean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
     util.check_call_make(datasource_root, targets=['clean'])
 
 
-def distclean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, **kwargs):
+def distclean(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
+    """Remove the tile cache entirely.
+
+    :param cache_dir: Root of the DEM cache folder.
+    :param product: DEM product choice.
+    """
     datasource_root, _ = ensure_setup(cache_dir, product)
     util.check_call_make(datasource_root, targets=['distclean'])

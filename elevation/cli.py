@@ -99,7 +99,7 @@ def clean(**kwargs):
     elevation.clean(**kwargs)
 
 
-@eio.command(short_help="Clean up the cache from temporary files.")
+@eio.command(short_help="Remove the tile cache entirely.")
 @click_merge_parent_params
 def distclean(**kwargs):
     elevation.distclean(**kwargs)
