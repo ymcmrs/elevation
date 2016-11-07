@@ -40,8 +40,14 @@ Version goals
 This project strives to adhere to `semantic versioning <http://semver.org>`_.
 
 
-1.0.0 (upcoming release)
+1.1.0 (upcoming release)
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
+To be defined.
+
+
+1.0.0
+~~~~~
 
 Minimal set of features to be operationally useful.
 No completeness and no performance guarantees.
@@ -50,6 +56,6 @@ No completeness and no performance guarantees.
 
   - new SRTM1 and old SRTM3 global high resolution digital elevation model
 
-  - GNU Makefile for cache management (parallelism and dependecy tracking)
+  - GNU Makefile for cache management (parallelism and dependency tracking)
 
   - GDAL VirtualRaster as main entry point
