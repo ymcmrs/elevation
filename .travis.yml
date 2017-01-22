@@ -9,7 +9,7 @@ addons:
     - libgdal-dev
 
 language: python
-python: 3.5
+python: 3.6
 env:
   - TOX_ENV=quality-check
   - TOX_ENV=pypy
