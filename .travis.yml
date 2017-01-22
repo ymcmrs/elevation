@@ -7,8 +7,6 @@ addons:
     packages:
     - gdal-bin
     - libgdal-dev
-    - python3.5-dev
-    - python3.6-dev
 
 language: python
 python: 3.6
