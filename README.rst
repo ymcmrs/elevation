@@ -8,6 +8,8 @@ elaborated by CGIAR-CSI.
 
 Note that any download policies of the respective providers apply.
 
+.. highlight: console
+
 
 Installation
 ------------

@@ -2,7 +2,8 @@
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed project metadata.
+- Update dependencies versions (using pip-tools).
 
 
 1.0.0 (2016-11-03)
