@@ -37,7 +37,7 @@ def import_bounds(reference):
                 return datasource.bounds
         except rasterio.errors.RasterioIOError:
             pass
-    if SUPPORT_RASTER_DATA:
+    if SUPPORT_VECTOR_DATA:
         try:
             with fiona.open(reference) as datasource:
                 return datasource.bounds
