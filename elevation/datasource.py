@@ -100,7 +100,7 @@ PRODUCTS = list(PRODUCTS_SPECS)
 DEFAULT_PRODUCT = PRODUCTS[0]
 TOOLS = [
     ('GNU Make', 'make --version'),
-    ('curl', 'curl --version'),
+    ('curl', 'curl --help'),
     ('unzip', 'unzip -v'),
     ('gunzip', 'gunzip --version'),
     ('gdal_translate', 'gdal_translate --version'),

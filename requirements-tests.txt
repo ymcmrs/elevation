@@ -8,6 +8,7 @@ apipkg==1.4               # via execnet
 appdirs==1.4.0
 click==6.7
 coverage==4.3.4           # via pytest-cov
+cryptography==1.8
 execnet==1.4.1            # via pytest-cache
 fasteners==0.14.1
 future==0.16.0
