@@ -42,7 +42,7 @@ Command line usage
 ------------------
 
 Identify the geographic bounds of the area of interest and fetch the DEM with the ``eio`` command.
-For example to clip the SRTM 30m DEM of Rome, around 41.9N 12.5W, to the ``Rome-30m-DEM.tif`` file::
+For example to clip the SRTM 30m DEM of Rome, around 41.9N 12.5E, to the ``Rome-30m-DEM.tif`` file::
 
     $ eio clip -o Rome-30m-DEM.tif --bounds 12.35 41.8 12.65 42
 
