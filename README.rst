@@ -14,7 +14,7 @@ Note that any download policies of the respective providers apply.
 Installation
 ------------
 
-Install the `latest version of Elevation <https://pypi.python.org/pypi/elevation>`_
+Install the `latest version of Elevation <https://pypi.org/project/elevation>`_
 from the Python Package Index::
 
     $ pip install elevation
@@ -137,7 +137,7 @@ Project resources
 Documentation http://elevation.bopen.eu
 Support       https://stackoverflow.com/search?q=python+elevation
 Development   https://github.com/bopen/elevation
-Download      https://pypi.python.org/pypi/elevation
+Download      https://pypi.org/project/elevation
 Code quality  .. image:: https://api.travis-ci.org/bopen/elevation.svg?branch=master
                 :target: https://travis-ci.org/bopen/elevation/branches
                 :alt: Build Status on Travis CI
