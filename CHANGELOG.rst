@@ -2,7 +2,7 @@
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Docs and dependencies updates.
 
 
 1.0.2 (2018-05-16)
