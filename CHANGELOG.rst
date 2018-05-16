@@ -2,7 +2,7 @@
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Small cleanups and updated dependencies.
 
 
 1.0.1 (2017-01-22)
