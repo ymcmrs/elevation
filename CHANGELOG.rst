@@ -2,7 +2,7 @@
 1.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Updated supported python versions.
 
 
 1.0.3 (2018-05-16)
