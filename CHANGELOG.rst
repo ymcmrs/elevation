@@ -1,5 +1,5 @@
 
-1.0.4 (unreleased)
+1.0.4 (2018-05-18)
 ------------------
 
 - Updated supported python versions.
