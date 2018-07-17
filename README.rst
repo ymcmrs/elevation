@@ -119,15 +119,17 @@ e.g. ``EIO_PRODUCT=SRTM3`` and ``EIO_CLIP_MARGIN=10%``.
 Python API
 ----------
 
-Every command has a corresponding API function in the ``elevation`` module::
+Every command has a corresponding API function in the ``elevation`` module:
 
-    import elevation
+.. highlight: python
 
-    # clip the SRTM1 30m DEM of Rome and save it to Rome-DEM.tif
-    elevation.clip(bounds=(12.35, 41.8, 12.65, 42), output='Rome-DEM.tif')
+import elevation
 
-    # clean up stale temporary files and fix the cache in the event of a server error
-    elevation.clean()
+# clip the SRTM1 30m DEM of Rome and save it to Rome-DEM.tif
+elevation.clip(bounds=(12.35, 41.8, 12.65, 42), output='Rome-DEM.tif')
+
+# clean up stale temporary files and fix the cache in the event of a server error
+elevation.clean()
 
 
 Project resources
