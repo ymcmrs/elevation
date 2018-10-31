@@ -1,8 +1,8 @@
 
-1.0.5 (unreleased)
+1.0.5 (2018-10-31)
 ------------------
 
-- Nothing changed yet.
+- Updated dependencies.
 
 
 1.0.4 (2018-05-18)
