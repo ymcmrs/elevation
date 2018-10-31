@@ -1,8 +1,4 @@
-appdirs
-click
 coveralls
-fasteners
-future
 pytest
 pytest-cov
 pytest-flakes

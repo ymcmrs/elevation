@@ -43,7 +43,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'appdirs',
-        'click',
+        'click<7.0',
         'fasteners',
         'future',
     ],
