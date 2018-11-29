@@ -21,7 +21,6 @@ import collections
 import math
 import os.path
 import pkgutil
-from fasteners import InterProcessLock
 
 import appdirs
 
