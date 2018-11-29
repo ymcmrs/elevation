@@ -21,6 +21,7 @@ import collections
 import math
 import os.path
 import pkgutil
+from fasteners import InterProcessLock
 
 import appdirs
 
@@ -144,8 +145,12 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download
     if len(ensure_tiles_names) > max_download_tiles:
         raise RuntimeError("Too many tiles: %d. Please consult the providers' websites "
                            "for how to bulk download tiles." % len(ensure_tiles_names))
-    ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
-    util.check_call_make(datasource_root, targets=['all'])
+
+    with util.lock_tiles(datasource_root, ensure_tiles_names):
+        ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
+
+    with util.lock_vrt(datasource_root, product):
+        util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
 
 
