@@ -178,7 +178,7 @@ def clip(bounds, output=DEFAULT_OUTPUT, margin=MARGIN, **kwargs):
     run_id = uuid.uuid4().hex
     bounds = build_bounds(bounds, margin=margin)
     datasource_root = seed(bounds=bounds, run_id=run_id, **kwargs)
-    do_clip(datasource_root, bounds, output, run_id, **kwargs)
+    do_clip(datasource_root, bounds, output, run_id=run_id, **kwargs)
 
 
 def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):

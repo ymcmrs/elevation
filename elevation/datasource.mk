@@ -43,6 +43,7 @@ info:
 
 clean:
 	find cache -size 0 -name "*.tif" -delete
+	$(RM) $(PRODUCT).*.vrt
 	$(RM) -r spool/*
 
 distclean: clean
