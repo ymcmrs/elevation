@@ -29,8 +29,12 @@ cache/%.tif: spool/%$(TILE_EXT)
 
 download: $(ENSURE_TILE_PATHS)
 
+copy_vrt:
+	cp $(PRODUCT).vrt $(PRODUCT).$(RUN_ID).vrt
+
 clip: $(PRODUCT).vrt
-	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(PRODUCT).vrt $(OUTPUT)
+	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(PRODUCT).$(RUN_ID).vrt $(OUTPUT)
+	rm $(PRODUCT).$(RUN_ID).vrt
 
 info:
 	@echo 'Product folder: $(shell pwd)'
