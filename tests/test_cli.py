@@ -65,7 +65,7 @@ def test_eio_clip(mocker, tmpdir):
     mocker.patch('subprocess.check_call')
     result = runner.invoke(cli.eio, options.split())
     assert not result.exception
-    assert subprocess.check_call.call_count == 3
+    assert subprocess.check_call.call_count == 4
 
     mocker.patch('subprocess.check_call')
     result = runner.invoke(cli.eio, ['clip'])

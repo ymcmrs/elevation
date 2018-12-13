@@ -7,7 +7,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import subprocess
-
+import re
 import pytest
 
 from elevation import datasource
@@ -45,8 +45,8 @@ def test_do_clip(mocker):
     bounds = (1, 5, 2, 6)
     mocker.patch('subprocess.check_call')
     cmd = datasource.do_clip(path='/tmp', bounds=bounds, output='/out.tif')
-    assert cmd == 'make -C /tmp clip OUTPUT="/out.tif" PROJWIN="1 6 2 5"'
-    subprocess.check_call.assert_called_once_with(cmd, shell=True)
+    assert re.match(r'make -C /tmp clip OUTPUT="/out\.tif" PROJWIN="1 6 2 5" RUN_ID=".{32}"', cmd)
+    subprocess.check_call.assert_called_with(cmd, shell=True)
 
 
 def test_seed(mocker, tmpdir):
@@ -74,12 +74,18 @@ def test_build_bounds():
 def test_clip(mocker, tmpdir):
     root = tmpdir.join('root')
     bounds = (13.1, 43.1, 14.9, 44.9)
+
+    class UUID:
+        hex = 'asd'
+    uuid_mock = mocker.Mock()
+    uuid_mock.return_value = UUID
+    mocker.patch('uuid.uuid4', uuid_mock)
     mocker.patch('subprocess.check_call')
     datasource.clip(cache_dir=str(root), product='SRTM1', bounds=bounds, output='out.tif')
     assert len(root.listdir()) == 1
     datasource_root = root.listdir()[0]
-    expected_cmd = 'make -C %s clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1"' % datasource_root
-    subprocess.check_call.assert_any_call(expected_cmd, shell=True)
+    cmd = 'make -C %s clip OUTPUT="out.tif" PROJWIN="13.1 44.9 14.9 43.1" RUN_ID="asd"' % datasource_root
+    subprocess.check_call.assert_any_call(cmd, shell=True)
 
 
 def test_clean(mocker, tmpdir):
