@@ -34,7 +34,7 @@ copy_vrt:
 
 clip: $(PRODUCT).vrt
 	gdal_translate -q -co TILED=YES -co COMPRESS=DEFLATE -co ZLEVEL=9 -co PREDICTOR=2 -projwin $(PROJWIN) $(PRODUCT).$(RUN_ID).vrt $(OUTPUT)
-	rm $(PRODUCT).$(RUN_ID).vrt
+	$(RM) $(PRODUCT).$(RUN_ID).vrt
 
 info:
 	@echo 'Product folder: $(shell pwd)'
