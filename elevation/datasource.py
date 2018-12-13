@@ -123,14 +123,17 @@ def ensure_setup(cache_dir, product, force=True):
     return datasource_root, spec
 
 
-def do_clip(path, bounds, output, run_id, **kwargs):
+def do_clip(path, bounds, output, product=DEFAULT_OUTPUT, **kwargs):
+    run_id = uuid.uuid4().hex
+    with util.lock_vrt(path, product):
+        util.check_call_make(path, targets=['copy_vrt'], variables=[('run_id', run_id)])
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
     variables_items = [('output', output), ('projwin', projwin), ('run_id', run_id)]
     return util.check_call_make(path, targets=['clip'], variables=variables_items)
 
 
-def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download_tiles=9, run_id=None, **kwargs):
+def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download_tiles=9, **kwargs):
     """Seed the DEM to given bounds.
 
     :param cache_dir: Root of the DEM cache folder.
@@ -151,7 +154,6 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download
 
     with util.lock_vrt(datasource_root, product):
         util.check_call_make(datasource_root, targets=['all'])
-        util.check_call_make(datasource_root, targets=['copy_vrt'], variables=[('run_id', run_id)])
     return datasource_root
 
 
@@ -175,10 +177,9 @@ def clip(bounds, output=DEFAULT_OUTPUT, margin=MARGIN, **kwargs):
     :param cache_dir: Root of the DEM cache folder.
     :param product: DEM product choice.
     """
-    run_id = uuid.uuid4().hex
     bounds = build_bounds(bounds, margin=margin)
-    datasource_root = seed(bounds=bounds, run_id=run_id, **kwargs)
-    do_clip(datasource_root, bounds, output, run_id=run_id, **kwargs)
+    datasource_root = seed(bounds=bounds, **kwargs)
+    do_clip(datasource_root, bounds, output, **kwargs)
 
 
 def info(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT):
