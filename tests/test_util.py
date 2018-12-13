@@ -18,15 +18,15 @@ def test_selfcheck():
 
 
 def test_lock_tiles(tmpdir, mocker):
-    root = tmpdir.join('root')
-    with util.lock_tiles(str(root), ['a.tiff']):
+    root = str(tmpdir.join('root'))
+    with util.lock_tiles(root, ['a.tiff']):
         assert os.path.exists(os.path.join(root, 'cache', 'a.tiff.lock'))
 
 
 def test_lock_vrt(tmpdir, mocker):
-    root = tmpdir.join('root')
+    root = str(tmpdir.join('root'))
 
-    with util.lock_vrt(str(root), 'SRTM1'):
+    with util.lock_vrt(root, 'SRTM1'):
         assert os.path.exists(os.path.join(root, 'SRTM1.vrt.lock'))
 
 
