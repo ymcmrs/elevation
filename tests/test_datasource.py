@@ -7,7 +7,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import subprocess
-import re
 import pytest
 
 from elevation import datasource
@@ -45,7 +44,7 @@ def test_do_clip(mocker):
     bounds = (1, 5, 2, 6)
     mocker.patch('subprocess.check_call')
     cmd = datasource.do_clip(path='/tmp', bounds=bounds, output='/out.tif')
-    assert re.match(r'make -C /tmp clip OUTPUT="/out\.tif" PROJWIN="1 6 2 5" RUN_ID=".{32}"', cmd)
+    assert cmd.startswith('make -C /tmp clip OUTPUT="/out.tif" PROJWIN="1 6 2 5" RUN_ID="')
     subprocess.check_call.assert_called_with(cmd, shell=True)
 
 
