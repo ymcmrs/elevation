@@ -18,14 +18,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import collections
-import functools
 import os
 import subprocess
 
 import fasteners
 
+from contextlib import contextmanager
 
-LOCKFILE_NAME = '.folder_lock'
+
+FOLDER_LOCKFILE_NAME = '.folder_lock'
 
 
 def selfcheck(tools):
@@ -42,40 +43,48 @@ def selfcheck(tools):
     return '\n'.join(msg) if msg else 'Your system is ready.'
 
 
-def folder_try_lock(wrapped):
+@contextmanager
+def lock_tiles(datasource_root, tile_names):
+    locks = []
+    for tile_name in tile_names:
+        lockfile_name = os.path.join(datasource_root, 'cache', tile_name + '.lock')
+        locks.append(fasteners.InterProcessLock(lockfile_name))
 
-    @functools.wraps(wrapped)
-    def wrapper(path, *args, **kwargs):
-        lockfile_name = os.path.join(path, LOCKFILE_NAME)
-        with fasteners.try_lock(fasteners.InterProcessLock(lockfile_name)) as locked:
-            if not locked:
-                raise RuntimeError("Failed to lock cache %r." % path)
-            return wrapped(path, *args, **kwargs)
+    for lock in locks:
+        lock.acquire(blocking=True)
 
-    return wrapper
+    yield
+
+    for lock in locks:
+        lock.release()
 
 
-@folder_try_lock
+@contextmanager
+def lock_vrt(datasource_root, product):
+    with fasteners.InterProcessLock(os.path.join(datasource_root, product + '.vrt.lock')):
+        yield
+
+
 def ensure_setup(root, folders=(), file_templates=(), force=False, **kwargs):
-    created_folders = []
-    for path in [root] + [os.path.join(root, p) for p in folders]:
-        if not os.path.exists(path):
-            os.makedirs(path)
-            created_folders.append(path)
+    with fasteners.InterProcessLock(os.path.join(root, FOLDER_LOCKFILE_NAME)):
+        created_folders = []
+        for path in [root] + [os.path.join(root, p) for p in folders]:
+            if not os.path.exists(path):
+                os.makedirs(path)
+                created_folders.append(path)
 
-    created_files = collections.OrderedDict()
-    for relpath, template in collections.OrderedDict(file_templates).items():
-        path = os.path.join(root, relpath)
-        if force or not os.path.exists(path):
-            body = template.format(**kwargs)
-            with open(path, 'w') as file:
-                file.write(body)
-            created_files[path] = body
+        created_files = collections.OrderedDict()
+        for relpath, template in collections.OrderedDict(file_templates).items():
+            path = os.path.join(root, relpath)
+            if force or not os.path.exists(path):
+                body = template.format(**kwargs)
+                with open(path, 'w') as file:
+                    file.write(body)
+                created_files[path] = body
 
     return created_folders, created_files
 
 
-@folder_try_lock
 def check_call_make(path, targets=(), variables=()):
     make_targets = ' '.join(targets)
     variables_items = collections.OrderedDict(variables).items()

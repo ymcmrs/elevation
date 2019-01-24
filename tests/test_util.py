@@ -7,8 +7,7 @@
 from __future__ import absolute_import, unicode_literals
 
 import subprocess
-
-import pytest
+import os
 
 from elevation import util
 
@@ -18,18 +17,17 @@ def test_selfcheck():
     assert 'NAME' in util.selfcheck([('NAME', 'false')])
 
 
-def test_folder_try_lock(tmpdir, mocker):
-    root = tmpdir.join('root')
+def test_lock_tiles(tmpdir, mocker):
+    root = str(tmpdir.join('root'))
+    with util.lock_tiles(root, ['a.tiff']):
+        assert os.path.exists(os.path.join(root, 'cache', 'a.tiff.lock'))
 
-    @util.folder_try_lock
-    def operation(path):
-        return True
 
-    assert operation(str(root))
+def test_lock_vrt(tmpdir, mocker):
+    root = str(tmpdir.join('root'))
 
-    mocker.patch('fasteners.InterProcessLock.acquire', return_value=False)
-    with pytest.raises(RuntimeError):
-        operation(str(root))
+    with util.lock_vrt(root, 'SRTM1'):
+        assert os.path.exists(os.path.join(root, 'SRTM1.vrt.lock'))
 
 
 def test_ensure_setup(tmpdir):

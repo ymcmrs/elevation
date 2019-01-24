@@ -21,6 +21,7 @@ import collections
 import math
 import os.path
 import pkgutil
+import uuid
 
 import appdirs
 
@@ -122,10 +123,13 @@ def ensure_setup(cache_dir, product, force=True):
     return datasource_root, spec
 
 
-def do_clip(path, bounds, output, **kwargs):
+def do_clip(path, bounds, output, product=DEFAULT_OUTPUT, **kwargs):
+    run_id = uuid.uuid4().hex
+    with util.lock_vrt(path, product):
+        util.check_call_make(path, targets=['copy_vrt'], variables=[('run_id', run_id)])
     left, bottom, right, top = bounds
     projwin = '%s %s %s %s' % (left, top, right, bottom)
-    variables_items = [('output', output), ('projwin', projwin)]
+    variables_items = [('output', output), ('projwin', projwin), ('run_id', run_id)]
     return util.check_call_make(path, targets=['clip'], variables=variables_items)
 
 
@@ -144,8 +148,12 @@ def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download
     if len(ensure_tiles_names) > max_download_tiles:
         raise RuntimeError("Too many tiles: %d. Please consult the providers' websites "
                            "for how to bulk download tiles." % len(ensure_tiles_names))
-    ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
-    util.check_call_make(datasource_root, targets=['all'])
+
+    with util.lock_tiles(datasource_root, ensure_tiles_names):
+        ensure_tiles(datasource_root, ensure_tiles_names, **kwargs)
+
+    with util.lock_vrt(datasource_root, product):
+        util.check_call_make(datasource_root, targets=['all'])
     return datasource_root
 
 
