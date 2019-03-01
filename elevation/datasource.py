@@ -85,7 +85,7 @@ SRTM1_SPEC = {
 SRTM3_SPEC = {
     'folders': ('spool', 'cache'),
     'file_templates': {'Makefile': DATASOURCE_MAKEFILE},
-    'datasource_url': 'http://srtm.csi.cgiar.org/SRT-ZIP/SRTM_V41/SRTM_Data_GeoTiff',
+    'datasource_url': 'http://srtm.csi.cgiar.org/wp-content/uploads/files/srtm_5x5/tiff',
     'tile_ext': '.tif',
     'compressed_pre_ext': '',
     'compressed_ext': '.zip',
