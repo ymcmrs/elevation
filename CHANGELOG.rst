@@ -1,8 +1,8 @@
 
-1.0.6 (unreleased)
+1.0.6 (2019-03-01)
 ------------------
 
-- Nothing changed yet.
+- Updated URL for CGIAR-CSI.
 
 
 1.0.5 (2018-10-31)
