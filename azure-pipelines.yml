@@ -27,7 +27,7 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip
-    pip install -r requirements.txt
+    pip install -r requirements-tests.txt
   displayName: 'Install dependencies'
 
 - script: |
