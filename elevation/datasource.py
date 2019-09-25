@@ -133,7 +133,7 @@ def do_clip(path, bounds, output, product=DEFAULT_OUTPUT, **kwargs):
     return util.check_call_make(path, targets=['clip'], variables=variables_items)
 
 
-def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download_tiles=9, **kwargs):
+def seed(cache_dir=CACHE_DIR, product=DEFAULT_PRODUCT, bounds=None, max_download_tiles=1000, **kwargs):
     """Seed the DEM to given bounds.
 
     :param cache_dir: Root of the DEM cache folder.
